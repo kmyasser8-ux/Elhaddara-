@@ -3,24 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الحضارة الأكاديمية</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700&family=Tajawal:wght@400;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
-    
+    <title>منصة الحضارة</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        :root { --main-font: 'Cairo', sans-serif; }
-        body { font-family: var(--main-font); transition: all 0.5s ease-in-out; }
         .font-amiri { font-family: 'Amiri', serif; }
         .font-kufi { font-family: 'Reem Kufi', sans-serif; }
         .font-tajawal { font-family: 'Tajawal', sans-serif; }
         .font-cairo { font-family: 'Cairo', sans-serif; }
-        
-        /* تأثير النبض والحركة البطيئة للزخارف والأشكال التعبيرية */
+
         @keyframes spin-slow {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -28,39 +20,42 @@
         .animate-spin-slow { animation: spin-slow 20s linear infinite; }
     </style>
 </head>
-<body class="bg-[#fcfbf7] text-gray-900 min-h-screen relative pb-24" id="bodyPage">
+<body id="bodyPage" class="bg-[#fcfbf7] text-gray-900 min-h-screen relative pb-24 transition-colors duration-300">
 
-    <header class="w-full bg-[#111111] text-white py-12 px-6 md:px-12 border-b-4 border-[#b89452] relative transition-all duration-500" id="mainHeader">
+    <header class="w-full bg-[#111111] text-white py-12 px-6 md:px-12 border-b-4 border-[#b89452] relative z-10">
         <div class="max-w-6xl mx-auto w-full flex justify-between items-center relative z-10">
             
             <div>
-                <h1 class="text-4xl md:text-6xl font-bold font-kufi tracking-widest text-white border-r-4 border-[#b89452] pr-4" id="logoText">
+                <h1 class="text-4xl md:text-6xl font-bold font-kufi tracking-widest text-white border-b-2 border-transparent pb-2">
                     الحضارة
                 </h1>
-                <p class="text-xs md:text-sm text-gray-400 mt-2 pr-4 font-light">منصة لتفكيك وتدبر العلوم الإنسانية والإسلامية</p>
+                <p class="text-xs md:text-sm text-gray-400 mt-2 pr-4 font-light">
+                    العلوم الإنسانية والإسلامية
+                </p>
             </div>
 
             <div class="relative flex items-center gap-4">
-                <button id="darkModeToggle" class="text-xl p-2 rounded-full hover:bg-gray-800 transition-colors">
-    🌙
-</button>
-
-<button id="menuToggle" class="text-xl p-2 rounded-full hover:bg-gray-800 transition-colors">
-    ☰
-</button>
                 
-                <button onclick="toggleSettingsMenu()" class="text-gray-400 hover:text-white transition-colors p-2 text-2xl focus:outline-none">
-                    <i class="fas fa-ellipsis-v"></i>
+                <button id="darkModeToggle" class="text-xl p-2 rounded-full hover:bg-gray-800 transition-colors" title="تغيير المظهر">
+                    🌙
                 </button>
-                
-                <div id="settingsMenu" class="hidden absolute left-0 mt-3 w-72 bg-white text-gray-800 rounded-xl shadow-2xl border border-gray-100 py-4 px-4 z-50 text-sm">
-                    <h4 class="font-bold border-b pb-2 mb-3 text-gray-900 flex items-center gap-2">
+
+                <button id="menuToggle" class="text-xl p-2 rounded-full hover:bg-gray-800 transition-colors" title="القائمة">
+                    ☰
+                </button>
+
+                <button onclick="toggleSettingsMenu()" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-ellipsis-v text-xl"></i>
+                </button>
+
+                <div id="settingsMenu" class="hidden absolute left-0 mt-3 top-full w-72 bg-white text-gray-800 rounded-lg shadow-2xl p-5 border border-gray-100 z-50">
+                    <h4 class="font-bold border-b pb-2 mb-3 flex items-center gap-2 text-gray-900">
                         <i class="fas fa-sliders-h text-[#b89452]"></i> لوحة التحكم والإدارة
                     </h4>
                     
                     <div class="mb-4">
-                        <label class="block text-xs font-bold text-gray-500 mb-1.5">1. خط اللغة الشارح</label>
-                        <select onchange="changeFont(this.value)" class="w-full bg-gray-50 border rounded-lg p-2 text-xs focus:outline-none">
+                        <label class="block text-xs font-bold text-gray-500 mb-1.5">1. خط اللغة المتبع</label>
+                        <select onchange="changeFont(this.value)" class="w-full bg-gray-50 border rounded p-1.5 text-sm">
                             <option value="font-cairo">خط قاهرة (عصري ومبسط)</option>
                             <option value="font-amiri">خط أميري (نسخ أكاديمي أصيل)</option>
                             <option value="font-kufi">خط ريم كوفي (كوفي جمالي)</option>
@@ -69,217 +64,75 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-xs font-bold text-gray-500 mb-1.5">2. هندسة وهيكلة العناصر</label>
-                        <button onclick="alert('لوحة الإدارة مهيأة: يمكنك الآن ربط كتل المقالات الثانوية المخصصة لك')" class="w-full bg-[#111111] text-white rounded-lg py-2 text-xs font-medium hover:bg-gray-800 transition-colors">
-                            <i class="fas fa-plus-circle ml-1"></i> إضافة عنصر أو مقال ثانٍ
+                        <label class="block text-xs font-bold text-gray-500 mb-1.5">2. إضافة وهيكلة العناصر</label>
+                        <button onclick="alert('لوحة الإدارة مهيأة!')" class="w-full bg-gray-900 text-white text-sm rounded py-1.5 hover:bg-gray-800 transition flex items-center justify-center gap-2">
+                            <i class="fas fa-plus-circle"></i> إضافة عنصر أو مقال الآن
                         </button>
                     </div>
 
-                    <div>
+                    <div class="mb-2">
                         <label class="block text-xs font-bold text-gray-500 mb-1.5">3. قوالب الألوان والمظهر</label>
                         <div class="grid grid-cols-2 gap-2 text-[11px]">
-                            <button onclick="changeGlobalTheme('dark')" class="bg-gray-900 text-white rounded p-1.5 hover:bg-black">مظهر داكن فاخر</button>
-                            <button onclick="changeGlobalTheme('classic')" class="bg-amber-50 text-amber-900 border border-amber-200 rounded p-1.5 hover:bg-amber-100">مظهر المخطوطات</button>
+                            <button onclick="changeGlobalTheme('dark')" class="bg-gray-950 text-white p-1.5 rounded hover:bg-gray-900">الداكن المطلق</button>
+                            <button onclick="changeGlobalTheme('classic')" class="bg-amber-50 text-amber-900 p-1.5 rounded hover:bg-amber-100 border border-amber-200">البيج الكلاسيكي</button>
                         </div>
                     </div>
                 </div>
+
             </div>
 
         </div>
     </header>
-    <div id="sidebar" class="fixed top-0 -right-64 w-64 h-full bg-[#111111] text-white transition-all duration-300 z-50 p-5 shadow-2xl">
-    <div class="flex justify-between items-center mb-8">
-        <h3 class="text-lg font-bold font-tajawal">أقسام المنصة</h3>
-        <button id="closeSidebar" class="text-gray-400 hover:text-white">✕</button>
+    <div id="sidebar" class="fixed top-0 -right-64 w-64 h-full bg-[#111111] text-white transition-all duration-300 z-50 p-5 shadow-2xl border-l border-gray-800">
+        <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
+            <h3 class="text-lg font-bold font-tajawal text-[#b89452]">أقسام المنصة</h3>
+            <button id="closeSidebar" class="text-gray-400 hover:text-white transition-colors text-xl">✕</button>
+        </div>
+        <nav class="flex flex-col gap-4 font-cairo">
+            <a href="#" class="p-2 rounded hover:bg-gray-900 hover:text-[#b89452] transition-all">المحاضرات</a>
+            <a href="#" class="p-2 rounded hover:bg-gray-900 hover:text-[#b89452] transition-all">التمارين والحلول</a>
+            <a href="#" class="p-2 rounded hover:bg-gray-900 hover:text-[#b89452] transition-all">المراجع العلمية</a>
+        </nav>
     </div>
-    <div class="flex flex-col gap-4 font-cairo">
-        <a href="#" class="hover:text-amber-400 transition-colors">المحاضرات</a>
-        <a href="#" class="hover:text-amber-400 transition-colors">التمارين والحلول</a>
-        <a href="#" class="hover:text-amber-400 transition-colors">المراجع العلمية</a>
-    </div>
-    </div>
-    
-
-    <nav class="max-w-6xl mx-auto px-4 py-12">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            <div onclick="spreadTheme('islamic', '#1b4332', '#eaf2ec')" class="cursor-pointer bg-white border border-emerald-100 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group text-center border-b-4 border-emerald-600">
-                <div class="w-20 h-20 mx-auto bg-emerald-50 text-emerald-700 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform relative">
-                    <i class="fas fa-mosque"></i>
-                    <div class="absolute inset-0 border-2 border-dashed border-emerald-600/30 rounded-full animate-spin-slow"></div>
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <nav class="max-w-6xl mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div onclick="spreadTheme('islamic', '#1b4332', '#eaf2ec')" class="cursor-pointer bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-20 h-20 mx-auto bg-emerald-50 text-emerald-700 rounded-full flex items-center justify-center text-3xl mb-4">
+                        <i class="fas fa-mosque"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-emerald-900 mb-1 text-center font-tajawal">العلوم الإسلامية</h3>
+                    <p class="text-xs text-emerald-600 text-center font-cairo">الفقه، الفكر والرموز التاريخية</p>
                 </div>
-                <h3 class="font-bold text-lg text-emerald-900 mb-1">العلوم الإسلامية</h3>
-                <p class="text-xs text-emerald-600">الفقه، الفكر والرموز التاريخية العادلة</p>
-            </div>
 
-            <div onclick="spreadTheme('psychology', '#4a148c', '#f3e5f5')" class="cursor-pointer bg-white border border-purple-100 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group text-center border-b-4 border-purple-600">
-                <div class="w-20 h-20 mx-auto bg-purple-50 text-purple-700 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform overflow-hidden relative">
-                    <i class="fas fa-user-tie"></i>
-                    <div class="absolute bottom-1 text-[10px] bg-purple-900 text-white px-1 rounded font-mono scale-90">FREUD</div>
                 </div>
-                <h3 class="font-bold text-lg text-purple-900 mb-1">علم النفس</h3>
-                <p class="text-xs text-purple-600">مدرسة التحليل وسبر أغوار العقل الباطن</p>
-            </div>
-
-            <div onclick="spreadTheme('politics', '#b71c1c', '#ffebee')" class="cursor-pointer bg-white border border-red-100 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group text-center border-b-4 border-red-600">
-                <div class="w-20 h-20 mx-auto bg-red-50 text-red-700 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
-                    <i class="fas fa-gavel"></i>
-                </div>
-                <h3 class="font-bold text-lg text-red-900 mb-1">علم السياسة</h3>
-                <p class="text-xs text-red-600">تفكيك مجمعات القوة، الأنظمة والإزدهار</p>
-            </div>
-
-            <div onclick="spreadTheme('history', '#e65100', '#fff3e0')" class="cursor-pointer bg-white border border-amber-100 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group text-center border-b-4 border-amber-600">
-                <div class="w-20 h-20 mx-auto bg-amber-50 text-amber-700 rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
-                    <i class="fas fa-hourglass-half"></i>
-                </div>
-                <h3 class="font-bold text-lg text-amber-900 mb-1">التاريخ الحركي</h3>
-                <p class="text-xs text-amber-600">صعود الإمبراطوريات، الحروب والجيوسياسية</p>
-            </div>
-
-        </div>
-    </nav>
-
-    <main class="max-w-4xl mx-auto px-4 mt-4">
-        
-        <div id="effectIndicator" class="hidden text-center py-2 px-4 rounded-xl text-xs font-bold mb-8 transition-all duration-500"></div>
-
-        <div id="content-islamic" class="science-content block space-y-6">
-            <h3 class="font-bold text-xl border-r-4 border-emerald-600 pr-3 text-emerald-900 mb-4 font-amiri">أحدث مدونات العلوم الإسلامية</h3>
-            
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-emerald-700 cursor-pointer">الصراع الطائفي بين الإثني عشرية والسلفية: تفكيك الجذور المعرفية</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">قراءة صحفية متأنية وجريئة تبحث في منشأ الاختلافات الهيكلية والعقدية بين المدرستين، وكيف تؤثر هذه المفاهيم على المشهد الفكري الإسلامي المعاصر.</p>
-            </article>
-
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-emerald-700 cursor-pointer">الدعاء وأهميته: ما وراء التضرع والعبادة الفردية</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">دراسة مبسطة تشرح الأبعاد الروحية والعملية الكامنة وراء صلة العبد بخالقه، وأثر الدعاء كقوة دافعة ومثبتة للذات الإنسانية.</p>
-            </article>
-
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-emerald-700 cursor-pointer">عمر بن الخطاب: أسرار حياة الحاكم الأكثر عدلاً في التاريخ</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">إضاءة على عبقرية الإدارة والسياسة الشرعية في عهد الفاروق، وكيف أسس لقواعد العدالة الاجتماعية الشاملة بأسلوب صحفي جذاب.</p>
-            </article>
-        </div>
-
-        <div id="content-psychology" class="science-content hidden space-y-6">
-            <h3 class="font-bold text-xl border-r-4 border-purple-600 pr-3 text-purple-900 mb-4">سبر أغوار النفس البشرية</h3>
-            
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-purple-700 cursor-pointer">العقل الباطن وأهميته: القوة الخفية التي تدير حياتك دون علمك</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">كيف يختزن دماغك التجارب والأفكار؟ وكيف يملي العقل اللاواعي تصرفاتك وقراراتك اليومية بأسلوب علمي مبسط وممتع للقارئ.</p>
-            </article>
-
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-purple-700 cursor-pointer">الوعي الجمعي وكيفية تشكله: من يقود عقول الجماهير؟</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">تحليل صحفي عميق يبحث في آليات صياغة الرأي العام، وتأثير الأفكار المشتركة في توجيه المجتمعات وصناعة التوجهات الكبرى.</p>
-            </article>
-        </div>
-
-        <div id="content-politics" class="science-content hidden space-y-6">
-            <h3 class="font-bold text-xl border-r-4 border-red-600 pr-3 text-red-900 mb-4">كواليس الأنظمة واستراتيجيات الحكم</h3>
-            
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-red-700 cursor-pointer">قصص الازدهار والتطور: كيف تفكك الدول شفرة النهوض؟</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">استعراض لأبرز التجارب العالمية الناجحة في التنمية والنهضة الاقتصادية والسياسية بلسان الصحافة الاستقصائية الحرة والمبسطة.</p>
-            </article>
-
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-red-700 cursor-pointer">المجمع العسكري المدني الترفيهي: التحالف الثلاثي غير المعلن للسيطرة</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">قراءة جريئة ومثيرة لكيفية تداخل الصناعات العسكرية مع القوى المدنية والإعلام الترفيهي لتوجيه سياسات الدول الكبرى ونفوذها الدولي.</p>
-            </article>
-        </div>
-
-        <div id="content-history" class="science-content hidden space-y-6">
-            <h3 class="font-bold text-xl border-r-4 border-amber-600 pr-3 text-amber-900 mb-4">سراديب الماضي وتوازنات القوة الدولية</h3>
-            
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-amber-700 cursor-pointer">إيران: من بلاط الشاه المذهب إلى سجن الثورة الصاخب</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">سردية تاريخية مشوقة ومبسطة تستعرض التحول الهيكلي الجذري في طهران، وتأثير سقوط النظام البهلوي على موازين القوى في المنطقة.</p>
-            </article>
-
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-amber-700 cursor-pointer">كيف سيطر العرب سابقاً على خطوط التجارة العالمية؟</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">دراسة جغرافية وتاريخية تبين كيف مكنت القوافل البحرية والبرية التجار العرب من بسط نفوذهم الاقتصادي بين الشرق والغرب.</p>
-            </article>
-
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-amber-700 cursor-pointer">ماذا نعرف عن الحرب الثماني سنوات؟ تشريح أطول نزاع تقليدي في القرن العشرين</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">تحليل تاريخي عسكري يستعرض كواليس حرب الخليج الأولى والأثمان الباهظة التي دُفعت وتأثيراتها المستمرة حتى اليوم.</p>
-            </article>
-
-            <article class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm">
-                <h4 class="text-lg font-bold text-gray-900 hover:text-amber-700 cursor-pointer">الملك فيصل بن عبد العزيز آل سعود: هل هو المخترع الفعلي للمصطلح الجيوسياسي العربي؟</h4>
-                <p class="text-gray-600 text-sm mt-2 leading-relaxed">بحث تاريخي مميز يسلط الضوء على عبقرية الملك فيصل في استخدام سلاح النفط وإدارة العلاقات الدولية لتعريف الجيوسياسية العربية عملياً.</p>
-            </article>
-        </div>
-
+        </nav>
     </main>
-
-    <footer class="w-full bg-[#111111] text-gray-500 text-center py-6 text-xs border-t border-gray-800 absolute bottom-0">
-        <p>© 2026 منصة الحضارة الأكاديمية. هنا يكتمل دورك الإبداعي بالتعديل والمحاكاة.</p>
-    </footer>
 
     <script>
         function toggleSettingsMenu() {
             const menu = document.getElementById('settingsMenu');
             menu.classList.toggle('hidden');
         }
-
-        // 1. تغيير وتعديل أنواع الخطوط العربية الأصيلة
         function changeFont(fontClass) {
-            const body = document.getElementById('bodyPage');
-            body.classList.remove('font-cairo', 'font-amiri', 'font-kufi', 'font-tajawal');
-            body.classList.add(fontClass);
+            document.body.className = document.body.className.replace(/font-\w+/g, '');
+            document.body.classList.add(fontClass);
         }
-
-        // تفعيل ميزة انتشار ملامح وألوان العنصر المختار على المنصة كاملة لتمتيع القارئ
-        function spreadTheme(science, primaryColor, lightBgColor) {
-            const body = document.getElementById('bodyPage');
-            const header = document.getElementById('mainHeader');
-            const indicator = document.getElementById('effectIndicator');
-            
-            // إظهار وإخفاء المحتويات بناءً على الحقل المعرفي المختار
-            const contents = document.querySelectorAll('.science-content');
-            contents.forEach(content => content.classList.add('hidden'));
-            document.getElementById(`content-${science}`).classList.remove('hidden');
-
-            // إحداث التأثير البصري الديناميكي الساحر (الانتشار الكامل والتلوين المنسجم)
-            body.style.backgroundColor = lightBgColor;
-            header.style.backgroundColor = primaryColor;
-            header.style.borderColor = '#b89452';
-            
-            // إظهار إشعار تفعيل الطابع والميزات
-            indicator.classList.remove('hidden');
-            indicator.style.backgroundColor = primaryColor;
-            indicator.style.color = '#ffffff';
-            
-            let scienceNames = {
-                'islamic': 'العلوم الإسلامية [ تشغيل الطابع والزخارف الأندلسية ]',
-                'psychology': 'علم النفس [ استحضار لوحة التحليل والوعي ]',
-                'politics': 'علم السياسة [ تفعيل ميزان وأنظمة الحكم ]',
-                'history': 'التاريخ الحركي [ فتح سردية الجيوسياسية والزمان ]'
-            };
-            
-            indicator.innerHTML = `<i class="fas fa-magic"></i> تم نشر ملامح وأشكال طابع (${scienceNames[science]}) على الواجهة بالكامل.`;
-        }
-
-        // 3. خيارات تعديل الألوان العامة المقترحة داخل قائمة الإعدادات (3 نقاط)
         function changeGlobalTheme(theme) {
-            const header = document.getElementById('mainHeader');
-            const logo = document.getElementById('logoText');
             if(theme === 'dark') {
-                header.style.backgroundColor = '#000000';
-                logo.style.color = '#ffffff';
-            } else if(theme === 'classic') {
-                header.style.backgroundColor = '#2c2519';
-                logo.style.color = '#fcfbf7';
+                document.body.style.backgroundColor = '#111111';
+                document.body.style.color = '#ffffff';
+            } else {
+                document.body.style.backgroundColor = '#fcfbf7';
+                document.body.style.color = '#1a202c';
             }
-            toggleSettingsMenu();
+        }
+        function spreadTheme(type, color1, color2) {
+            console.log("تم اختيار القسم:", type);
         }
     </script>
- <script src="script.js"></script>   
-</body>
-                                                                                            </html>
 
+    <script src="script.js"></script>
+</body>
+</html>
