@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الحضارة</title>
+    <title>منصة الحضارة - العلوم الإنسانية والسياسية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@300;400;700&family=Reem+Kufi&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         .font-amiri { font-family: 'Amiri', serif; }
@@ -13,126 +14,301 @@
         .font-tajawal { font-family: 'Tajawal', sans-serif; }
         .font-cairo { font-family: 'Cairo', sans-serif; }
 
-        @keyframes spin-slow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .animate-spin-slow { animation: spin-slow 20s linear infinite; }
+        /* حركات إبداعية بصرية */
+        .sidebar-transition { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        
+        body.dark-mode { background-color: #0f172a; color: #f1f5f9; }
+        body.dark-mode header { background-color: #020617; }
+        body.dark-mode .bg-white { background-color: #1e293b; border-color: #334155; }
+        body.dark-mode .text-emerald-900 { color: #34d399; }
+        body.dark-mode .text-gray-900 { color: #f8fafc; }
     </style>
 </head>
-<body id="bodyPage" class="bg-[#fcfbf7] text-gray-900 min-h-screen relative pb-24 transition-colors duration-300">
+<body id="bodyPage" class="bg-[#fcfbf7] text-gray-900 min-h-screen relative pb-24 transition-colors duration-500 font-cairo">
 
-    <header class="w-full bg-[#111111] text-white py-12 px-6 md:px-12 border-b-4 border-[#b89452] relative z-10">
-        <div class="max-w-6xl mx-auto w-full flex justify-between items-center relative z-10">
+    <header class="w-full bg-[#111111] text-white py-12 px-6 md:px-12 border-b-4 border-[#b89452] shadow-xl relative z-40">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
             
             <div>
-                <h1 class="text-4xl md:text-6xl font-bold font-kufi tracking-widest text-white border-b-2 border-transparent pb-2">
-                    الحضارة
-                </h1>
-                <p class="text-xs md:text-sm text-gray-400 mt-2 pr-4 font-light">
-                    العلوم الإنسانية والإسلامية
-                </p>
+                <h1 class="text-4xl md:text-6xl font-bold font-kufi tracking-widest text-white">الحضارة</h1>
+                <p class="text-xs md:text-sm text-[#b89452] mt-2 font-light">بوابة العلوم الإنسانية والإسلامية والجيوسياسية</p>
             </div>
 
-            <div class="relative flex items-center gap-4">
+            <div class="relative flex items-center gap-3 md:gap-5">
                 
-                <button id="darkModeToggle" class="text-xl p-2 rounded-full hover:bg-gray-800 transition-colors" title="تغيير المظهر">
+                <button id="darkModeToggle" class="text-2xl p-2 rounded-full hover:bg-gray-800 transition-all duration-300" title="تغيير المظهر">
                     🌙
                 </button>
 
-                <button id="menuToggle" class="text-xl p-2 rounded-full hover:bg-gray-800 transition-colors" title="القائمة">
+                <button id="menuToggle" class="text-2xl p-2 rounded-full hover:bg-gray-800 transition-all duration-300" title="الأقسام">
                     ☰
                 </button>
 
-                <button onclick="toggleSettingsMenu()" class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fas fa-ellipsis-v text-xl"></i>
+                <button onclick="toggleSettingsMenu()" class="text-gray-400 hover:text-[#b89452] transition-colors">
+                    <i class="fas fa-ellipsis-v text-2xl"></i>
                 </button>
 
-                <div id="settingsMenu" class="hidden absolute left-0 mt-3 top-full w-72 bg-white text-gray-800 rounded-lg shadow-2xl p-5 border border-gray-100 z-50">
-                    <h4 class="font-bold border-b pb-2 mb-3 flex items-center gap-2 text-gray-900">
-                        <i class="fas fa-sliders-h text-[#b89452]"></i> لوحة التحكم والإدارة
+                <div id="settingsMenu" class="hidden absolute left-0 mt-3 top-full w-72 bg-white text-gray-800 rounded-xl shadow-2xl p-5 border border-gray-100 z-50">
+                    <h4 class="font-bold border-b pb-2 mb-3 flex items-center gap-2 text-gray-900 font-tajawal">
+                        <i class="fas fa-sliders-h text-[#b89452]"></i> لوحة الإدارة
                     </h4>
-                    
-                    <div class="mb-4">
-                        <label class="block text-xs font-bold text-gray-500 mb-1.5">1. خط اللغة المتبع</label>
-                        <select onchange="changeFont(this.value)" class="w-full bg-gray-50 border rounded p-1.5 text-sm">
-                            <option value="font-cairo">خط قاهرة (عصري ومبسط)</option>
-                            <option value="font-amiri">خط أميري (نسخ أكاديمي أصيل)</option>
-                            <option value="font-kufi">خط ريم كوفي (كوفي جمالي)</option>
-                            <option value="font-tajawal">خط تجول (رسمي وأنيق)</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-xs font-bold text-gray-500 mb-1.5">2. إضافة وهيكلة العناصر</label>
-                        <button onclick="alert('لوحة الإدارة مهيأة!')" class="w-full bg-gray-900 text-white text-sm rounded py-1.5 hover:bg-gray-800 transition flex items-center justify-center gap-2">
-                            <i class="fas fa-plus-circle"></i> إضافة عنصر أو مقال الآن
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase">تغيير الخط</label>
+                            <select onchange="changeFont(this.value)" class="w-full bg-gray-50 border rounded-lg p-2 text-sm mt-1">
+                                <option value="font-cairo">خط قاهرة (عصري)</option>
+                                <option value="font-amiri">خط أميري (أصيل)</option>
+                                <option value="font-tajawal">خط تجول (أنيق)</option>
+                            </select>
+                        </div>
+                        <button class="w-full bg-gray-900 text-white rounded-lg py-2 text-sm hover:bg-[#b89452] transition">
+                            إضافة محتوى جديد
                         </button>
                     </div>
-
-                    <div class="mb-2">
-                        <label class="block text-xs font-bold text-gray-500 mb-1.5">3. قوالب الألوان والمظهر</label>
-                        <div class="grid grid-cols-2 gap-2 text-[11px]">
-                            <button onclick="changeGlobalTheme('dark')" class="bg-gray-950 text-white p-1.5 rounded hover:bg-gray-900">الداكن المطلق</button>
-                            <button onclick="changeGlobalTheme('classic')" class="bg-amber-50 text-amber-900 p-1.5 rounded hover:bg-amber-100 border border-amber-200">البيج الكلاسيكي</button>
-                        </div>
-                    </div>
                 </div>
+            </div>
+        </div>
+    </header>
 
+    <div id="sidebar" class="fixed top-0 -right-72 w-72 h-full bg-[#111111] text-white sidebar-transition z-[100] p-6 shadow-2xl border-l border-[#b89452]/30">
+        <div class="flex justify-between items-center mb-10 border-b border-gray-800 pb-4">
+            <h3 class="text-xl font-bold font-tajawal text-[#b89452]">أقسام المنصة</h3>
+            <button id="closeSidebar" class="text-2xl text-gray-400 hover:text-white transition-colors">✕</button>
+        </div>
+        <nav class="flex flex-col gap-6 font-tajawal">
+            <a href="#" class="flex items-center gap-3 hover:text-[#b89452] transition-all group">
+                <i class="fas fa-home w-6 text-gray-500 group-hover:text-[#b89452]"></i> الرئيسية
+            </a>
+            <a href="#" class="flex items-center gap-3 hover:text-[#b89452] transition-all group">
+                <i class="fas fa-book-open w-6 text-gray-500 group-hover:text-[#b89452]"></i> بحوث ومقالات
+            </a>
+            <a href="#" class="flex items-center gap-3 hover:text-[#b89452] transition-all group">
+                <i class="fas fa-chart-line w-6 text-gray-500 group-hover:text-[#b89452]"></i> تحليلات ودراسات
+            </a>
+        </nav>
+        <div class="absolute bottom-10 right-6 left-6 border-t border-gray-800 pt-6">
+            <p class="text-[10px] text-gray-500 text-center uppercase tracking-widest">منصة الحضارة التعليمية</p>
+        </div>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-6 py-16">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            <div class="card-hover cursor-pointer bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+                <div class="w-16 h-16 mx-auto bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <h3 class="font-bold text-xl text-emerald-900 mb-2 text-center font-tajawal">العلوم الإسلامية</h3>
+                <p class="text-sm text-emerald-600/70 text-center">الفقه، التفسير، والفكر الإسلامي الراسخ</p>
+            </div>
+
+            <div class="card-hover cursor-pointer bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+                <div class="w-16 h-16 mx-auto bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    <i class="fas fa-globe-europe"></i>
+                </div>
+                <h3 class="font-bold text-xl text-red-900 mb-2 text-center font-tajawal">السياسة والجيوسياسية</h3>
+                <p class="text-sm text-red-600/70 text-center">علاقات القوة، النظم العسكرية، والجغرافيا السياسية</p>
+            </div>
+
+            <div class="card-hover cursor-pointer bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+                <div class="w-16 h-16 mx-auto bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="font-bold text-xl text-purple-900 mb-2 text-center font-tajawal">علم النفس</h3>
+                <p class="text-sm text-purple-600/70 text-center">دراسة السلوك، الوعي البشري، والتحليل النفسي</p>
+            </div>
+
+            <div class="card-hover cursor-pointer bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+                <div class="w-16 h-16 mx-auto bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    <i class="fas fa-scroll"></i>
+                </div>
+                <h3 class="font-bold text-xl text-amber-900 mb-2 text-center font-tajawal">الفلسفة والفكر</h3>
+                <p class="text-sm text-amber-600/70 text-center">المذاهب الفكرية، تاريخ الفلسفة وتطور المجتمعات</p>
             </div>
 
         </div>
-    </header>
-    <div id="sidebar" class="fixed top-0 -right-64 w-64 h-full bg-[#111111] text-white transition-all duration-300 z-50 p-5 shadow-2xl border-l border-gray-800">
-        <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-            <h3 class="text-lg font-bold font-tajawal text-[#b89452]">أقسام المنصة</h3>
-            <button id="closeSidebar" class="text-gray-400 hover:text-white transition-colors text-xl">✕</button>
-        </div>
-        <nav class="flex flex-col gap-4 font-cairo">
-            <a href="#" class="p-2 rounded hover:bg-gray-900 hover:text-[#b89452] transition-all">المحاضرات</a>
-            <a href="#" class="p-2 rounded hover:bg-gray-900 hover:text-[#b89452] transition-all">التمارين والحلول</a>
-            <a href="#" class="p-2 rounded hover:bg-gray-900 hover:text-[#b89452] transition-all">المراجع العلمية</a>
-        </nav>
-    </div>
-    <main class="max-w-6xl mx-auto px-4 py-12">
-        <nav class="max-w-6xl mx-auto px-4 py-12">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <div onclick="spreadTheme('islamic', '#1b4332', '#eaf2ec')" class="cursor-pointer bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="w-20 h-20 mx-auto bg-emerald-50 text-emerald-700 rounded-full flex items-center justify-center text-3xl mb-4">
-                        <i class="fas fa-mosque"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-emerald-900 mb-1 text-center font-tajawal">العلوم الإسلامية</h3>
-                    <p class="text-xs text-emerald-600 text-center font-cairo">الفقه، الفكر والرموز التاريخية</p>
-                </div>
-
-                </div>
-        </nav>
     </main>
 
     <script>
         function toggleSettingsMenu() {
-            const menu = document.getElementById('settingsMenu');
-            menu.classList.toggle('hidden');
+            document.getElementById('settingsMenu').classList.toggle('hidden');
         }
+
         function changeFont(fontClass) {
-            document.body.className = document.body.className.replace(/font-\w+/g, '');
+            document.body.classList.remove('font-cairo', 'font-amiri', 'font-tajawal');
             document.body.classList.add(fontClass);
         }
-        function changeGlobalTheme(theme) {
-            if(theme === 'dark') {
-                document.body.style.backgroundColor = '#111111';
-                document.body.style.color = '#ffffff';
-            } else {
-                document.body.style.backgroundColor = '#fcfbf7';
-                document.body.style.color = '#1a202c';
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.fa-ellipsis-v')) {
+                var menu = document.getElementById("settingsMenu");
+                if (menu && !menu.classList.contains('hidden')) {
+                    menu.classList.add('hidden');
+                }
             }
-        }
-        function spreadTheme(type, color1, color2) {
-            console.log("تم اختيار القسم:", type);
         }
     </script>
 
     <script src="script.js"></script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الحضارة - العلوم الإنسانية والسياسية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@300;400;700&family=Reem+Kufi&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-amiri { font-family: 'Amiri', serif; }
+        .font-kufi { font-family: 'Reem Kufi', sans-serif; }
+        .font-tajawal { font-family: 'Tajawal', sans-serif; }
+        .font-cairo { font-family: 'Cairo', sans-serif; }
+
+        /* حركات إبداعية بصرية */
+        .sidebar-transition { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        
+        body.dark-mode { background-color: #0f172a; color: #f1f5f9; }
+        body.dark-mode header { background-color: #020617; }
+        body.dark-mode .bg-white { background-color: #1e293b; border-color: #334155; }
+        body.dark-mode .text-emerald-900 { color: #34d399; }
+        body.dark-mode .text-gray-900 { color: #f8fafc; }
+    </style>
+</head>
+<body id="bodyPage" class="bg-[#fcfbf7] text-gray-900 min-h-screen relative pb-24 transition-colors duration-500 font-cairo">
+
+    <header class="w-full bg-[#111111] text-white py-12 px-6 md:px-12 border-b-4 border-[#b89452] shadow-xl relative z-40">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            
+            <div>
+                <h1 class="text-4xl md:text-6xl font-bold font-kufi tracking-widest text-white">الحضارة</h1>
+                <p class="text-xs md:text-sm text-[#b89452] mt-2 font-light">بوابة العلوم الإنسانية والإسلامية والجيوسياسية</p>
+            </div>
+
+            <div class="relative flex items-center gap-3 md:gap-5">
+                
+                <button id="darkModeToggle" class="text-2xl p-2 rounded-full hover:bg-gray-800 transition-all duration-300" title="تغيير المظهر">
+                    🌙
+                </button>
+
+                <button id="menuToggle" class="text-2xl p-2 rounded-full hover:bg-gray-800 transition-all duration-300" title="الأقسام">
+                    ☰
+                </button>
+
+                <button onclick="toggleSettingsMenu()" class="text-gray-400 hover:text-[#b89452] transition-colors">
+                    <i class="fas fa-ellipsis-v text-2xl"></i>
+                </button>
+
+                <div id="settingsMenu" class="hidden absolute left-0 mt-3 top-full w-72 bg-white text-gray-800 rounded-xl shadow-2xl p-5 border border-gray-100 z-50">
+                    <h4 class="font-bold border-b pb-2 mb-3 flex items-center gap-2 text-gray-900 font-tajawal">
+                        <i class="fas fa-sliders-h text-[#b89452]"></i> لوحة الإدارة
+                    </h4>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase">تغيير الخط</label>
+                            <select onchange="changeFont(this.value)" class="w-full bg-gray-50 border rounded-lg p-2 text-sm mt-1">
+                                <option value="font-cairo">خط قاهرة (عصري)</option>
+                                <option value="font-amiri">خط أميري (أصيل)</option>
+                                <option value="font-tajawal">خط تجول (أنيق)</option>
+                            </select>
+                        </div>
+                        <button class="w-full bg-gray-900 text-white rounded-lg py-2 text-sm hover:bg-[#b89452] transition">
+                            إضافة محتوى جديد
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="sidebar" class="fixed top-0 -right-72 w-72 h-full bg-[#111111] text-white sidebar-transition z-[100] p-6 shadow-2xl border-l border-[#b89452]/30">
+        <div class="flex justify-between items-center mb-10 border-b border-gray-800 pb-4">
+            <h3 class="text-xl font-bold font-tajawal text-[#b89452]">أقسام المنصة</h3>
+            <button id="closeSidebar" class="text-2xl text-gray-400 hover:text-white transition-colors">✕</button>
+        </div>
+        <nav class="flex flex-col gap-6 font-tajawal">
+            <a href="#" class="flex items-center gap-3 hover:text-[#b89452] transition-all group">
+                <i class="fas fa-home w-6 text-gray-500 group-hover:text-[#b89452]"></i> الرئيسية
+            </a>
+            <a href="#" class="flex items-center gap-3 hover:text-[#b89452] transition-all group">
+                <i class="fas fa-book-open w-6 text-gray-500 group-hover:text-[#b89452]"></i> بحوث ومقالات
+            </a>
+            <a href="#" class="flex items-center gap-3 hover:text-[#b89452] transition-all group">
+                <i class="fas fa-chart-line w-6 text-gray-500 group-hover:text-[#b89452]"></i> تحليلات ودراسات
+            </a>
+        </nav>
+        <div class="absolute bottom-10 right-6 left-6 border-t border-gray-800 pt-6">
+            <p class="text-[10px] text-gray-500 text-center uppercase tracking-widest">منصة الحضارة التعليمية</p>
+        </div>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-6 py-16">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            <div class="card-hover cursor-pointer bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+                <div class="w-16 h-16 mx-auto bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <h3 class="font-bold text-xl text-emerald-900 mb-2 text-center font-tajawal">العلوم الإسلامية</h3>
+                <p class="text-sm text-emerald-600/70 text-center">الفقه، التفسير، والفكر الإسلامي الراسخ</p>
+            </div>
+
+            <div class="card-hover cursor-pointer bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+                <div class="w-16 h-16 mx-auto bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    <i class="fas fa-globe-europe"></i>
+                </div>
+                <h3 class="font-bold text-xl text-red-900 mb-2 text-center font-tajawal">السياسة والجيوسياسية</h3>
+                <p class="text-sm text-red-600/70 text-center">علاقات القوة، النظم العسكرية، والجغرافيا السياسية</p>
+            </div>
+
+            <div class="card-hover cursor-pointer bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+                <div class="w-16 h-16 mx-auto bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="font-bold text-xl text-purple-900 mb-2 text-center font-tajawal">علم النفس</h3>
+                <p class="text-sm text-purple-600/70 text-center">دراسة السلوك، الوعي البشري، والتحليل النفسي</p>
+            </div>
+
+            <div class="card-hover cursor-pointer bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+                <div class="w-16 h-16 mx-auto bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    <i class="fas fa-scroll"></i>
+                </div>
+                <h3 class="font-bold text-xl text-amber-900 mb-2 text-center font-tajawal">الفلسفة والفكر</h3>
+                <p class="text-sm text-amber-600/70 text-center">المذاهب الفكرية، تاريخ الفلسفة وتطور المجتمعات</p>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        function toggleSettingsMenu() {
+            document.getElementById('settingsMenu').classList.toggle('hidden');
+        }
+
+        function changeFont(fontClass) {
+            document.body.classList.remove('font-cairo', 'font-amiri', 'font-tajawal');
+            document.body.classList.add(fontClass);
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.fa-ellipsis-v')) {
+                var menu = document.getElementById("settingsMenu");
+                if (menu && !menu.classList.contains('hidden')) {
+                    menu.classList.add('hidden');
+                }
+            }
+        }
+    </script>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
