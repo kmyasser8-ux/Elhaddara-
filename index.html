@@ -640,53 +640,11 @@ rounded-[35px] p-12 text-white">
 
 </footer>
 
-<script>
+<script src="script.js"></script>
 
-const body = document.body;
+</body>
+</html>
 
-document.getElementById("themeBtn").onclick = () => {
-    body.classList.toggle("dark");
-}
-
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlayPage");
-
-document.getElementById("menuBtn").onclick = () => {
-    sidebar.classList.add("active");
-    overlay.classList.add("active");
-}
-
-document.getElementById("closeSidebar").onclick = closeSidebar;
-overlay.onclick = closeSidebar;
-
-function closeSidebar(){
-    sidebar.classList.remove("active");
-    overlay.classList.remove("active");
-}
-
-function toggleSection(id){
-
-    const panels = document.querySelectorAll(".section-panel");
-
-    panels.forEach(panel => {
-
-        if(panel.id === id){
-
-            panel.classList.toggle("active");
-
-            if(panel.classList.contains("active")){
-                panel.scrollIntoView({
-                    behavior:"smooth"
-                });
-            }
-
-        }else{
-            panel.classList.remove("active");
-        }
-
-    });
-
-}
 
 </script>
 
