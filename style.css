@@ -190,23 +190,115 @@ body.dark{
     opacity:0.25;
 }
 
+/* =========================
+   بطاقات الحضارة - النسخة الفاخرة
+========================= */
 
-/* --- تعديل بطاقات الأقسام لتأثير الزجاج والتفاعل --- */
-.card-section {
-    background: rgba(255, 255, 255, 0.03); /* خلفية شفافة جداً لتفتيح البطاقة الداكنة */
-    backdrop-filter: blur(8px); /* تأثير التمويه الزجاجي */
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1); /* إطار نحيف جداً بلون أبيض شفاف ليرسم أطراف البطاقة */
-    border-radius: 16px; /* جعل زوايا البطاقات دائرية وناعمة */
-    padding: 25px;
-    transition: all 0.4s ease; /* تمهيد لحركة الماوس الناعمة */
+.card-section{
+
+    position: relative;
+    overflow: hidden;
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,0.06),
+        rgba(255,255,255,0.015)
+    );
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    border-radius: 24px;
+
+    padding: 28px;
+
+    transition:
+    transform 0.45s ease,
+    box-shadow 0.45s ease,
+    border-color 0.45s ease,
+    background 0.45s ease;
+
+    box-shadow:
+    0 10px 35px rgba(0,0,0,0.28);
+
 }
 
-/* --- ماذا يحدث عندما يمرر الزائر الماوس فوق البطاقة (Hover) --- */
-.card-section:hover {
-    transform: translateY(-10px); /* ترتفع البطاقة للأعلى بشكل رائع */
-    background: rgba(255, 255, 255, 0.08); /* تصبح خلفيتها الزجاجية أكثر إضاءة */
-    border-color: rgba(212, 175, 55, 0.5); /* يتغير إطارها للون ذهبي حضاري خفيف */
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5); /* يظهر لها ظل في الأسفل يعزلها عن الخلفية */
-    }
-    
+/* --- خط ضوء علوي فاخر --- */
+.card-section::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:1px;
+
+    background:
+    linear-gradient(
+        to right,
+        transparent,
+        rgba(255,255,255,0.55),
+        transparent
+    );
+
+    opacity:0.5;
+}
+
+/* --- وهج داخلي خفيف --- */
+.card-section::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    radial-gradient(
+        circle at top right,
+        rgba(199,168,107,0.12),
+        transparent 40%
+    );
+
+    opacity:0;
+
+    transition:0.5s;
+}
+
+/* =========================
+   Hover Effect
+========================= */
+
+.card-section:hover{
+
+    transform:
+    translateY(-12px)
+    scale(1.015);
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,0.09),
+        rgba(255,255,255,0.025)
+    );
+
+    border-color:
+    rgba(199,168,107,0.45);
+
+    box-shadow:
+    0 20px 45px rgba(0,0,0,0.42),
+    0 0 25px rgba(199,168,107,0.12);
+
+}
+
+/* --- تفعيل الوهج عند Hover --- */
+.card-section:hover::after{
+    opacity:1;
+}
