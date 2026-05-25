@@ -6,203 +6,346 @@
     <title>لوحة التحكم - منصة الحضارة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body { background: #0a0c15; color: white; font-family: 'Cairo', sans-serif; }
-        .btn-gold { background: #c7a86b; color: #0a0c15; padding: 10px 20px; border-radius: 40px; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
+        .btn-gold { background: #c7a86b; color: #0a0c15; padding: 10px 20px; border-radius: 40px; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
         .btn-gold:hover { background: #d4b87a; transform: scale(1.02); }
-        .btn-red { background: #dc2626; color: white; padding: 8px 16px; border-radius: 40px; cursor: pointer; border: none; }
-        .btn-outline { background: transparent; border: 1px solid #c7a86b; color: #c7a86b; padding: 8px 16px; border-radius: 40px; cursor: pointer; }
-        .card { background: #1e1f2e; border-radius: 20px; padding: 1.5rem; margin-bottom: 1rem; border-right: 4px solid #c7a86b; }
-        input, textarea { background: #2d2f42; border: none; padding: 12px; border-radius: 12px; color: white; width: 100%; margin-top: 5px; outline: none; }
-        input:focus, textarea:focus { border: 1px solid #c7a86b; }
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; opacity: 0; transition: 0.2s; }
-        .modal.active { visibility: visible; opacity: 1; }
-        .modal-content { background: #1a1c2c; padding: 2rem; border-radius: 28px; width: 90%; max-width: 500px; }
-        .tab-btn { padding: 10px 20px; border-radius: 40px; cursor: pointer; transition: 0.2s; }
-        .tab-btn.active { background: #c7a86b; color: #0a0c15; }
-        .tab-btn:not(.active) { background: #2d2f42; }
+        .btn-red { background: #dc2626; color: white; padding: 8px 16px; border-radius: 40px; cursor: pointer; border: none; transition: 0.2s; }
+        .btn-red:hover { background: #b91c1c; }
+        .btn-outline { background: transparent; border: 1px solid #c7a86b; color: #c7a86b; padding: 8px 16px; border-radius: 40px; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-outline:hover { background: #c7a86b; color: #0a0c15; }
+        .card { background: #1e1f2e; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; }
+        .tab-btn { padding: 10px 24px; border-radius: 30px; background: #1e1f2e; color: #a0aec0; border: 1px solid transparent; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .tab-btn:hover { background: #2d2f3f; color: white; }
+        .tab-btn.active { background: #c7a86b; color: #0a0c15; border-color: #c7a86b; }
+        
+        /* Modal Styles */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 100; }
+        .modal.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: #141622; border: 1px solid #c7a86b; border-radius: 24px; width: 90%; max-width: 600px; padding: 30px; }
     </style>
 </head>
-<body class="p-6">
+<body>
 
-<div class="max-w-6xl mx-auto">
-    <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-[#c7a86b]">🎛️ لوحة تحكم الحضارة</h1>
-        <p class="text-gray-400 mt-2">إدارة جميع مقالات المنصة (العلوم الإسلامية، السياسة، علم النفس، الفلسفة)</p>
-        <div class="w-24 h-0.5 bg-[#c7a86b] mx-auto mt-3"></div>
-    </div>
-
-    <!-- أزرار التبويب -->
- <div id="dynamicTabsContainer" class="flex flex-wrap gap-3 justify-center mb-8"></div>
-     <div id="categoriesManagementSection" class="section-content">
-        <div class="flex justify-between items-center flex-wrap mb-5">
-            <h2 class="text-2xl font-bold"><i class="fas fa-tags text-[#c7a86b]"></i> إدارة أقسام العلوم الرئيسية</h2>
-            <button onclick="openAddCategoryModal()" class="btn-gold text-sm"><i class="fas fa-plus"></i> إضافة علم جديد</button>
-        </div>
-        <div id="categoriesList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-    </div>
-
-    <div id="articlesManagementSection" class="section-content" style="display:none">
-        <div class="flex justify-between items-center flex-wrap mb-5">
-            <h2 id="currentCategoryTitle" class="text-2xl font-bold"><i class="fas fa-book-open text-[#c7a86b]"></i> مقالات العلم</h2>
-            <button onclick="openAddArticleModal()" class="btn-gold text-sm"><i class="fas fa-plus"></i> مقال جديد</button>
-        </div>
-        <div id="dynamicArticlesList" class="space-y-3"></div>
-    </div>
-    
-
-
-
-<!-- نافذة إضافة/تعديل -->
-<div id="articleModal" class="modal">
-    <div class="modal-content">
-        <h3 id="modalTitle" class="text-xl font-bold mb-4">إضافة مقال جديد</h3>
-        <input type="hidden" id="currentSection">
-        <input type="hidden" id="editIndex">
-        <input type="text" id="articleTitle" placeholder="عنوان المقال" class="mb-3">
-        <textarea id="articleText" placeholder="نص المقال..." rows="4" class="mb-4"></textarea>
-        <div class="flex gap-3">
-            <button onclick="saveArticle()" class="btn-gold">💾 حفظ</button>
-            <button onclick="closeModal()" class="btn-outline">إلغاء</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    let currentView = 'islamic';
-    let articlesData = {
-        islamic: [],
-        politics: [],
-        psychology: [],
-        philosophy: []
-    };
-
-    function loadData() {
-        const sections = ['islamic', 'politics', 'psychology', 'philosophy'];
-        sections.forEach(section => {
-            const saved = localStorage.getItem(`${section}Articles`);
-            if(saved) {
-                articlesData[section] = JSON.parse(saved);
-            } else {
-                // بيانات افتراضية
-                if(section === 'islamic') articlesData[section] = [
-                    { title: "الصراع الطائفي بين السلفية والإثني عشرية", text: "تحليل تاريخي وسياسي وفكري لأبرز التحولات العقائدية." },
-                    { title: "الدعاء وتأثيره على البناء النفسي", text: "كيف يغير الإيمان والدعاء سلوك الإنسان." },
-                    { title: "الفقه الإسلامي بين الأصالة والتجديد", text: "قراءة في تطور المدارس الفقهية." }
-                ];
-                else if(section === 'politics') articlesData[section] = [
-                    { title: "كيف تبني الدول العظمى نفوذها؟", text: "تحليل آليات الاقتصاد والعسكر والتكنولوجيا." },
-                    { title: "قصص صعود الدول", text: "تجارب اليابان والصين وألمانيا." }
-                ];
-                else if(section === 'psychology') articlesData[section] = [
-                    { title: "قوة العقل الباطن", text: "تأثير الأفكار على السلوك." },
-                    { title: "الوعي الجمعي", text: "كيف يتحكم بالمجتمعات." }
-                ];
-                else if(section === 'philosophy') articlesData[section] = [
-                    { title: "المذاهب الفكرية", text: "الوجودية والماركسية." },
-                    { title: "تطور الفلسفة", text: "من اليونان إلى الحداثة." }
-                ];
-                localStorage.setItem(`${section}Articles`, JSON.stringify(articlesData[section]));
-            }
-        });
-        renderCurrentView();
-    }
-
-    function renderCurrentView() {
-        const articles = articlesData[currentView];
-        const containerId = `${currentView}ArticlesList`;
-        const container = document.getElementById(containerId);
+    <div class="max-w-6xl mx-auto px-6 py-10">
         
-        if(articles.length === 0) {
-            container.innerHTML = '<div class="text-center text-gray-400 py-6">📭 لا توجد مقالات. اضغط "مقال جديد" للإضافة.</div>';
-            return;
-        }
-        
-        container.innerHTML = articles.map((art, idx) => `
-            <div class="card">
-                <div class="flex justify-between items-start flex-wrap gap-2">
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-[#c7a86b]">${escapeHtml(art.title)}</h3>
-                        <p class="text-gray-300 text-sm mt-1">${escapeHtml(art.text.substring(0, 100))}${art.text.length > 100 ? '...' : ''}</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="editArticle('${currentView}', ${idx})" class="bg-[#c7a86b] text-black px-3 py-1 rounded-full text-sm"><i class="fas fa-edit"></i> تعديل</button>
-                        <button onclick="deleteArticle('${currentView}', ${idx})" class="bg-red-600/80 hover:bg-red-600 px-3 py-1 rounded-full text-sm"><i class="fas fa-trash"></i> حذف</button>
-                    </div>
+        <div class="flex justify-between items-center border-b border-white/10 pb-6 mb-8">
+            <div>
+                <h1 class="text-4xl font-bold text-[#c7a86b] mb-2">لوحة تحكم الحضارة</h1>
+                <p class="text-gray-400 text-sm">إدارة الأقسام الفكرية والبحوث بسلاسة مطلقة</p>
+            </div>
+            <a href="index.html" class="btn-outline">
+                <i class="fas fa-sign-out-alt"></i> خروج والعودة للموقع
+            </a>
+        </div>
+
+        <div id="dynamicTabsContainer" class="flex flex-wrap gap-3 justify-center mb-8"></div>
+
+        <div id="categoriesManagementSection" class="section-content">
+            <div class="flex justify-between items-center flex-wrap mb-6">
+                <h2 class="text-2xl font-bold"><i class="fas fa-tags text-[#c7a86b] ml-2"></i> أقسام العلوم الحالية</h2>
+                <button onclick="openAddCategoryModal()" class="btn-gold"><i class="fas fa-plus"></i> إضافة علم جديد</button>
+            </div>
+            <div id="categoriesList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </div>
+
+        <div id="articlesManagementSection" class="section-content" style="display:none">
+            <div class="flex justify-between items-center flex-wrap mb-6">
+                <h2 id="currentCategoryTitle" class="text-2xl font-bold text-[#c7a86b]"></h2>
+                <div class="flex gap-3">
+                    <button onclick="showCategoriesTab()" class="btn-outline text-sm"><i class="fas fa-arrow-right"></i> العودة للعلوم</button>
+                    <button onclick="openAddArticleModal()" class="btn-gold text-sm"><i class="fas fa-plus"></i> إضافة مقال في هذا العلم</button>
                 </div>
             </div>
-        `).join('');
-    }
+            <div id="dynamicArticlesList" class="space-y-4"></div>
+        </div>
+    </div>
 
-    function showSection(section) {
-        currentView = section;
-        document.querySelectorAll('.section-content').forEach(el => el.style.display = 'none');
-        document.getElementById(`${section}Section`).style.display = 'block';
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(`tab${section.charAt(0).toUpperCase() + section.slice(1)}`).classList.add('active');
-        renderCurrentView();
-    }
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <h3 id="categoryModalTitle" class="text-2xl font-bold mb-6 text-[#c7a86b]">إضافة علم جديد</h3>
+            <input type="hidden" id="editCatId">
+            <div class="mb-4">
+                <label class="block text-gray-400 mb-2">اسم العلم (يظهر للقراء)</label>
+                <input type="text" id="catTitle" class="w-full bg-[#1e1f2e] border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-[#c7a86b]">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-400 mb-2">المعرّف الفريد بالإنجليزية (مثال: history, politics)</label>
+                <input type="text" id="catIdInput" class="w-full bg-[#1e1f2e] border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-[#c7a86b]">
+            </div>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeCategoryModal()" class="btn-outline">إلغاء</button>
+                <button onclick="saveCategory()" class="btn-gold">حفظ العلم</button>
+            </div>
+        </div>
+    </div>
 
-    let currentEditSection = null;
-    let currentEditIndex = null;
+    <div id="articleModal" class="modal">
+        <div class="modal-content">
+            <h3 id="articleModalTitle" class="text-2xl font-bold mb-6 text-[#c7a86b]">إضافة مقال جديد</h3>
+            <input type="hidden" id="editArticleIndex">
+            <div class="mb-4">
+                <label class="block text-gray-400 mb-2">عنوان المقال</label>
+                <input type="text" id="articleTitle" class="w-full bg-[#1e1f2e] border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-[#c7a86b]">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-400 mb-2">نص وفكرة المقال العميقة</label>
+                <textarea id="articleText" rows="6" class="w-full bg-[#1e1f2e] border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-[#c7a86b] leading-relaxed"></textarea>
+            </div>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeArticleModal()" class="btn-outline">إلغاء</button>
+                <button onclick="saveArticle()" class="btn-gold">حفظ المقال</button>
+            </div>
+        </div>
+    </div>
 
-    function openAddModal(section) {
-        currentEditSection = section;
-        currentEditIndex = null;
-        document.getElementById('modalTitle').innerText = '➕ إضافة مقال جديد';
-        document.getElementById('currentSection').value = section;
-        document.getElementById('articleTitle').value = '';
-        document.getElementById('articleText').value = '';
-        document.getElementById('editIndex').value = '';
-        document.getElementById('articleModal').classList.add('active');
-    }
+    <script>
+        // الأقسام الافتراضية الثابتة لحماية اللوحة
+        const defaultCats = [
+            { id: 'islamic', title: 'العلوم الإسلامية' },
+            { id: 'politics', title: 'السياسة' },
+            { id: 'psychology', title: 'علم النفس' },
+            { id: 'philosophy', title: 'الفلسفة والفكر' }
+        ];
 
-    function editArticle(section, idx) {
-        currentEditSection = section;
-        currentEditIndex = idx;
-        const art = articlesData[section][idx];
-        document.getElementById('modalTitle').innerText = '✏️ تعديل المقال';
-        document.getElementById('currentSection').value = section;
-        document.getElementById('articleTitle').value = art.title;
-        document.getElementById('articleText').value = art.text;
-        document.getElementById('editIndex').value = idx;
-        document.getElementById('articleModal').classList.add('active');
-    }
+        let categories = [];
+        let currentCategory = ''; // لمراقبة العلم النشط حالياً والمقالات المرتبطة به
 
-    function saveArticle() {
-        const section = document.getElementById('currentSection').value;
-        const title = document.getElementById('articleTitle').value.trim();
-        const text = document.getElementById('articleText').value.trim();
-        const editIdx = document.getElementById('editIndex').value;
-        
-        if(!title || !text) { alert('الرجاء ملء جميع الحقول'); return; }
-        
-        if(editIdx !== '') {
-            articlesData[section][parseInt(editIdx)] = { title, text };
-        } else {
-            articlesData[section].push({ title, text });
+        function initDashboard() {
+            if (!localStorage.getItem('intellectualCategories')) {
+                localStorage.setItem('intellectualCategories', JSON.stringify(defaultCats));
+            }
+            loadCategoriesData();
         }
-        
-        localStorage.setItem(`${section}Articles`, JSON.stringify(articlesData[section]));
-        renderCurrentView();
-        closeModal();
-        alert('✅ تم حفظ المقال بنجاح');
-    }
 
-    function deleteArticle(section, idx) {
-        if(confirm('هل تريد حذف هذا المقال نهائياً؟')) {
-            articlesData[section].splice(idx, 1);
-            localStorage.setItem(`${section}Articles`, JSON.stringify(articlesData[section]));
-            renderCurrentView();
-            alert('✅ تم حذف المقال');
+        function loadCategoriesData() {
+            categories = JSON.parse(localStorage.getItem('intellectualCategories')) || defaultCats;
+            renderTabs();
+            renderCategoriesList();
         }
-    }
 
-    function closeModal() { document.getElementById('articleModal').classList.remove('active'); }
-    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
-    window.onclick = e => { if(e.target === document.getElementById('articleModal')) closeModal(); };
-    
-    loadData();
-</script>
+        // بناء التبويبات مع تصفير الـ innerHTML منعاً للتكرار المزدوج
+        function renderTabs() {
+            const tabsContainer = document.getElementById('dynamicTabsContainer');
+            tabsContainer.innerHTML = ''; 
+
+            // تبويب الإدارة الأساسي
+            const mainTab = document.createElement('button');
+            mainTab.className = `tab-btn ${currentCategory === '' ? 'active' : ''}`;
+            mainTab.id = 'tab-main-dashboard';
+            mainTab.innerHTML = '⚙️ إدارة الأقسام والعلوم';
+            mainTab.onclick = () => showCategoriesTab();
+            tabsContainer.appendChild(mainTab);
+
+            // تبويبات العلوم الفرعية المتغيرة
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${currentCategory === cat.id ? 'active' : ''}`;
+                btn.id = `tab-btn-${cat.id}`;
+                btn.innerText = cat.title;
+                btn.onclick = () => showArticlesTab(cat.id, cat.title);
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        // عرض بطاقات العلوم الحالية
+        function renderCategoriesList() {
+            const listContainer = document.getElementById('categoriesList');
+            listContainer.innerHTML = ''; // تفريغ لمنع التضاعف والتكرار
+
+            categories.forEach(cat => {
+                const articlesCount = localStorage.getItem(`${cat.id}Articles`) ? JSON.parse(localStorage.getItem(`${cat.id}Articles`)).length : 0;
+                
+                listContainer.innerHTML += `
+                    <div class="card flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#c7a86b] mb-2">${escapeHtml(cat.title)}</h3>
+                            <p class="text-sm text-gray-400 mb-4">المعرف البرمجي: <span class="text-gray-300 font-mono">${cat.id}</span></p>
+                            <span class="inline-block bg-white/5 border border-white/10 text-xs px-3 py-1 rounded-full text-gray-300">
+                                📁 يحتوي على (${articlesCount}) مقال وبحث
+                            </span>
+                        </div>
+                        <div class="flex gap-2 mt-6 border-t border-white/5 pt-4">
+                            <button onclick="showArticlesTab('${cat.id}', '${cat.title}')" class="btn-outline text-xs px-4 py-2"><i class="fas fa-eye"></i> عرض وتعديل المقالات</button>
+                            <button onclick="openEditCategoryModal('${cat.id}', '${cat.title}')" class="btn-outline text-xs text-blue-400 border-blue-400/30 hover:bg-blue-400 hover:text-black px-4 py-2"><i class="fas fa-edit"></i> تعديل</button>
+                            <button onclick="deleteCategory('${cat.id}')" class="btn-red text-xs px-4 py-2"><i class="fas fa-trash"></i> حذف</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // تشغيل واجهة المقالات للعلم النشط والمختار 
+        function showArticlesTab(catId, catTitle) {
+            currentCategory = catId;
+            
+            document.getElementById('categoriesManagementSection').style.display = 'none';
+            document.getElementById('articlesManagementSection').style.display = 'block';
+            
+            document.getElementById('currentCategoryTitle').innerHTML = `<i class="fas fa-book-open text-[#c7a86b] ml-2"></i> إدارة مقالات: ${escapeHtml(catTitle)}`;
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById(`tab-btn-${catId}`);
+            if(activeBtn) activeBtn.classList.add('active');
+
+            renderArticlesList();
+        }
+
+        function showCategoriesTab() {
+            currentCategory = '';
+            document.getElementById('categoriesManagementSection').style.display = 'block';
+            document.getElementById('articlesManagementSection').style.display = 'none';
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-main-dashboard').classList.add('active');
+            renderCategoriesList();
+            renderTabs();
+        }
+
+        function renderArticlesList() {
+            const listContainer = document.getElementById('dynamicArticlesList');
+            listContainer.innerHTML = ''; 
+
+            const articles = localStorage.getItem(`${currentCategory}Articles`) ? JSON.parse(localStorage.getItem(`${currentCategory}Articles`)) : [];
+            
+            if(articles.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-10 bg-white/5 rounded-2xl border border-dashed border-white/10">
+                        <p class="text-gray-400">لا توجد بحوث أو مقالات مضافة في هذا العلم الفكري حتى الآن.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            articles.forEach((art, idx) => {
+                listContainer.innerHTML += `
+                    <div class="bg-[#1e1f2e] p-5 rounded-2xl border border-white/5 flex justify-between items-start gap-4">
+                        <div class="space-y-2 flex-1">
+                            <h4 class="text-lg font-bold text-[#c7a86b]">${escapeHtml(art.title)}</h4>
+                            <p class="text-sm text-gray-300 leading-relaxed text-justify">${escapeHtml(art.text)}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openEditArticleModal(${idx})" class="text-xs btn-outline border-white/10 text-gray-400 hover:text-[#c7a86b] px-3 py-1.5"><i class="fas fa-pen"></i></button>
+                            <button onclick="deleteArticle(${idx})" class="text-xs btn-red bg-red-600/20 text-red-400 hover:bg-red-600 px-3 py-1.5"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // عمليات المودال والتحكم بالأقسام
+        function openAddCategoryModal() {
+            document.getElementById('categoryModalTitle').innerText = 'إضافة علم فكري جديد';
+            document.getElementById('editCatId').value = '';
+            document.getElementById('catTitle').value = '';
+            document.getElementById('catIdInput').value = '';
+            document.getElementById('catIdInput').disabled = false;
+            document.getElementById('categoryModal').classList.add('active');
+        }
+
+        function openEditCategoryModal(id, title) {
+            document.getElementById('categoryModalTitle').innerText = 'تعديل اسم العلم الفكري';
+            document.getElementById('editCatId').value = id;
+            document.getElementById('catTitle').value = title;
+            document.getElementById('catIdInput').value = id;
+            document.getElementById('catIdInput').disabled = true; 
+            document.getElementById('categoryModal').classList.add('active');
+        }
+
+        function closeCategoryModal() { document.getElementById('categoryModal').classList.remove('active'); }
+
+        function saveCategory() {
+            const title = document.getElementById('catTitle').value.trim();
+            const id = document.getElementById('catIdInput').value.trim().toLowerCase();
+            const editId = document.getElementById('editCatId').value;
+
+            if(!title || !id) { alert('الرجاء تعبئة كافة الحقول المطلوبة'); return; }
+
+            if(editId === '') {
+                if(categories.some(c => c.id === id)) { alert('المعرف البرمجي مستخدم مسبقاً، اختر معرفاً فريداً آخر!'); return; }
+                categories.push({ id, title });
+            } else {
+                const catIndex = categories.findIndex(c => c.id === editId);
+                if(catIndex !== -1) categories[catIndex].title = title;
+            }
+
+            localStorage.setItem('intellectualCategories', JSON.stringify(categories));
+            loadCategoriesData();
+            closeCategoryModal();
+            alert('✅ تم حفظ القسم الفكري بنجاح');
+        }
+
+        function deleteCategory(id) {
+            if(confirm('🚨 تحذير: حذف العلم سيخفيه من المنصة تماماً، هل تريد الاستمرار؟')) {
+                categories = categories.filter(c => c.id !== id);
+                localStorage.setItem('intellectualCategories', JSON.stringify(categories));
+                loadCategoriesData();
+                showCategoriesTab();
+            }
+        }
+
+        // عمليات ومودال المقالات المصلحة ديناميكياً
+        function openAddArticleModal() {
+            document.getElementById('articleModalTitle').innerText = 'إضافة بحث/مقال جديد';
+            document.getElementById('editArticleIndex').value = '';
+            document.getElementById('articleTitle').value = '';
+            document.getElementById('articleText').value = '';
+            document.getElementById('articleModal').classList.add('active');
+        }
+
+        function openEditArticleModal(idx) {
+            const articles = JSON.parse(localStorage.getItem(`${currentCategory}Articles`)) || [];
+            document.getElementById('articleModalTitle').innerText = 'تعديل المقال';
+            document.getElementById('editArticleIndex').value = idx;
+            document.getElementById('articleTitle').value = articles[idx].title;
+            document.getElementById('articleText').value = articles[idx].text;
+            document.getElementById('articleModal').classList.add('active');
+        }
+
+        function closeArticleModal() { document.getElementById('articleModal').classList.remove('active'); }
+
+        function saveArticle() {
+            const title = document.getElementById('articleTitle').value.trim();
+            const text = document.getElementById('articleText').value.trim();
+            const editIdx = document.getElementById('editArticleIndex').value;
+
+            if(!title || !text) { alert('الرجاء ملء جميع حقول المقال'); return; }
+
+            let articles = localStorage.getItem(`${currentCategory}Articles`) ? JSON.parse(localStorage.getItem(`${currentCategory}Articles`)) : [];
+
+            if(editIdx !== '') {
+                articles[parseInt(editIdx)] = { title, text };
+            } else {
+                articles.push({ title, text });
+            }
+
+            localStorage.setItem(`${currentCategory}Articles`, JSON.stringify(articles));
+            renderArticlesList();
+            closeArticleModal();
+            alert('✅ تم حفظ المقال بنجاح داخل القسم');
+            loadCategoriesData(); 
+        }
+
+        function deleteArticle(idx) {
+            if(confirm('هل تريد بالتأكيد حذف هذا المقال نهائياً من الذاكرة؟')) {
+                let articles = JSON.parse(localStorage.getItem(`${currentCategory}Articles`)) || [];
+                articles.splice(idx, 1);
+                localStorage.setItem(`${currentCategory}Articles`, JSON.stringify(articles));
+                renderArticlesList();
+                loadCategoriesData();
+            }
+        }
+
+        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+        
+        window.onclick = e => {
+            if (e.target === document.getElementById('categoryModal')) closeCategoryModal();
+            if (e.target === document.getElementById('articleModal')) closeArticleModal();
+        };
+
+        initDashboard();
+    </script>
 </body>
-</html>
+                    </html>
+            
