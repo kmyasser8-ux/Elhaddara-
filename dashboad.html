@@ -11,7 +11,6 @@
         .btn-gold { background: #c7a86b; color: #0a0c15; padding: 10px 20px; border-radius: 40px; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
         .btn-gold:hover { background: #d4b87a; transform: scale(1.02); }
         .btn-red { background: #dc2626; color: white; padding: 8px 16px; border-radius: 40px; cursor: pointer; border: none; }
-        .btn-red:hover { background: #b91c1c; }
         .btn-outline { background: transparent; border: 1px solid #c7a86b; color: #c7a86b; padding: 8px 16px; border-radius: 40px; cursor: pointer; }
         .card { background: #1e1f2e; border-radius: 20px; padding: 1.5rem; margin-bottom: 1rem; border-right: 4px solid #c7a86b; }
         input, textarea { background: #2d2f42; border: none; padding: 12px; border-radius: 12px; color: white; width: 100%; margin-top: 5px; outline: none; }
@@ -19,72 +18,77 @@
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; opacity: 0; transition: 0.2s; }
         .modal.active { visibility: visible; opacity: 1; }
         .modal-content { background: #1a1c2c; padding: 2rem; border-radius: 28px; width: 90%; max-width: 500px; }
-        .science-tag { background: #2d2f42; border-radius: 40px; padding: 6px 16px; display: inline-flex; align-items: center; gap: 8px; }
-        .preview-box { background: #0f111a; border: 1px solid #2d2f42; border-radius: 16px; padding: 16px; margin-top: 20px; }
+        .tab-btn { padding: 10px 20px; border-radius: 40px; cursor: pointer; transition: 0.2s; }
+        .tab-btn.active { background: #c7a86b; color: #0a0c15; }
+        .tab-btn:not(.active) { background: #2d2f42; }
     </style>
 </head>
 <body class="p-6">
 
-<div class="max-w-5xl mx-auto">
-    <!-- العنوان -->
+<div class="max-w-6xl mx-auto">
     <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-[#c7a86b]">🎛️ لوحة تحكم الحضارة</h1>
-        <p class="text-gray-400 mt-2">إدارة محتوى المنصة - التغييرات تظهر تلقائياً في index.html</p>
+        <p class="text-gray-400 mt-2">إدارة جميع مقالات المنصة (العلوم الإسلامية، السياسة، علم النفس، الفلسفة)</p>
         <div class="w-24 h-0.5 bg-[#c7a86b] mx-auto mt-3"></div>
     </div>
 
-    <!-- مقالات العلوم الإسلامية (الجزء الرئيسي) -->
-    <div class="flex justify-between items-center flex-wrap mb-5">
-        <h2 class="text-2xl font-bold"><i class="fas fa-mosque text-[#c7a86b]"></i> مقالات العلوم الإسلامية</h2>
-        <button onclick="openAddModal()" class="btn-gold text-sm"><i class="fas fa-plus"></i> مقال جديد</button>
-    </div>
-    
-    <div id="articlesList" class="space-y-3">
-        <!-- ستظهر المقالات هنا -->
+    <!-- أزرار التبويب -->
+    <div class="flex flex-wrap gap-3 justify-center mb-8">
+        <button onclick="showSection('islamic')" id="tabIslamic" class="tab-btn active">🕌 العلوم الإسلامية</button>
+        <button onclick="showSection('politics')" id="tabPolitics" class="tab-btn">🌍 السياسة</button>
+        <button onclick="showSection('psychology')" id="tabPsychology" class="tab-btn">🧠 علم النفس</button>
+        <button onclick="showSection('philosophy')" id="tabPhilosophy" class="tab-btn">📜 الفلسفة</button>
     </div>
 
-    <!-- أقسام إضافية (سياسة، نفس، فلسفة) -->
-    <div class="mt-10 pt-6 border-t border-gray-700">
-        <h3 class="text-xl font-bold mb-4"><i class="fas fa-cog text-[#c7a86b]"></i> إدارة الأقسام الأخرى</h3>
-        <p class="text-gray-400 text-sm mb-4">يمكنك تعديل محتوى الأقسام الأخرى (السياسة، علم النفس، الفلسفة) من هنا:</p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- قسم السياسة -->
-            <div class="bg-[#15172a] p-4 rounded-xl">
-                <h4 class="font-bold text-blue-400"><i class="fas fa-globe"></i> السياسة</h4>
-                <button onclick="editOtherSection('politics')" class="btn-outline text-sm w-full mt-3">تعديل مقالات السياسة</button>
-            </div>
-            <!-- قسم علم النفس -->
-            <div class="bg-[#15172a] p-4 rounded-xl">
-                <h4 class="font-bold text-purple-400"><i class="fas fa-brain"></i> علم النفس</h4>
-                <button onclick="editOtherSection('psychology')" class="btn-outline text-sm w-full mt-3">تعديل مقالات علم النفس</button>
-            </div>
-            <!-- قسم الفلسفة -->
-            <div class="bg-[#15172a] p-4 rounded-xl">
-                <h4 class="font-bold text-amber-400"><i class="fas fa-scroll"></i> الفلسفة</h4>
-                <button onclick="editOtherSection('philosophy')" class="btn-outline text-sm w-full mt-3">تعديل مقالات الفلسفة</button>
-            </div>
+    <!-- قسم العلوم الإسلامية -->
+    <div id="islamicSection" class="section-content">
+        <div class="flex justify-between items-center flex-wrap mb-5">
+            <h2 class="text-2xl font-bold"><i class="fas fa-mosque text-[#c7a86b]"></i> مقالات العلوم الإسلامية</h2>
+            <button onclick="openAddModal('islamic')" class="btn-gold text-sm"><i class="fas fa-plus"></i> مقال جديد</button>
         </div>
+        <div id="islamicArticlesList" class="space-y-3"></div>
     </div>
 
-    <!-- معاينة سريعة -->
-    <div class="preview-box mt-8">
-        <p class="text-gray-400 text-sm"><i class="fas fa-info-circle"></i> جميع التغييرات تحفظ تلقائياً في المتصفح. افتح <strong class="text-[#c7a86b]">index.html</strong> لرؤية النتائج مباشرة.</p>
+    <!-- قسم السياسة -->
+    <div id="politicsSection" class="section-content" style="display:none">
+        <div class="flex justify-between items-center flex-wrap mb-5">
+            <h2 class="text-2xl font-bold"><i class="fas fa-globe text-blue-400"></i> مقالات السياسة</h2>
+            <button onclick="openAddModal('politics')" class="btn-gold text-sm"><i class="fas fa-plus"></i> مقال جديد</button>
+        </div>
+        <div id="politicsArticlesList" class="space-y-3"></div>
     </div>
 
-    <!-- رابط لفتح المنصة -->
-    <div class="text-center mt-6">
-        <a href="index.html" target="_blank" class="text-[#c7a86b] hover:underline"><i class="fas fa-external-link-alt"></i> افتح المنصة الرئيسية</a>
+    <!-- قسم علم النفس -->
+    <div id="psychologySection" class="section-content" style="display:none">
+        <div class="flex justify-between items-center flex-wrap mb-5">
+            <h2 class="text-2xl font-bold"><i class="fas fa-brain text-purple-400"></i> مقالات علم النفس</h2>
+            <button onclick="openAddModal('psychology')" class="btn-gold text-sm"><i class="fas fa-plus"></i> مقال جديد</button>
+        </div>
+        <div id="psychologyArticlesList" class="space-y-3"></div>
+    </div>
+
+    <!-- قسم الفلسفة -->
+    <div id="philosophySection" class="section-content" style="display:none">
+        <div class="flex justify-between items-center flex-wrap mb-5">
+            <h2 class="text-2xl font-bold"><i class="fas fa-scroll text-amber-400"></i> مقالات الفلسفة</h2>
+            <button onclick="openAddModal('philosophy')" class="btn-gold text-sm"><i class="fas fa-plus"></i> مقال جديد</button>
+        </div>
+        <div id="philosophyArticlesList" class="space-y-3"></div>
+    </div>
+
+    <div class="mt-8 text-center text-gray-500 text-sm border-t border-gray-700 pt-6">
+        ✅ جميع التغييرات تحفظ تلقائياً. <a href="index.html" target="_blank" class="text-[#c7a86b] hover:underline">← افتح المنصة الرئيسية</a>
     </div>
 </div>
 
-<!-- نافذة إضافة/تعديل مقال للعلوم الإسلامية -->
+<!-- نافذة إضافة/تعديل -->
 <div id="articleModal" class="modal">
     <div class="modal-content">
         <h3 id="modalTitle" class="text-xl font-bold mb-4">إضافة مقال جديد</h3>
+        <input type="hidden" id="currentSection">
         <input type="hidden" id="editIndex">
         <input type="text" id="articleTitle" placeholder="عنوان المقال" class="mb-3">
-        <textarea id="articleText" placeholder="نص المقال أو الملخص..." rows="4" class="mb-4"></textarea>
+        <textarea id="articleText" placeholder="نص المقال..." rows="4" class="mb-4"></textarea>
         <div class="flex gap-3">
             <button onclick="saveArticle()" class="btn-gold">💾 حفظ</button>
             <button onclick="closeModal()" class="btn-outline">إلغاء</button>
@@ -92,205 +96,141 @@
     </div>
 </div>
 
-<!-- نافذة تعديل الأقسام الأخرى -->
-<div id="otherModal" class="modal">
-    <div class="modal-content">
-        <h3 id="otherModalTitle" class="text-xl font-bold mb-4">تعديل القسم</h3>
-        <input type="hidden" id="otherSectionType">
-        <div id="otherArticlesList" class="space-y-3 mb-4 max-h-96 overflow-y-auto">
-            <!-- ستظهر مقالات القسم هنا -->
-        </div>
-        <button onclick="closeOtherModal()" class="btn-outline w-full">إغلاق</button>
-    </div>
-</div>
-
 <script>
-    // ----------------------------------------------
-    // البيانات - متوافقة مع بنية index.html
-    let islamicArticles = [];
-    
-    // بيانات الأقسام الأخرى (سياسة، نفس، فلسفة)
-    let otherSections = {
-        politics: [
-            { title: "كيف تبني الدول العظمى نفوذها العالمي؟", text: "تحليل لآليات الاقتصاد والعسكر والتكنولوجيا في صناعة الهيمنة الدولية." },
-            { title: "قصص صعود الدول من الفوضى إلى القوة", text: "دراسة لتجارب اليابان والصين وألمانيا في إعادة بناء القوة الوطنية." }
-        ],
-        psychology: [
-            { title: "قوة العقل الباطن في تشكيل الشخصية", text: "كيف تؤثر الأفكار المتكررة والمعتقدات الخفية على القرارات والسلوك اليومي." },
-            { title: "الوعي الجمعي وكيف يتحكم بالمجتمعات", text: "تحليل نفسي واجتماعي لكيفية تشكل الأفكار الجماعية وصناعة الرأي العام." }
-        ],
-        philosophy: [
-            { title: "أهم المذاهب الفكرية التي غيرت العالم", text: "رحلة عبر الوجودية والماركسية والعدمية والعقلانية الحديثة." },
-            { title: "كيف تطورت الفلسفة من اليونان إلى الحداثة؟", text: "تاريخ التحولات الفكرية الكبرى وصراع الإنسان مع أسئلة الوجود." }
-        ]
+    let currentView = 'islamic';
+    let articlesData = {
+        islamic: [],
+        politics: [],
+        psychology: [],
+        philosophy: []
     };
 
-    // تحميل البيانات من localStorage
     function loadData() {
-        // مقالات العلوم الإسلامية
-        const savedArts = localStorage.getItem('islamicArticles');
-        if(savedArts) {
-            islamicArticles = JSON.parse(savedArts);
-        } else {
-            islamicArticles = [
-                { title: "الصراع الطائفي بين السلفية والإثني عشرية", text: "تحليل تاريخي وسياسي وفكري لأبرز التحولات العقائدية والصراعات المذهبية في العالم الإسلامي." },
-                { title: "الدعاء وتأثيره على البناء النفسي للإنسان", text: "كيف يغير الإيمان والدعاء سلوك الإنسان واستقراره النفسي والروحي." },
-                { title: "الفقه الإسلامي بين الأصالة والتجديد", text: "قراءة في تطور المدارس الفقهية والتحديات المعاصرة." }
-            ];
-            localStorage.setItem('islamicArticles', JSON.stringify(islamicArticles));
-        }
-
-        // الأقسام الأخرى
-        const savedOthers = localStorage.getItem('otherSections');
-        if(savedOthers) {
-            otherSections = JSON.parse(savedOthers);
-        } else {
-            localStorage.setItem('otherSections', JSON.stringify(otherSections));
-        }
-
-        renderArticles();
+        const sections = ['islamic', 'politics', 'psychology', 'philosophy'];
+        sections.forEach(section => {
+            const saved = localStorage.getItem(`${section}Articles`);
+            if(saved) {
+                articlesData[section] = JSON.parse(saved);
+            } else {
+                // بيانات افتراضية
+                if(section === 'islamic') articlesData[section] = [
+                    { title: "الصراع الطائفي بين السلفية والإثني عشرية", text: "تحليل تاريخي وسياسي وفكري لأبرز التحولات العقائدية." },
+                    { title: "الدعاء وتأثيره على البناء النفسي", text: "كيف يغير الإيمان والدعاء سلوك الإنسان." },
+                    { title: "الفقه الإسلامي بين الأصالة والتجديد", text: "قراءة في تطور المدارس الفقهية." }
+                ];
+                else if(section === 'politics') articlesData[section] = [
+                    { title: "كيف تبني الدول العظمى نفوذها؟", text: "تحليل آليات الاقتصاد والعسكر والتكنولوجيا." },
+                    { title: "قصص صعود الدول", text: "تجارب اليابان والصين وألمانيا." }
+                ];
+                else if(section === 'psychology') articlesData[section] = [
+                    { title: "قوة العقل الباطن", text: "تأثير الأفكار على السلوك." },
+                    { title: "الوعي الجمعي", text: "كيف يتحكم بالمجتمعات." }
+                ];
+                else if(section === 'philosophy') articlesData[section] = [
+                    { title: "المذاهب الفكرية", text: "الوجودية والماركسية." },
+                    { title: "تطور الفلسفة", text: "من اليونان إلى الحداثة." }
+                ];
+                localStorage.setItem(`${section}Articles`, JSON.stringify(articlesData[section]));
+            }
+        });
+        renderCurrentView();
     }
 
-    // عرض مقالات العلوم الإسلامية في لوحة التحكم
-    function renderArticles() {
-        const container = document.getElementById('articlesList');
-        if(!container) return;
+    function renderCurrentView() {
+        const articles = articlesData[currentView];
+        const containerId = `${currentView}ArticlesList`;
+        const container = document.getElementById(containerId);
         
-        if(islamicArticles.length === 0) {
+        if(articles.length === 0) {
             container.innerHTML = '<div class="text-center text-gray-400 py-6">📭 لا توجد مقالات. اضغط "مقال جديد" للإضافة.</div>';
             return;
         }
         
-        container.innerHTML = islamicArticles.map((art, idx) => `
+        container.innerHTML = articles.map((art, idx) => `
             <div class="card">
                 <div class="flex justify-between items-start flex-wrap gap-2">
                     <div class="flex-1">
                         <h3 class="text-lg font-bold text-[#c7a86b]">${escapeHtml(art.title)}</h3>
-                        <p class="text-gray-300 text-sm mt-1">${escapeHtml(art.text.substring(0, 120))}${art.text.length > 120 ? '...' : ''}</p>
+                        <p class="text-gray-300 text-sm mt-1">${escapeHtml(art.text.substring(0, 100))}${art.text.length > 100 ? '...' : ''}</p>
                     </div>
                     <div class="flex gap-2">
-                        <button onclick="editArticle(${idx})" class="bg-[#c7a86b] text-black px-3 py-1 rounded-full text-sm"><i class="fas fa-edit"></i> تعديل</button>
-                        <button onclick="deleteArticle(${idx})" class="bg-red-600/80 hover:bg-red-600 px-3 py-1 rounded-full text-sm"><i class="fas fa-trash"></i> حذف</button>
+                        <button onclick="editArticle('${currentView}', ${idx})" class="bg-[#c7a86b] text-black px-3 py-1 rounded-full text-sm"><i class="fas fa-edit"></i> تعديل</button>
+                        <button onclick="deleteArticle('${currentView}', ${idx})" class="bg-red-600/80 hover:bg-red-600 px-3 py-1 rounded-full text-sm"><i class="fas fa-trash"></i> حذف</button>
                     </div>
                 </div>
             </div>
         `).join('');
     }
 
-    // فتح نافذة إضافة مقال جديد
-    function openAddModal() {
-        window.currentEditIndex = null;
+    function showSection(section) {
+        currentView = section;
+        document.querySelectorAll('.section-content').forEach(el => el.style.display = 'none');
+        document.getElementById(`${section}Section`).style.display = 'block';
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`tab${section.charAt(0).toUpperCase() + section.slice(1)}`).classList.add('active');
+        renderCurrentView();
+    }
+
+    let currentEditSection = null;
+    let currentEditIndex = null;
+
+    function openAddModal(section) {
+        currentEditSection = section;
+        currentEditIndex = null;
         document.getElementById('modalTitle').innerText = '➕ إضافة مقال جديد';
+        document.getElementById('currentSection').value = section;
         document.getElementById('articleTitle').value = '';
         document.getElementById('articleText').value = '';
         document.getElementById('editIndex').value = '';
         document.getElementById('articleModal').classList.add('active');
     }
 
-    // فتح نافذة تعديل مقال
-    function editArticle(idx) {
-        window.currentEditIndex = idx;
-        const art = islamicArticles[idx];
+    function editArticle(section, idx) {
+        currentEditSection = section;
+        currentEditIndex = idx;
+        const art = articlesData[section][idx];
         document.getElementById('modalTitle').innerText = '✏️ تعديل المقال';
+        document.getElementById('currentSection').value = section;
         document.getElementById('articleTitle').value = art.title;
         document.getElementById('articleText').value = art.text;
         document.getElementById('editIndex').value = idx;
         document.getElementById('articleModal').classList.add('active');
     }
 
-    // حفظ المقال (إضافة أو تعديل)
     function saveArticle() {
+        const section = document.getElementById('currentSection').value;
         const title = document.getElementById('articleTitle').value.trim();
         const text = document.getElementById('articleText').value.trim();
-        
-        if(!title) { alert('الرجاء إدخال عنوان المقال'); return; }
-        if(!text) { alert('الرجاء إدخال نص المقال'); return; }
-        
         const editIdx = document.getElementById('editIndex').value;
         
+        if(!title || !text) { alert('الرجاء ملء جميع الحقول'); return; }
+        
         if(editIdx !== '') {
-            islamicArticles[editIdx] = { title, text };
+            articlesData[section][parseInt(editIdx)] = { title, text };
         } else {
-            islamicArticles.push({ title, text });
+            articlesData[section].push({ title, text });
         }
         
-        localStorage.setItem('islamicArticles', JSON.stringify(islamicArticles));
-        renderArticles();
+        localStorage.setItem(`${section}Articles`, JSON.stringify(articlesData[section]));
+        renderCurrentView();
         closeModal();
         alert('✅ تم حفظ المقال بنجاح');
     }
 
-    // حذف مقال
-    function deleteArticle(idx) {
+    function deleteArticle(section, idx) {
         if(confirm('هل تريد حذف هذا المقال نهائياً؟')) {
-            islamicArticles.splice(idx, 1);
-            localStorage.setItem('islamicArticles', JSON.stringify(islamicArticles));
-            renderArticles();
+            articlesData[section].splice(idx, 1);
+            localStorage.setItem(`${section}Articles`, JSON.stringify(articlesData[section]));
+            renderCurrentView();
             alert('✅ تم حذف المقال');
         }
     }
 
-    // فتح نافذة تعديل الأقسام الأخرى
-    function editOtherSection(section) {
-        const sectionNames = { politics: 'السياسة', psychology: 'علم النفس', philosophy: 'الفلسفة' };
-        document.getElementById('otherModalTitle').innerText = `✏️ تعديل مقالات ${sectionNames[section]}`;
-        document.getElementById('otherSectionType').value = section;
-        
-        const articles = otherSections[section];
-        const container = document.getElementById('otherArticlesList');
-        
-        container.innerHTML = articles.map((art, idx) => `
-            <div class="bg-[#2d2f42] p-3 rounded-xl">
-                <input type="text" id="other_title_${idx}" value="${escapeHtml(art.title)}" class="text-sm mb-2" placeholder="العنوان">
-                <textarea id="other_text_${idx}" rows="2" class="text-sm" placeholder="النص">${escapeHtml(art.text)}</textarea>
-                <button onclick="saveOtherArticle('${section}', ${idx})" class="btn-gold text-xs mt-2 px-3 py-1">💾 حفظ هذا المقال</button>
-            </div>
-        `).join('');
-        
-        document.getElementById('otherModal').classList.add('active');
-    }
+    function closeModal() { document.getElementById('articleModal').classList.remove('active'); }
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+    window.onclick = e => { if(e.target === document.getElementById('articleModal')) closeModal(); };
     
-    function saveOtherArticle(section, idx) {
-        const newTitle = document.getElementById(`other_title_${idx}`).value.trim();
-        const newText = document.getElementById(`other_text_${idx}`).value.trim();
-        
-        if(newTitle && newText) {
-            otherSections[section][idx] = { title: newTitle, text: newText };
-            localStorage.setItem('otherSections', JSON.stringify(otherSections));
-            alert('✅ تم حفظ التعديل');
-            editOtherSection(section); // إعادة تحميل العرض
-        } else {
-            alert('الرجاء ملء الحقول');
-        }
-    }
-    
-    function closeOtherModal() {
-        document.getElementById('otherModal').classList.remove('active');
-    }
-
-    function closeModal() {
-        document.getElementById('articleModal').classList.remove('active');
-    }
-
-    function escapeHtml(str) {
-        if(!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if(m === '&') return '&amp;';
-            if(m === '<') return '&lt;';
-            if(m === '>') return '&gt;';
-            return m;
-        });
-    }
-
-    // إغلاق المودال عند الضغط خارج المحتوى
-    window.onclick = function(e) {
-        const modal1 = document.getElementById('articleModal');
-        const modal2 = document.getElementById('otherModal');
-        if(e.target === modal1) closeModal();
-        if(e.target === modal2) closeOtherModal();
-    }
-
     loadData();
 </script>
 </body>
-    </html>
+</html>
