@@ -483,7 +483,19 @@ rounded-[35px] p-12 text-white">
 
 </footer>
 
-<script src="script.js"></script>
+<script src="script.js"></script> 
+ <script>
+    // 1. الإمساك بزر العلوم الإسلامية والحاوية الخاصة بمقالاته
+    const islamicBtn = document.getElementById('islamic-btn');
+    const islamicContent = document.getElementById('islamic-content');
+
+    // 2. سماع الضغطة (عندما يضغط الزائر على العنوان)
+    islamicBtn.addEventListener('click', function() {
+        // 3. اقلب الحالة: إذا كانت المقالات مخفية أظهرها، وإذا كانت ظاهرة أخفها
+        islamicContent.classList.toggle('active');
+    });
+ </script>
+ 
 </body>
 </html>
 
