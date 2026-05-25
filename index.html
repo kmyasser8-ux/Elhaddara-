@@ -161,110 +161,191 @@
     <h3 class="text-3xl text-white font-bold">الحضارة</h3>
     <p class="text-gray-500 mt-2">منصة فكرية تجمع بين العمق والجمال البصري</p>
 </footer>
-
-<script src="script.js"></script>
 <script>
-    // تحميل جميع المقالات من localStorage
-    function loadAllContent() {
-        // مقالات العلوم الإسلامية
-        const savedIslamic = localStorage.getItem('islamicArticles');
-        if(savedIslamic) {
-            const articles = JSON.parse(savedIslamic);
-            const container = document.getElementById('islamicContainer');
-            if(container) {
-                container.innerHTML = articles.map(art => `
-                    <div class="article-card">
-                        <h3 class="text-xl font-bold text-[#c7a86b] mb-3">${escapeHtml(art.title)}</h3>
-                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">${escapeHtml(art.text)}</p>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // مقالات السياسة
-        const savedPolitics = localStorage.getItem('politicsArticles');
-        if(savedPolitics) {
-            const articles = JSON.parse(savedPolitics);
-            const container = document.getElementById('politicsContainer');
-            if(container) {
-                container.innerHTML = articles.map(art => `
-                    <div class="bg-white/5 rounded-2xl p-6">
-                        <h3 class="text-xl font-bold mb-3">${escapeHtml(art.title)}</h3>
-                        <p class="text-gray-300">${escapeHtml(art.text)}</p>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // مقالات علم النفس
-        const savedPsych = localStorage.getItem('psychologyArticles');
-        if(savedPsych) {
-            const articles = JSON.parse(savedPsych);
-            const container = document.getElementById('psychologyContainer');
-            if(container) {
-                container.innerHTML = articles.map(art => `
-                    <div class="bg-white/5 rounded-2xl p-6">
-                        <h3 class="text-xl font-bold mb-3">${escapeHtml(art.title)}</h3>
-                        <p class="text-gray-300">${escapeHtml(art.text)}</p>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // مقالات الفلسفة
-        const savedPhil = localStorage.getItem('philosophyArticles');
-        if(savedPhil) {
-            const articles = JSON.parse(savedPhil);
-            const container = document.getElementById('philosophyContainer');
-            if(container) {
-                container.innerHTML = articles.map(art => `
-                    <div class="bg-white/5 rounded-2xl p-6">
-                        <h3 class="text-xl font-bold mb-3">${escapeHtml(art.title)}</h3>
-                        <p class="text-gray-300">${escapeHtml(art.text)}</p>
-                    </div>
-                `).join('');
-            }
-        }
+    // آلية فتح وإغلاق اللوحات
+    function toggleSection(panelId) {
+        const panel = document.getElementById(panelId);
+        if(panel) panel.classList.toggle('active');
     }
 
-    function escapeHtml(str) {
-        if(!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            return m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;');
+    // إدارة القائمة الجانبية (Sidebar)
+    const sidebar = document.getElementById('sidebar');
+    const overlayPage = document.getElementById('overlayPage');
+    const menuBtn = document.getElementById('menuBtn');
+    const closeSidebar = document.getElementById('closeSidebar');
+
+    if(menuBtn) menuBtn.addEventListener('click', () => { sidebar.classList.add('active'); overlayPage.classList.add('active'); });
+    if(closeSidebar) closeSidebar.addEventListener('click', () => { sidebar.classList.remove('active'); overlayPage.classList.remove('active'); });
+    if(overlayPage) overlayPage.addEventListener('click', () => { sidebar.classList.remove('active'); overlayPage.classList.remove('active'); });
+
+    // تبديل الوضع الليلي والنهاري
+    const themeBtn = document.getElementById('themeBtn');
+    if(themeBtn) {
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            const icon = themeBtn.querySelector('i');
+            icon.className = document.body.classList.contains('dark') ? 'fas fa-moon' : 'fas fa-sun';
+            themeBtn.style.color = document.body.classList.contains('dark') ? '#facc15' : '#ea580c';
         });
     }
 
-    // تهيئة البيانات الافتراضية إذا كانت localStorage فارغة
-    function initDefaultData() {
-        if(!localStorage.getItem('islamicArticles')) {
-            localStorage.setItem('islamicArticles', JSON.stringify([
-                { title: "الصراع الطائفي بين السلفية والإثني عشرية", text: "تحليل تاريخي وسياسي وفكري لأبرز التحولات العقائدية والصراعات المذهبية في العالم الإسلامي." },
-                { title: "الدعاء وتأثيره على البناء النفسي للإنسان", text: "كيف يغير الإيمان والدعاء سلوك الإنسان واستقراره النفسي والروحي." },
-                { title: "الفقه الإسلامي بين الأصالة والتجديد", text: "قراءة في تطور المدارس الفقهية والتحديات المعاصرة." }
-            ]));
+    // الإعدادات الافتراضية للعلوم الأساسية (تُحمل أول مرة فقط)
+    const defaultCats = [
+        { id: 'islamic', title: 'العلوم الإسلامية', desc: 'العقيدة، الفقه، الفكر الإسلامي', icon: 'fas fa-mosque', bg: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=500', iconColor: 'text-emerald-300', color: 'from-slate-950 to-emerald-950' },
+        { id: 'politics', title: 'السياسة', desc: 'فهم القوى العالمية وصراعات النفوذ', icon: 'fas fa-globe', bg: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?q=80&w=500', iconColor: 'text-blue-300', color: 'from-slate-950 to-blue-950' },
+        { id: 'psychology', title: 'علم النفس', desc: 'العقيلة الباطن، الوعي والتحليل النفسي', icon: 'fas fa-brain', bg: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=500', iconColor: 'text-purple-300', color: 'from-[#140c24] to-[#271046]' },
+        { id: 'philosophy', title: 'الفلسفة والفكر', desc: 'رحلة الأفكار وصراع الإنسان مع المعنى', icon: 'fas fa-scroll', bg: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=500', iconColor: 'text-amber-300', color: 'from-[#21160d] to-[#3b2713]' }
+    ];
+
+    // بناء الواجهة ديناميكياً بناءً على المخزن في localStorage
+    function initAndRender() {
+        if(!localStorage.getItem('platformCategories')) {
+            localStorage.setItem('platformCategories', JSON.stringify(defaultCats));
         }
-        if(!localStorage.getItem('politicsArticles')) {
-            localStorage.setItem('politicsArticles', JSON.stringify([
-                { title: "كيف تبني الدول العظمى نفوذها العالمي؟", text: "تحليل لآليات الاقتصاد والعسكر والتكنولوجيا في صناعة الهيمنة الدولية." },
-                { title: "قصص صعود الدول من الفوضى إلى القوة", text: "دراسة لتجارب اليابان والصين وألمانيا في إعادة بناء القوة الوطنية." }
-            ]));
-        }
-        if(!localStorage.getItem('psychologyArticles')) {
-            localStorage.setItem('psychologyArticles', JSON.stringify([
-                { title: "قوة العقل الباطن في تشكيل الشخصية", text: "كيف تؤثر الأفكار المتكررة والمعتقدات الخفية على القرارات والسلوك اليومي." },
-                { title: "الوعي الجمعي وكيف يتحكم بالمجتمعات", text: "تحليل نفسي واجتماعي لكيفية تشكل الأفكار الجماعية." }
-            ]));
-        }
-        if(!localStorage.getItem('philosophyArticles')) {
-            localStorage.setItem('philosophyArticles', JSON.stringify([
-                { title: "أهم المذاهب الفكرية التي غيرت العالم", text: "رحلة عبر الوجودية والماركسية والعدمية والعقلانية الحديثة." },
-                { title: "كيف تطورت الفلسفة من اليونان إلى الحداثة؟", text: "تاريخ التحولات الفكرية الكبرى وصراع الإنسان مع أسئلة الوجود." }
-            ]));
-        }
+        
+        const categories = JSON.parse(localStorage.getItem('platformCategories'));
+        const grid = document.getElementById('categoriesGrid');
+        const panelsContainer = document.getElementById('dynamicPanels');
+        
+        grid.innerHTML = '';
+        panelsContainer.innerHTML = '';
+
+        categories.forEach(cat => {
+            // 1. توليد بطاقة العلم الأساسي
+            grid.innerHTML += `
+                <div onclick="toggleSection('${cat.id}Panel')" class="card bg-[#11131e] text-white p-6 min-h-[320px]">
+                    <div class="card-bg" style="background-image:url('${cat.bg}')"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-3xl ${cat.iconColor || 'text-amber-300'} mb-5">
+                            <i class="${cat.icon}"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">${escapeHtml(cat.title)}</h3>
+                        <p class="text-gray-300 mt-3 text-sm">${escapeHtml(cat.desc)}</p>
+                    </div>
+                </div>
+            `;
+
+            // 2. سحب وتوليد لوحة المقالات الخاصة بهذا القسم
+            const savedArticles = localStorage.getItem(`${cat.id}Articles`) ? JSON.parse(localStorage.getItem(`${cat.id}Articles`)) : [];
+            let articlesHTML = savedArticles.map(art => `
+                <div class="article-card">
+                    <h3 class="text-xl font-bold text-[#c7a86b] mb-3">${escapeHtml(art.title)}</h3>
+                    <p class="leading-relaxed text-sm opacity-90">${escapeHtml(art.text)}</p>
+                </div>
+            `).join('');
+
+            if(savedArticles.length === 0) {
+                articlesHTML = '<p class="text-gray-400 text-sm py-4">لا توجد مقالات مضافة في هذا العلم حالياً.</p>';
+            }
+
+            panelsContainer.innerHTML += `
+                <section id="${cat.id}Panel" class="section-panel">
+                    <div class="bg-gradient-to-br ${cat.color || 'from-slate-950 to-slate-900'} rounded-3xl p-8 text-white mt-6">
+                        <h2 class="text-3xl font-bold mb-6 text-[#c7a86b]">📚 بحوث ومقالات: ${escapeHtml(cat.title)}</h2>
+                        <div class="grid md:grid-cols-2 gap-6">${articlesHTML}</div>
+                    </div>
+                </section>
+            `;
+        });
     }
 
-    initDefaultData();
-    document.addEventListener('DOMContentLoaded', loadAllContent);
-</script>
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+    
+    document.addEventListener('DOMContentLoaded', initAndRender);
+            </script>
+    <script>
+    // آلية فتح وإغلاق اللوحات
+    function toggleSection(panelId) {
+        const panel = document.getElementById(panelId);
+        if(panel) panel.classList.toggle('active');
+    }
+
+    // إدارة القائمة الجانبية (Sidebar)
+    const sidebar = document.getElementById('sidebar');
+    const overlayPage = document.getElementById('overlayPage');
+    const menuBtn = document.getElementById('menuBtn');
+    const closeSidebar = document.getElementById('closeSidebar');
+
+    if(menuBtn) menuBtn.addEventListener('click', () => { sidebar.classList.add('active'); overlayPage.classList.add('active'); });
+    if(closeSidebar) closeSidebar.addEventListener('click', () => { sidebar.classList.remove('active'); overlayPage.classList.remove('active'); });
+    if(overlayPage) overlayPage.addEventListener('click', () => { sidebar.classList.remove('active'); overlayPage.classList.remove('active'); });
+
+    // تبديل الوضع الليلي والنهاري
+    const themeBtn = document.getElementById('themeBtn');
+    if(themeBtn) {
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            const icon = themeBtn.querySelector('i');
+            icon.className = document.body.classList.contains('dark') ? 'fas fa-moon' : 'fas fa-sun';
+            themeBtn.style.color = document.body.classList.contains('dark') ? '#facc15' : '#ea580c';
+        });
+    }
+
+    // الإعدادات الافتراضية للعلوم الأساسية (تُحمل أول مرة فقط)
+    const defaultCats = [
+        { id: 'islamic', title: 'العلوم الإسلامية', desc: 'العقيدة، الفقه، الفكر الإسلامي', icon: 'fas fa-mosque', bg: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=500', iconColor: 'text-emerald-300', color: 'from-slate-950 to-emerald-950' },
+        { id: 'politics', title: 'السياسة', desc: 'فهم القوى العالمية وصراعات النفوذ', icon: 'fas fa-globe', bg: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?q=80&w=500', iconColor: 'text-blue-300', color: 'from-slate-950 to-blue-950' },
+        { id: 'psychology', title: 'علم النفس', desc: 'العقيلة الباطن، الوعي والتحليل النفسي', icon: 'fas fa-brain', bg: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=500', iconColor: 'text-purple-300', color: 'from-[#140c24] to-[#271046]' },
+        { id: 'philosophy', title: 'الفلسفة والفكر', desc: 'رحلة الأفكار وصراع الإنسان مع المعنى', icon: 'fas fa-scroll', bg: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=500', iconColor: 'text-amber-300', color: 'from-[#21160d] to-[#3b2713]' }
+    ];
+
+    // بناء الواجهة ديناميكياً بناءً على المخزن في localStorage
+    function initAndRender() {
+        if(!localStorage.getItem('platformCategories')) {
+            localStorage.setItem('platformCategories', JSON.stringify(defaultCats));
+        }
+        
+        const categories = JSON.parse(localStorage.getItem('platformCategories'));
+        const grid = document.getElementById('categoriesGrid');
+        const panelsContainer = document.getElementById('dynamicPanels');
+        
+        grid.innerHTML = '';
+        panelsContainer.innerHTML = '';
+
+        categories.forEach(cat => {
+            // 1. توليد بطاقة العلم الأساسي
+            grid.innerHTML += `
+                <div onclick="toggleSection('${cat.id}Panel')" class="card bg-[#11131e] text-white p-6 min-h-[320px]">
+                    <div class="card-bg" style="background-image:url('${cat.bg}')"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-3xl ${cat.iconColor || 'text-amber-300'} mb-5">
+                            <i class="${cat.icon}"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">${escapeHtml(cat.title)}</h3>
+                        <p class="text-gray-300 mt-3 text-sm">${escapeHtml(cat.desc)}</p>
+                    </div>
+                </div>
+            `;
+
+            // 2. سحب وتوليد لوحة المقالات الخاصة بهذا القسم
+            const savedArticles = localStorage.getItem(`${cat.id}Articles`) ? JSON.parse(localStorage.getItem(`${cat.id}Articles`)) : [];
+            let articlesHTML = savedArticles.map(art => `
+                <div class="article-card">
+                    <h3 class="text-xl font-bold text-[#c7a86b] mb-3">${escapeHtml(art.title)}</h3>
+                    <p class="leading-relaxed text-sm opacity-90">${escapeHtml(art.text)}</p>
+                </div>
+            `).join('');
+
+            if(savedArticles.length === 0) {
+                articlesHTML = '<p class="text-gray-400 text-sm py-4">لا توجد مقالات مضافة في هذا العلم حالياً.</p>';
+            }
+
+            panelsContainer.innerHTML += `
+                <section id="${cat.id}Panel" class="section-panel">
+                    <div class="bg-gradient-to-br ${cat.color || 'from-slate-950 to-slate-900'} rounded-3xl p-8 text-white mt-6">
+                        <h2 class="text-3xl font-bold mb-6 text-[#c7a86b]">📚 بحوث ومقالات: ${escapeHtml(cat.title)}</h2>
+                        <div class="grid md:grid-cols-2 gap-6">${articlesHTML}</div>
+                    </div>
+                </section>
+            `;
+        });
+    }
+
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+    
+    document.addEventListener('DOMContentLoaded', initAndRender);
+    </script>
+    
+
 </body>
 </html>
