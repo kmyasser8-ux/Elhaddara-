@@ -22,13 +22,11 @@ rel="stylesheet">
 
 <body>
 
-<!-- OVERLAY -->
 <div id="overlayPage"
-class="overlay-page fixed inset-0 bg-black/60 z-40"></div>
+class="overlay-page fixed inset-0 bg-black/60 z-40 hidden"></div>
 
-<!-- SIDEBAR -->
 <aside id="sidebar"
-class="sidebar fixed top-0 -right-[320px] w-[320px] h-full bg-[#050816] z-50 p-8 border-l border-[#c7a86b]/20">
+class="sidebar fixed top-0 -right-[320px] w-[320px] h-full bg-[#050816] z-50 p-8 border-l border-[#c7a86b]/20 transition-all duration-300">
 
 <div class="flex justify-between items-center mb-12">
 
@@ -67,12 +65,10 @@ class="flex items-center gap-4 hover:text-[#c7a86b] transition text-lg">
 
 </aside>
 
-<!-- HERO -->
 <header class="hero min-h-[80vh] flex items-center relative">
 
 <div class="max-w-7xl mx-auto px-6 relative z-10 w-full">
 
-<!-- TOP -->
 <div class="flex justify-between items-center mb-24">
 
 <div class="flex items-center gap-4">
@@ -110,7 +106,6 @@ style="font-family:'Reem Kufi',sans-serif">
 
 </div>
 
-<!-- HERO TEXT -->
 <div class="max-w-3xl">
 
 <h2 class="text-white text-4xl md:text-6xl leading-relaxed font-bold">
@@ -131,10 +126,8 @@ style="font-family:'Reem Kufi',sans-serif">
 
 </header>
 
-<!-- MAIN -->
 <main class="max-w-7xl mx-auto px-6 py-24">
 
-<!-- TITLE -->
 <div class="text-center mb-20">
 
 <h2 class="text-4xl font-bold">
@@ -145,10 +138,8 @@ style="font-family:'Reem Kufi',sans-serif">
 
 </div>
 
-<!-- CARDS -->
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
 
-<!-- ISLAM -->
 <div onclick="toggleSection('islamPanel')"
 class="card shine bg-[#0b1114] text-white p-8 min-h-[360px]">
 
@@ -182,7 +173,6 @@ style="background-image:url('https://images.unsplash.com/photo-1564769625905-50e
 
 </div>
 
-<!-- POLITICS -->
 <div onclick="toggleSection('politicsPanel')"
 class="card politics-card shine bg-[#10131c] text-white p-8 min-h-[360px]">
 
@@ -221,7 +211,6 @@ class="politics-corner-img">
 
 </div>
 
-<!-- PSYCHOLOGY -->
 <div onclick="toggleSection('psyPanel')"
 class="card shine bg-[#181224] text-white p-8 min-h-[360px]">
 
@@ -251,7 +240,6 @@ style="background-image:url('https://images.unsplash.com/photo-1517841905240-472
 
 </div>
 
-<!-- PHILOSOPHY -->
 <div onclick="toggleSection('philPanel')"
 class="card shine bg-[#1b1610] text-white p-8 min-h-[360px]">
 
@@ -283,31 +271,24 @@ style="background-image:url('https://images.unsplash.com/photo-1512820790803-83c
 
 </div>
 
-<!-- ISLAM PANEL -->
-<section id="islamPanel"
-class="section-panel">
+<section id="islamPanel" class="section-panel">
 
-<div class="bg-gradient-to-br from-emerald-950 to-[#08110d]
-rounded-[35px] p-12 text-white relative overflow-hidden">
+<div class="bg-gradient-to-br from-emerald-950 to-[#08110d] rounded-[35px] p-12 text-white relative overflow-hidden">
 
-<div class="absolute inset-0 opacity-10"
-style="background-image:
-radial-gradient(#d2b16f 1px, transparent 1px);
-background-size:35px 35px">
-</div>
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#d2b16f 1px, transparent 1px); background-size:35px 35px"></div>
 
 <h2 id="islamic-btn" class="text-5xl font-bold mb-12 relative z-10 cursor-pointer">
 العلوم الإسلامية
 </h2>
 
-<div id="islamic-content" class="grid md:grid-cols-3 gap-8 relative z-10" style="display: none;">
+<div id="islamic-content" class="grid md:grid-cols-3 gap-8 relative z-10">
 <a href="islamic-science.html" style="text-decoration: none; color: inherit; display: block;">
 <div class="article bg-white/5 border border-white/10 rounded-3xl p-7">
 <h3 class="text-2xl font-bold mb-4">
 الصراع الطائفي بين السلفية والإثني عشرية
 </h3>
 <p class="text-gray-300 leading-9">
-تحليل تاريخي وسياسي وفكري لأبرز التحولات العقائدية والصراعات المذهبية في العالم الإسلامي.
+تحليل تاريخي وسياسي وفكري لأبرز التحولات العقائدية والصراعات المذهبية in العالم الإسلامي.
 </p>
 </div>
 </a>
@@ -335,12 +316,9 @@ background-size:35px 35px">
 
 </section>
 
-<!-- POLITICS PANEL -->
-<section id="politicsPanel"
-class="section-panel">
+<section id="politicsPanel" class="section-panel">
 
-<div class="bg-gradient-to-br from-slate-950 to-blue-950
-rounded-[35px] p-12 text-white">
+<div class="bg-gradient-to-br from-slate-950 to-blue-950 rounded-[35px] p-12 text-white">
 
 <h2 class="text-5xl font-bold mb-12">
 السياسة والجيوسياسية
@@ -378,12 +356,9 @@ rounded-[35px] p-12 text-white">
 
 </section>
 
-<!-- PSY -->
-<section id="psyPanel"
-class="section-panel">
+<section id="psyPanel" class="section-panel">
 
-<div class="bg-gradient-to-br from-[#140c24] to-[#271046]
-rounded-[35px] p-12 text-white">
+<div class="bg-gradient-to-br from-[#140c24] to-[#271046] rounded-[35px] p-12 text-white">
 
 <h2 class="text-5xl font-bold mb-12">
 علم النفس
@@ -421,12 +396,9 @@ rounded-[35px] p-12 text-white">
 
 </section>
 
-<!-- PHIL -->
-<section id="philPanel"
-class="section-panel">
+<section id="philPanel" class="section-panel">
 
-<div class="bg-gradient-to-br from-[#21160d] to-[#3b2713]
-rounded-[35px] p-12 text-white">
+<div class="bg-gradient-to-br from-[#21160d] to-[#3b2713] rounded-[35px] p-12 text-white">
 
 <h2 class="text-5xl font-bold mb-12">
 الفلسفة والفكر
@@ -466,7 +438,6 @@ rounded-[35px] p-12 text-white">
 
 </main>
 
-<!-- FOOTER -->
 <footer class="bg-[#050816] py-12 border-t border-[#c7a86b]/10">
 
 <div class="max-w-7xl mx-auto px-6 text-center">
@@ -483,31 +454,52 @@ rounded-[35px] p-12 text-white">
 
 </footer>
 
-<script src="script.js"></script> 
 <script>
-    // 1. الإمساك بعنصر عنوان العلوم الإسلامية وقسم الإسلام كاملاً
-    const islamicBtn = document.getElementById('islamic-btn');
-    const islamPanel = document.getElementById('islamPanel');
-
-    // 2. عندما يقوم الزائر بالضغط على العنوان
-    islamicBtn.addEventListener('click', function() {
-        
-        // 3. أمر ذكي: ابحث عن كل الأقسام (sections) في الصفحة وقم بإخفائها فوراً
-        const allSections = document.querySelectorAll('section');
-        allSections.forEach(function(section) {
-            section.style.display = 'none';
+// 1. دالة التحكم في فتح وإغلاق الأقسام الفكرية الأربعة بسلاسة
+function toggleSection(panelId) {
+    const targetPanel = document.getElementById(panelId);
+    if (targetPanel) {
+        const allPanels = document.querySelectorAll('.section-panel');
+        allPanels.forEach(panel => {
+            if (panel.id === panelId) {
+                panel.classList.toggle('active');
+            } else {
+                panel.classList.remove('active');
+            }
         });
 
-        // 4. أظهر قسم العلوم الإسلامية لوحده ليتصدر المنصة بالكامل
-        if (islamPanel) {
-            islamPanel.style.display = 'block';
-        }
+        // النزول التلقائي السلس إلى القسم المفتوح
+        setTimeout(() => {
+            if (targetPanel.classList.contains('active')) {
+                targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 250);
+    }
+}
+
+// 2. كود تشغيل وإغلاق القائمة الجانبية (Sidebar)
+const menuBtn = document.getElementById('menuBtn');
+const closeSidebar = document.getElementById('closeSidebar');
+const sidebar = document.getElementById('sidebar');
+const overlayPage = document.getElementById('overlayPage');
+
+if(menuBtn && sidebar && overlayPage) {
+    menuBtn.addEventListener('click', () => {
+        sidebar.style.right = '0';
+        overlayPage.classList.remove('hidden');
     });
+}
+
+if(closeSidebar && sidebar && overlayPage) {
+    closeSidebar.addEventListener('click', () => {
+        sidebar.style.right = '-320px';
+        overlayPage.classList.add('hidden');
+    });
+    overlayPage.addEventListener('click', () => {
+        sidebar.style.right = '-320px';
+        overlayPage.classList.add('hidden');
+    });
+}
 </script>
- 
- 
- 
- 
 </body>
 </html>
-
