@@ -485,16 +485,21 @@ rounded-[35px] p-12 text-white">
 
 <script src="script.js"></script> 
  <script>
-    // 1. الإمساك بزر العلوم الإسلامية والحاوية الخاصة بمقالاته
+    // 1. الإمساك بعنصر العنوان وحاوية المقالات
     const islamicBtn = document.getElementById('islamic-btn');
     const islamicContent = document.getElementById('islamic-content');
 
-    // 2. سماع الضغطة (عندما يضغط الزائر على العنوان)
+    // 2. الاستماع لضغطة الزائر
     islamicBtn.addEventListener('click', function() {
-        // 3. اقلب الحالة: إذا كانت المقالات مخفية أظهرها، وإذا كانت ظاهرة أخفها
-        islamicContent.classList.toggle('active');
+        // 3. فحص الحالة الحالية للحاوية: إذا كانت مخفية أظهرها كشبكة، وإذا كانت ظاهرة أخفها
+        if (islamicContent.style.display === 'none') {
+            islamicContent.style.display = 'grid'; // تظهر على شكل أعمدة متناسقة فوراً
+        } else {
+            islamicContent.style.display = 'none'; // تختفي تماماً بنقاء
+        }
     });
  </script>
+ 
  
 </body>
 </html>
