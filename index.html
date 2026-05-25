@@ -24,26 +24,9 @@
         .section-panel.active{max-height:800px;opacity:1;margin-top:60px;}
         .gold-line{width:100px;height:2px;background:#c7a86b;margin:1rem auto;}
         .politics-corner-img{position:absolute;bottom:-15px;right:-15px;width:120px;opacity:0.15;}
+        .article-card{background:rgba(255,255,255,0.05);border:1px solid rgba(199,168,107,0.2);border-radius:24px;padding:1.5rem;transition:0.3s;}
+        .article-card:hover{transform:translateY(-5px);border-color:#c7a86b;background:rgba(255,255,255,0.08);}
     </style>
-    <script>
-    // ربط مع لوحة التحكم dashboard.html - قراءة المقالات المخزنة
-    function loadFromDashboard() {
-        const savedArts = localStorage.getItem('islamicArticles');
-        if(savedArts) {
-            const articles = JSON.parse(savedArts);
-            const container = document.getElementById('islamicContainer');
-            if(container && articles.length) {
-                container.innerHTML = articles.map(art => `
-                    <div class="card bg-white/5 p-6 rounded-2xl border border-white/10">
-                        <h3 class="text-xl font-bold text-[#c7a86b]">${art.title.replace(/[&<>]/g, function(m){return m==='&'?'&amp;':m==='<'?'&lt;':'&gt;';})}</h3>
-                        <p class="text-gray-300 mt-2">${art.text.substring(0, 100)}${art.text.length > 100 ? '...' : ''}</p>
-                    </div>
-                `).join('');
-            }
-        }
-    }
-    document.addEventListener('DOMContentLoaded', loadFromDashboard);
-    </script>
 </head>
 <body>
 
@@ -57,6 +40,7 @@
     <nav class="space-y-6 text-white">
         <a href="#" id="navHome" class="flex items-center gap-3 hover:text-[#c7a86b]"><i class="fas fa-house"></i> الرئيسية</a>
         <a href="#articles" id="navArticles" class="flex items-center gap-3 hover:text-[#c7a86b]"><i class="fas fa-book-open"></i> بحوث ومقالات</a>
+        <a href="dashboard.html" class="flex items-center gap-3 hover:text-[#c7a86b]"><i class="fas fa-sliders-h"></i> لوحة التحكم</a>
     </nav>
 </aside>
 
@@ -84,8 +68,8 @@
         <div class="gold-line"></div>
     </div>
 
+    <!-- البطاقات الأربعة -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        <!-- العلوم الإسلامية -> تنتقل إلى islamic-science.html -->
         <div onclick="window.location.href='islamic-science.html'" class="card bg-[#0b1114] text-white p-6 min-h-[320px]">
             <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=500')"></div>
             <div class="relative z-10">
@@ -96,7 +80,6 @@
             </div>
         </div>
 
-        <!-- السياسة -->
         <div onclick="toggleSection('politicsPanel')" class="card politics-card bg-[#10131c] text-white p-6 min-h-[320px] relative">
             <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?q=80&w=500')"></div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg" class="politics-corner-img">
@@ -107,7 +90,6 @@
             </div>
         </div>
 
-        <!-- علم النفس -->
         <div onclick="toggleSection('psyPanel')" class="card bg-[#181224] text-white p-6 min-h-[320px]">
             <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=500')"></div>
             <div class="relative z-10">
@@ -117,7 +99,6 @@
             </div>
         </div>
 
-        <!-- الفلسفة -->
         <div onclick="toggleSection('philPanel')" class="card bg-[#1b1610] text-white p-6 min-h-[320px]">
             <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=500')"></div>
             <div class="relative z-10">
@@ -128,13 +109,24 @@
         </div>
     </div>
 
+    <!-- 🟢 قسم عرض مقالات العلوم الإسلامية من dashboard -->
+    <div class="mt-20">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-[#c7a86b]">📚 مقالات العلوم الإسلامية</h2>
+            <div class="gold-line"></div>
+            <p class="text-gray-500 mt-2">يمكنك إضافة وتعديل هذه المقالات من <a href="dashboard.html" class="text-[#c7a86b] underline">لوحة التحكم</a></p>
+        </div>
+        <div id="islamicContainer" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- ستظهر المقالات تلقائياً من localStorage -->
+        </div>
+    </div>
+
     <!-- اللوحات المنزلقة -->
     <section id="politicsPanel" class="section-panel">
         <div class="bg-gradient-to-br from-slate-950 to-blue-950 rounded-3xl p-8 text-white">
             <h2 class="text-3xl font-bold mb-6">السياسة والجيوسياسية</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">كيف تبني الدول العظمى نفوذها؟</h3><p class="text-gray-300 mt-2">تحليل آليات الاقتصاد والعسكر.</p></div>
-                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">قصص صعود الدول</h3><p class="text-gray-300 mt-2">تجارب اليابان والصين وألمانيا.</p></div>
+            <div id="politicsContainer" class="grid md:grid-cols-2 gap-6">
+                <!-- مقالات السياسة تظهر هنا -->
             </div>
         </div>
     </section>
@@ -142,9 +134,8 @@
     <section id="psyPanel" class="section-panel">
         <div class="bg-gradient-to-br from-[#140c24] to-[#271046] rounded-3xl p-8 text-white">
             <h2 class="text-3xl font-bold mb-6">علم النفس</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">قوة العقل الباطن</h3><p class="text-gray-300 mt-2">تأثير الأفكار على السلوك.</p></div>
-                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">الوعي الجمعي</h3><p class="text-gray-300 mt-2">كيف يتحكم بالمجتمعات.</p></div>
+            <div id="psychologyContainer" class="grid md:grid-cols-2 gap-6">
+                <!-- مقالات علم النفس تظهر هنا -->
             </div>
         </div>
     </section>
@@ -152,9 +143,8 @@
     <section id="philPanel" class="section-panel">
         <div class="bg-gradient-to-br from-[#21160d] to-[#3b2713] rounded-3xl p-8 text-white">
             <h2 class="text-3xl font-bold mb-6">الفلسفة والفكر</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">المذاهب الفكرية</h3><p class="text-gray-300 mt-2">الوجودية والماركسية.</p></div>
-                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">تطور الفلسفة</h3><p class="text-gray-300 mt-2">من اليونان إلى الحداثة.</p></div>
+            <div id="philosophyContainer" class="grid md:grid-cols-2 gap-6">
+                <!-- مقالات الفلسفة تظهر هنا -->
             </div>
         </div>
     </section>
@@ -165,81 +155,109 @@
     <p class="text-gray-500 mt-2">منصة فكرية تجمع بين العمق والجمال البصري</p>
 </footer>
 
+<script src="script.js"></script>
 <script>
-    // العناصر
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlayPage');
-    const menuBtn = document.getElementById('menuBtn');
-    const closeBtn = document.getElementById('closeSidebar');
-    const themeBtn = document.getElementById('themeBtn');
-    const body = document.body;
-
-    // القائمة الجانبية
-    menuBtn.onclick = () => { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; };
-    function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
-    closeBtn.onclick = closeSidebar;
-    overlay.onclick = closeSidebar;
-
-    // الوضع المظلم
-    if(localStorage.getItem('theme') === 'dark') { body.classList.add('dark'); themeBtn.innerHTML = '<i class="fas fa-sun"></i>'; }
-    themeBtn.onclick = () => {
-        body.classList.toggle('dark');
-        const isDark = body.classList.contains('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        themeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-    };
-
-    // فتح وإغلاق الأقسام
-    window.toggleSection = function(sectionId) {
-        const panels = ['politicsPanel', 'psyPanel', 'philPanel'];
-        const target = document.getElementById(sectionId);
-        panels.forEach(p => { if(p !== sectionId) document.getElementById(p)?.classList.remove('active'); });
-        target?.classList.toggle('active');
-        if(target?.classList.contains('active')) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-    };
-
-    // روابط القائمة
-    document.getElementById('navHome')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        ['politicsPanel','psyPanel','philPanel'].forEach(p => document.getElementById(p)?.classList.remove('active'));
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        closeSidebar();
-    });
-    document.getElementById('navArticles')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth' });
-        closeSidebar();
-    });
-</script>
-    <script>
-    // قراءة المقالات من localStorage (التي تم حفظها عبر dashboard.html)
-    function loadArticlesFromStorage() {
-        const savedArticles = localStorage.getItem('islamicArticles');
-        if(savedArticles) {
-            const articles = JSON.parse(savedArticles);
-            const container = document.querySelector('#islamicPanel .grid, .grid-cols-1.md\\:grid-cols-3');
-            if(container && articles.length) {
+    // تحميل جميع المقالات من localStorage
+    function loadAllContent() {
+        // مقالات العلوم الإسلامية
+        const savedIslamic = localStorage.getItem('islamicArticles');
+        if(savedIslamic) {
+            const articles = JSON.parse(savedIslamic);
+            const container = document.getElementById('islamicContainer');
+            if(container) {
                 container.innerHTML = articles.map(art => `
-                    <div class="article bg-white/5 border border-white/10 rounded-3xl p-7">
-                        <h3 class="text-2xl font-bold mb-4">${escapeHtml(art.title)}</h3>
-                        <p class="text-gray-300 leading-9">${escapeHtml(art.text)}</p>
+                    <div class="article-card">
+                        <h3 class="text-xl font-bold text-[#c7a86b] mb-3">${escapeHtml(art.title)}</h3>
+                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">${escapeHtml(art.text)}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // مقالات السياسة
+        const savedPolitics = localStorage.getItem('politicsArticles');
+        if(savedPolitics) {
+            const articles = JSON.parse(savedPolitics);
+            const container = document.getElementById('politicsContainer');
+            if(container) {
+                container.innerHTML = articles.map(art => `
+                    <div class="bg-white/5 rounded-2xl p-6">
+                        <h3 class="text-xl font-bold mb-3">${escapeHtml(art.title)}</h3>
+                        <p class="text-gray-300">${escapeHtml(art.text)}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // مقالات علم النفس
+        const savedPsych = localStorage.getItem('psychologyArticles');
+        if(savedPsych) {
+            const articles = JSON.parse(savedPsych);
+            const container = document.getElementById('psychologyContainer');
+            if(container) {
+                container.innerHTML = articles.map(art => `
+                    <div class="bg-white/5 rounded-2xl p-6">
+                        <h3 class="text-xl font-bold mb-3">${escapeHtml(art.title)}</h3>
+                        <p class="text-gray-300">${escapeHtml(art.text)}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // مقالات الفلسفة
+        const savedPhil = localStorage.getItem('philosophyArticles');
+        if(savedPhil) {
+            const articles = JSON.parse(savedPhil);
+            const container = document.getElementById('philosophyContainer');
+            if(container) {
+                container.innerHTML = articles.map(art => `
+                    <div class="bg-white/5 rounded-2xl p-6">
+                        <h3 class="text-xl font-bold mb-3">${escapeHtml(art.title)}</h3>
+                        <p class="text-gray-300">${escapeHtml(art.text)}</p>
                     </div>
                 `).join('');
             }
         }
     }
-    
+
     function escapeHtml(str) {
         if(!str) return '';
         return str.replace(/[&<>]/g, function(m) {
-            if(m === '&') return '&amp;';
-            if(m === '<') return '&lt;';
-            if(m === '>') return '&gt;';
-            return m;
+            return m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;');
         });
     }
-    
-    document.addEventListener('DOMContentLoaded', loadArticlesFromStorage);
-    </script>
+
+    // تهيئة البيانات الافتراضية إذا كانت localStorage فارغة
+    function initDefaultData() {
+        if(!localStorage.getItem('islamicArticles')) {
+            localStorage.setItem('islamicArticles', JSON.stringify([
+                { title: "الصراع الطائفي بين السلفية والإثني عشرية", text: "تحليل تاريخي وسياسي وفكري لأبرز التحولات العقائدية والصراعات المذهبية في العالم الإسلامي." },
+                { title: "الدعاء وتأثيره على البناء النفسي للإنسان", text: "كيف يغير الإيمان والدعاء سلوك الإنسان واستقراره النفسي والروحي." },
+                { title: "الفقه الإسلامي بين الأصالة والتجديد", text: "قراءة في تطور المدارس الفقهية والتحديات المعاصرة." }
+            ]));
+        }
+        if(!localStorage.getItem('politicsArticles')) {
+            localStorage.setItem('politicsArticles', JSON.stringify([
+                { title: "كيف تبني الدول العظمى نفوذها العالمي؟", text: "تحليل لآليات الاقتصاد والعسكر والتكنولوجيا في صناعة الهيمنة الدولية." },
+                { title: "قصص صعود الدول من الفوضى إلى القوة", text: "دراسة لتجارب اليابان والصين وألمانيا في إعادة بناء القوة الوطنية." }
+            ]));
+        }
+        if(!localStorage.getItem('psychologyArticles')) {
+            localStorage.setItem('psychologyArticles', JSON.stringify([
+                { title: "قوة العقل الباطن في تشكيل الشخصية", text: "كيف تؤثر الأفكار المتكررة والمعتقدات الخفية على القرارات والسلوك اليومي." },
+                { title: "الوعي الجمعي وكيف يتحكم بالمجتمعات", text: "تحليل نفسي واجتماعي لكيفية تشكل الأفكار الجماعية." }
+            ]));
+        }
+        if(!localStorage.getItem('philosophyArticles')) {
+            localStorage.setItem('philosophyArticles', JSON.stringify([
+                { title: "أهم المذاهب الفكرية التي غيرت العالم", text: "رحلة عبر الوجودية والماركسية والعدمية والعقلانية الحديثة." },
+                { title: "كيف تطورت الفلسفة من اليونان إلى الحداثة؟", text: "تاريخ التحولات الفكرية الكبرى وصراع الإنسان مع أسئلة الوجود." }
+            ]));
+        }
+    }
+
+    initDefaultData();
+    document.addEventListener('DOMContentLoaded', loadAllContent);
+</script>
 </body>
 </html>
