@@ -484,21 +484,28 @@ rounded-[35px] p-12 text-white">
 </footer>
 
 <script src="script.js"></script> 
- <script>
-    // 1. الإمساك بعنصر العنوان وحاوية المقالات
+<script>
+    // 1. الإمساك بعنصر عنوان العلوم الإسلامية وقسم الإسلام كاملاً
     const islamicBtn = document.getElementById('islamic-btn');
-    const islamicContent = document.getElementById('islamic-content');
+    const islamPanel = document.getElementById('islamPanel');
 
-    // 2. الاستماع لضغطة الزائر
+    // 2. عندما يقوم الزائر بالضغط على العنوان
     islamicBtn.addEventListener('click', function() {
-        // 3. فحص الحالة الحالية للحاوية: إذا كانت مخفية أظهرها كشبكة، وإذا كانت ظاهرة أخفها
-        if (islamicContent.style.display === 'none') {
-            islamicContent.style.display = 'grid'; // تظهر على شكل أعمدة متناسقة فوراً
-        } else {
-            islamicContent.style.display = 'none'; // تختفي تماماً بنقاء
+        
+        // 3. أمر ذكي: ابحث عن كل الأقسام (sections) في الصفحة وقم بإخفائها فوراً
+        const allSections = document.querySelectorAll('section');
+        allSections.forEach(function(section) {
+            section.style.display = 'none';
+        });
+
+        // 4. أظهر قسم العلوم الإسلامية لوحده ليتصدر المنصة بالكامل
+        if (islamPanel) {
+            islamPanel.style.display = 'block';
         }
     });
- </script>
+</script>
+ 
+ 
  
  
 </body>
