@@ -5,20 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة الحضارة - العلوم الإسلامية</title>
     
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="stylesheet" href="style.css"> 
 </head>
-<body>
+<body class="bg-[#0b0f19] text-white font-sans">
 
-    <div class="hero" style="padding: 60px 20px; text-align: center;">
-        <h1 style="color: #c7a86b; font-size: 3rem;">قسم العلوم الإسلامية</h1>
-        <p style="color: white; font-size: 1.2rem;">نافذة على الفكر والتشريع والتطور العلمي في الحضارة الإسلامية</p>
-        <div class="gold-line" style="margin: 20px auto;"></div>
+    <div class="hero text-center py-16 px-5">
+        <h1 class="text-5xl font-bold text-[#c7a86b] mb-4">قسم العلوم الإسلامية</h1>
+        <p class="text-gray-300 text-lg max-w-2xl mx-auto">نافذة على الفكر والتشريع والتطور العلمي في الحضارة الإسلامية</p>
+        <div class="w-24 h-1 bg-[#c7a86b] mx-auto mt-6 rounded-full"></div>
     </div>
 
-    <div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
-        <p style="color: #666; text-align: center;">مرحباً بك في القسم.. المقالات قيد التحضير حالياً.</p>
+    <div class="max-w-[1200px] mx-auto my-12 px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+            
+            <div class="article bg-white/5 border border-white/10 rounded-3xl p-7 card-section">
+                <h3 class="text-2xl font-bold mb-4">الصراع الطائفي بين السلفية والإثني عشرية</h3>
+                <p class="text-gray-300 leading-9 text-justify">تحليل تاريخي وسياسي وفكري لأبرز التحولات العقائدية والصراعات المذهبية في العالم الإسلامي.</p>
+            </div>
+
+            <div class="article bg-white/5 border border-white/10 rounded-3xl p-7 card-section">
+                <h3 class="text-2xl font-bold mb-4">الدعاء وتأثيره على البناء النفسي للإنسان</h3>
+                <p class="text-gray-300 leading-9 text-justify">كيف يغير الإيمان والدعاء سلوك الإنسان واستقراره النفسي والروحي.</p>
+            </div>
+
+            <div class="article bg-white/5 border border-white/10 rounded-3xl p-7 card-section">
+                <h3 class="text-2xl font-bold mb-4">الفقه الإسلامي بين الأصالة والتجديد</h3>
+                <p class="text-gray-300 leading-9 text-justify">قراءة في تطور المدارس الفقهية والتحديات المعاصرة.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="text-center mb-16">
+        <a href="index.html" class="inline-block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-3 px-8 rounded-full transition-all duration-300">
+            ← العودة للمنصة الرئيسية
+        </a>
     </div>
 
 </body>
 </html>
-
