@@ -3,17 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الحضارة | الفكر الإسلامي والإنساني</title>
+    <title>منصة الحضارة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>... (أضف كل الأنماط السابقة هنا)</style>
+    <style>
+        body{font-family:'Cairo',sans-serif;background:#f8f5ef;transition:0.3s;}
+        body.dark{background:#020617;color:white;}
+        .hero{background:linear-gradient(rgba(0,0,0,0.78),rgba(0,0,0,0.88)),url('https://images.unsplash.com/photo-1512632578888-169bbbc64f33?q=80&w=1600&auto=format&fit=crop');background-size:cover;min-height:80vh;}
+        .glass{background:rgba(255,255,255,0.05);backdrop-filter:blur(10px);}
+        .card{position:relative;overflow:hidden;border-radius:30px;cursor:pointer;transition:0.3s;border:1px solid rgba(199,168,107,0.2);}
+        .card:hover{transform:translateY(-8px);}
+        .card-bg{position:absolute;inset:0;background-size:cover;opacity:0.15;}
+        .sidebar{position:fixed;top:0;right:-320px;width:320px;height:100%;background:#050816;z-index:50;transition:0.3s;padding:2rem;}
+        .sidebar.active{right:0;}
+        .overlay-page{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:40;opacity:0;visibility:hidden;transition:0.3s;}
+        .overlay-page.active{opacity:1;visibility:visible;}
+        .section-panel{max-height:0;overflow:hidden;opacity:0;transition:0.5s;margin-top:0;}
+        .section-panel.active{max-height:800px;opacity:1;margin-top:60px;}
+        .gold-line{width:100px;height:2px;background:#c7a86b;margin:1rem auto;}
+        .politics-corner-img{position:absolute;bottom:-15px;right:-15px;width:120px;opacity:0.15;}
+    </style>
 </head>
 <body>
-<!-- الهيدر والـ Sidebar وبطاقات الأقسام ... -->
+
+<div id="overlayPage" class="overlay-page"></div>
+
+<aside id="sidebar" class="sidebar">
+    <div class="flex justify-between items-center mb-8">
+        <h2 class="text-2xl text-[#c7a86b] font-bold">الأقسام</h2>
+        <button id="closeSidebar" class="text-white text-2xl">✕</button>
+    </div>
+    <nav class="space-y-6 text-white">
+        <a href="#" id="navHome" class="flex items-center gap-3 hover:text-[#c7a86b]"><i class="fas fa-house"></i> الرئيسية</a>
+        <a href="#articles" id="navArticles" class="flex items-center gap-3 hover:text-[#c7a86b]"><i class="fas fa-book-open"></i> بحوث ومقالات</a>
+    </nav>
+</aside>
+
+<header class="hero flex items-center relative">
+    <div class="max-w-7xl mx-auto px-6 w-full">
+        <div class="flex justify-between items-center mb-20 flex-wrap">
+            <div class="flex gap-3">
+                <button id="menuBtn" class="glass w-12 h-12 rounded-full text-white"><i class="fas fa-bars"></i></button>
+                <button id="themeBtn" class="glass w-12 h-12 rounded-full text-yellow-400"><i class="fas fa-moon"></i></button>
+            </div>
+            <div class="text-right">
+                <h1 class="text-5xl md:text-7xl font-bold text-white" style="font-family:'Reem Kufi'">الحضارة</h1>
+                <p class="text-[#d8bb82] mt-2">منصة فكرية من تأليف ياسر كاملي</p>
+            </div>
+        </div>
+        <div class="max-w-2xl">
+            <h2 class="text-white text-4xl md:text-6xl font-bold">بوابة فكرية بين <span class="text-[#c7a86b]">الحضارة</span> والتحليل</h2>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-20" id="articles">
+    <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold">الأقسام الفكرية</h2>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <!-- العلوم الإسلامية -> تنتقل إلى islamic-science.html -->
+        <div onclick="window.location.href='islamic-science.html'" class="card bg-[#0b1114] text-white p-6 min-h-[320px]">
+            <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=500')"></div>
+            <div class="relative z-10">
+                <div class="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center text-3xl text-emerald-300 mb-5"><i class="fas fa-mosque"></i></div>
+                <h3 class="text-2xl font-bold">العلوم الإسلامية</h3>
+                <p class="text-gray-300 mt-3">العقيدة، الفقه، الفكر الإسلامي</p>
+                <div class="mt-6 text-[#d6b16f] text-2xl">☪</div>
+            </div>
+        </div>
+
+        <!-- السياسة -->
+        <div onclick="toggleSection('politicsPanel')" class="card politics-card bg-[#10131c] text-white p-6 min-h-[320px] relative">
+            <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?q=80&w=500')"></div>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg" class="politics-corner-img">
+            <div class="relative z-10">
+                <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center text-3xl text-blue-300 mb-5"><i class="fas fa-globe"></i></div>
+                <h3 class="text-2xl font-bold">السياسة</h3>
+                <p class="text-gray-300 mt-3">فهم القوى العالمية وصراعات النفوذ</p>
+            </div>
+        </div>
+
+        <!-- علم النفس -->
+        <div onclick="toggleSection('psyPanel')" class="card bg-[#181224] text-white p-6 min-h-[320px]">
+            <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=500')"></div>
+            <div class="relative z-10">
+                <div class="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center text-3xl text-purple-300 mb-5"><i class="fas fa-brain"></i></div>
+                <h3 class="text-2xl font-bold">علم النفس</h3>
+                <p class="text-gray-300 mt-3">العقل الباطن، الوعي والتحليل النفسي</p>
+            </div>
+        </div>
+
+        <!-- الفلسفة -->
+        <div onclick="toggleSection('philPanel')" class="card bg-[#1b1610] text-white p-6 min-h-[320px]">
+            <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=500')"></div>
+            <div class="relative z-10">
+                <div class="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center text-3xl text-amber-300 mb-5"><i class="fas fa-scroll"></i></div>
+                <h3 class="text-2xl font-bold">الفلسفة والفكر</h3>
+                <p class="text-gray-300 mt-3">رحلة الأفكار وصراع الإنسان مع المعنى</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- اللوحات المنزلقة -->
+    <section id="politicsPanel" class="section-panel">
+        <div class="bg-gradient-to-br from-slate-950 to-blue-950 rounded-3xl p-8 text-white">
+            <h2 class="text-3xl font-bold mb-6">السياسة والجيوسياسية</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">كيف تبني الدول العظمى نفوذها؟</h3><p class="text-gray-300 mt-2">تحليل آليات الاقتصاد والعسكر.</p></div>
+                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">قصص صعود الدول</h3><p class="text-gray-300 mt-2">تجارب اليابان والصين وألمانيا.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="psyPanel" class="section-panel">
+        <div class="bg-gradient-to-br from-[#140c24] to-[#271046] rounded-3xl p-8 text-white">
+            <h2 class="text-3xl font-bold mb-6">علم النفس</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">قوة العقل الباطن</h3><p class="text-gray-300 mt-2">تأثير الأفكار على السلوك.</p></div>
+                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">الوعي الجمعي</h3><p class="text-gray-300 mt-2">كيف يتحكم بالمجتمعات.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="philPanel" class="section-panel">
+        <div class="bg-gradient-to-br from-[#21160d] to-[#3b2713] rounded-3xl p-8 text-white">
+            <h2 class="text-3xl font-bold mb-6">الفلسفة والفكر</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">المذاهب الفكرية</h3><p class="text-gray-300 mt-2">الوجودية والماركسية.</p></div>
+                <div class="bg-white/5 rounded-2xl p-6"><h3 class="text-xl font-bold">تطور الفلسفة</h3><p class="text-gray-300 mt-2">من اليونان إلى الحداثة.</p></div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-[#050816] py-8 border-t border-[#c7a86b]/10 text-center">
+    <h3 class="text-3xl text-white font-bold">الحضارة</h3>
+    <p class="text-gray-500 mt-2">منصة فكرية تجمع بين العمق والجمال البصري</p>
+</footer>
+
 <script>
-    // كل التواقيع والـ toggleSection وما يتصل بها
+    // العناصر
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlayPage');
+    const menuBtn = document.getElementById('menuBtn');
+    const closeBtn = document.getElementById('closeSidebar');
+    const themeBtn = document.getElementById('themeBtn');
+    const body = document.body;
+
+    // القائمة الجانبية
+    menuBtn.onclick = () => { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; };
+    function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
+    closeBtn.onclick = closeSidebar;
+    overlay.onclick = closeSidebar;
+
+    // الوضع المظلم
+    if(localStorage.getItem('theme') === 'dark') { body.classList.add('dark'); themeBtn.innerHTML = '<i class="fas fa-sun"></i>'; }
+    themeBtn.onclick = () => {
+        body.classList.toggle('dark');
+        const isDark = body.classList.contains('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        themeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    };
+
+    // فتح وإغلاق الأقسام
+    window.toggleSection = function(sectionId) {
+        const panels = ['politicsPanel', 'psyPanel', 'philPanel'];
+        const target = document.getElementById(sectionId);
+        panels.forEach(p => { if(p !== sectionId) document.getElementById(p)?.classList.remove('active'); });
+        target?.classList.toggle('active');
+        if(target?.classList.contains('active')) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    };
+
+    // روابط القائمة
+    document.getElementById('navHome')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        ['politicsPanel','psyPanel','philPanel'].forEach(p => document.getElementById(p)?.classList.remove('active'));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        closeSidebar();
+    });
+    document.getElementById('navArticles')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth' });
+        closeSidebar();
+    });
 </script>
 </body>
 </html>
