@@ -211,5 +211,35 @@
         closeSidebar();
     });
 </script>
+    <script>
+    // قراءة المقالات من localStorage (التي تم حفظها عبر dashboard.html)
+    function loadArticlesFromStorage() {
+        const savedArticles = localStorage.getItem('islamicArticles');
+        if(savedArticles) {
+            const articles = JSON.parse(savedArticles);
+            const container = document.querySelector('#islamicPanel .grid, .grid-cols-1.md\\:grid-cols-3');
+            if(container && articles.length) {
+                container.innerHTML = articles.map(art => `
+                    <div class="article bg-white/5 border border-white/10 rounded-3xl p-7">
+                        <h3 class="text-2xl font-bold mb-4">${escapeHtml(art.title)}</h3>
+                        <p class="text-gray-300 leading-9">${escapeHtml(art.text)}</p>
+                    </div>
+                `).join('');
+            }
+        }
+    }
+    
+    function escapeHtml(str) {
+        if(!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', loadArticlesFromStorage);
+    </script>
 </body>
 </html>
