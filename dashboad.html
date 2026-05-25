@@ -1,1 +1,220 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم - منصة الحضارة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body { background: #0a0c15; color: white; font-family: 'Cairo', sans-serif; }
+        .btn-gold { background: #c7a86b; color: #0a0c15; padding: 10px 20px; border-radius: 40px; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
+        .btn-gold:hover { background: #d4b87a; transform: scale(1.02); }
+        .btn-red { background: #dc2626; color: white; padding: 8px 16px; border-radius: 40px; cursor: pointer; border: none; }
+        .btn-outline { background: transparent; border: 1px solid #c7a86b; color: #c7a86b; padding: 8px 16px; border-radius: 40px; cursor: pointer; }
+        .card { background: #1e1f2e; border-radius: 20px; padding: 1.5rem; margin-bottom: 1rem; border-right: 4px solid #c7a86b; }
+        input, textarea { background: #2d2f42; border: none; padding: 10px; border-radius: 12px; color: white; width: 100%; margin-top: 5px; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; opacity: 0; transition: 0.2s; }
+        .modal.active { visibility: visible; opacity: 1; }
+        .modal-content { background: #1a1c2c; padding: 2rem; border-radius: 28px; width: 90%; max-width: 500px; }
+    </style>
+</head>
+<body class="p-6">
 
+<div class="max-w-5xl mx-auto">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-[#c7a86b]">🎛️ لوحة التحكم</h1>
+        <p class="text-gray-400 mt-2">أضف، عدّل، أو احذف مقالات <strong>العلوم الإسلامية</strong> وأقسامًا جديدة</p>
+        <div class="w-24 h-0.5 bg-[#c7a86b] mx-auto mt-3"></div>
+    </div>
+
+    <!-- قسم إضافة علوم جديدة -->
+    <div class="bg-[#15172a] p-5 rounded-2xl mb-8">
+        <h3 class="text-xl font-bold mb-3"><i class="fas fa-plus-circle text-[#c7a86b]"></i> إضافة قسم علمي جديد</h3>
+        <div class="flex gap-3 flex-wrap">
+            <input type="text" id="newScienceName" placeholder="مثال: علوم القرآن، التفسير، الحديث، السيرة..." class="flex-1">
+            <button onclick="addNewScience()" class="btn-gold"><i class="fas fa-folder-open"></i> إنشاء القسم</button>
+        </div>
+        <div id="sciencesList" class="flex flex-wrap gap-2 mt-4"></div>
+    </div>
+
+    <!-- قسم مقالات العلوم الإسلامية (مع أزرار) -->
+    <div class="flex justify-between items-center flex-wrap mb-5">
+        <h2 class="text-2xl font-bold"><i class="fas fa-mosque text-[#c7a86b]"></i> مقالات العلوم الإسلامية</h2>
+        <button onclick="openAddModal()" class="btn-gold text-sm"><i class="fas fa-plus"></i> مقال جديد</button>
+    </div>
+    
+    <div id="articlesList" class="space-y-3">
+        <!-- ستظهر المقالات هنا -->
+    </div>
+
+    <div class="mt-8 text-center text-gray-500 text-sm border-t border-gray-700 pt-6">
+        ✅ جميع التغييرات تحفظ تلقائياً. افتح <span class="text-[#c7a86b]">index.html</span> لرؤية النتائج مباشرة.
+    </div>
+</div>
+
+<!-- مودال الإضافة/التعديل -->
+<div id="articleModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle" class="text-xl font-bold mb-4">إضافة مقال</h3>
+        <input type="hidden" id="editIndex">
+        <input type="text" id="articleTitle" placeholder="عنوان المقال" class="mb-3">
+        <textarea id="articleText" placeholder="نص المقال أو الملخص..." rows="4" class="mb-4"></textarea>
+        <div class="flex gap-3">
+            <button onclick="saveArticle()" class="btn-gold">💾 حفظ</button>
+            <button onclick="closeModal()" class="btn-outline">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------- البيانات ----------
+    let islamicArticles = [];
+    let customSciences = [];
+
+    function loadData() {
+        // تحميل مقالات العلوم الإسلامية
+        const savedArts = localStorage.getItem('islamicArticles');
+        if(savedArts) {
+            islamicArticles = JSON.parse(savedArts);
+        } else {
+            islamicArticles = [
+                { title: "الصراع الطائفي بين السلفية والإثني عشرية", text: "تحليل تاريخي وسياسي وفكري لأبرز التحولات العقائدية." },
+                { title: "الدعاء وتأثيره على البناء النفسي", text: "كيف يغير الإيمان والدعاء سلوك الإنسان واستقراره النفسي." },
+                { title: "الفقه الإسلامي بين الأصالة والتجديد", text: "قراءة في تطور المدارس الفقهية والتحديات المعاصرة." }
+            ];
+            localStorage.setItem('islamicArticles', JSON.stringify(islamicArticles));
+        }
+
+        const savedSci = localStorage.getItem('customSciences');
+        if(savedSci) {
+            customSciences = JSON.parse(savedSci);
+        } else {
+            customSciences = [];
+        }
+
+        renderArticles();
+        renderSciences();
+    }
+
+    function renderArticles() {
+        const container = document.getElementById('articlesList');
+        if(!container) return;
+        if(islamicArticles.length === 0) {
+            container.innerHTML = '<div class="text-center text-gray-400 py-6">📭 لا توجد مقالات. اضغط "مقال جديد" للإضافة.</div>';
+            return;
+        }
+        container.innerHTML = islamicArticles.map((art, idx) => `
+            <div class="card">
+                <div class="flex justify-between items-start flex-wrap gap-2">
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-[#c7a86b]">${escapeHtml(art.title)}</h3>
+                        <p class="text-gray-300 text-sm mt-1">${escapeHtml(art.text.substring(0, 120))}${art.text.length > 120 ? '...' : ''}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="editArticle(${idx})" class="bg-[#c7a86b] text-black px-3 py-1 rounded-full text-sm"><i class="fas fa-edit"></i> تعديل</button>
+                        <button onclick="deleteArticle(${idx})" class="bg-red-600/80 hover:bg-red-600 px-3 py-1 rounded-full text-sm"><i class="fas fa-trash"></i> حذف</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderSciences() {
+        const container = document.getElementById('sciencesList');
+        if(!container) return;
+        if(customSciences.length === 0) {
+            container.innerHTML = '<span class="text-gray-500 text-sm">✨ لا توجد أقسام مضافة بعد.</span>';
+            return;
+        }
+        container.innerHTML = customSciences.map((sc, idx) => `
+            <div class="bg-[#2d2f42] rounded-full px-4 py-2 flex items-center gap-2">
+                <i class="fas fa-book text-[#c7a86b] text-sm"></i>
+                <span>${escapeHtml(sc.name)}</span>
+                <button onclick="deleteScience(${idx})" class="text-red-400 hover:text-red-300 text-sm mr-2"><i class="fas fa-times"></i></button>
+            </div>
+        `).join('');
+    }
+
+    function addNewScience() {
+        const name = document.getElementById('newScienceName').value.trim();
+        if(!name) { alert('أدخل اسم القسم'); return; }
+        customSciences.push({ name, articles: [] });
+        localStorage.setItem('customSciences', JSON.stringify(customSciences));
+        document.getElementById('newScienceName').value = '';
+        renderSciences();
+    }
+
+    function deleteScience(idx) {
+        if(confirm('حذف هذا القسم؟')) {
+            customSciences.splice(idx, 1);
+            localStorage.setItem('customSciences', JSON.stringify(customSciences));
+            renderSciences();
+        }
+    }
+
+    let editModeIndex = null;
+    function openAddModal() {
+        editModeIndex = null;
+        document.getElementById('modalTitle').innerText = '➕ إضافة مقال جديد';
+        document.getElementById('articleTitle').value = '';
+        document.getElementById('articleText').value = '';
+        document.getElementById('editIndex').value = '';
+        document.getElementById('articleModal').classList.add('active');
+    }
+
+    function editArticle(idx) {
+        editModeIndex = idx;
+        const art = islamicArticles[idx];
+        document.getElementById('modalTitle').innerText = '✏️ تعديل المقال';
+        document.getElementById('articleTitle').value = art.title;
+        document.getElementById('articleText').value = art.text;
+        document.getElementById('editIndex').value = idx;
+        document.getElementById('articleModal').classList.add('active');
+    }
+
+    function saveArticle() {
+        const title = document.getElementById('articleTitle').value.trim();
+        const text = document.getElementById('articleText').value.trim();
+        if(!title || !text) { alert('املأ الحقول'); return; }
+        const editIdx = document.getElementById('editIndex').value;
+        if(editIdx !== '') {
+            islamicArticles[editIdx] = { title, text };
+        } else {
+            islamicArticles.push({ title, text });
+        }
+        localStorage.setItem('islamicArticles', JSON.stringify(islamicArticles));
+        renderArticles();
+        closeModal();
+    }
+
+    function deleteArticle(idx) {
+        if(confirm('حذف المقال؟')) {
+            islamicArticles.splice(idx, 1);
+            localStorage.setItem('islamicArticles', JSON.stringify(islamicArticles));
+            renderArticles();
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('articleModal').classList.remove('active');
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    window.onclick = function(e) {
+        const modal = document.getElementById('articleModal');
+        if(e.target === modal) closeModal();
+    }
+
+    loadData();
+</script>
+</body>
+  </html>
