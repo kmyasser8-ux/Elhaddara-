@@ -704,3 +704,235 @@ const SECTIONS = {
         id: 'ph2',
         title: 'كيف تطورت الفلسفة من اليونان إلى الحداثة؟',
         desc: 'تاريخ التحولات الفكرية الكبرى وصراع الإنسان مع أس
+                  {
+          id: 'ph2',
+          title: 'كيف تطورت الفلسفة من اليونان إلى الحداثة؟',
+          desc: 'تاريخ التحولات الفكرية الكبرى وصراع الإنسان مع أسئلة الوجود والعدم وبناء الحقيقة عبر العصور.',
+          link: ''
+        }
+      ]
+    }
+};
+
+/* ============================================================
+   إدارة البيانات وتتبع الحالات (State Management)
+============================================================ */
+// محاولة تحميل البيانات المعدلة من التخزين المحلي، أو استخدام البيانات الافتراضية أعلاه
+let data = JSON.parse(localStorage.getItem('al_haddara_data')) || SECTIONS;
+let currentSectionId = null; // الاحتفاظ بمعرف القسم المفتوح حالياً
+
+// دالة لحفظ التغييرات في التخزين المحلي وإظهار مؤشر الحفظ البصري
+function saveData() {
+    localStorage.setItem('al_haddara_data', JSON.stringify(data));
+    showSaveToast();
+}
+
+// دالة تفعيل شريط التنبيه البصري الصغير عند الحفظ الناجح
+function showSaveToast() {
+    const toast = document.getElementById('saveToast');
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 2000);
+}
+
+/* ============================================================
+   آليات عرض وإغلاق الأقسام الفكرية (Section View)
+============================================================ */
+function openSection(sectionId) {
+    currentSectionId = sectionId;
+    const section = data[sectionId];
+    
+    if (!section) return;
+
+    // إخفاء الصفحة الرئيسية أولاً لتوفير مساحة العرض
+    document.getElementById('mainPage').style.display = 'none';
+    
+    // تفعيل شاشة العرض الكامل للقسم وإعطاؤه الخلفية المتدرجة الفاخرة الخاصة به
+    const view = document.getElementById('sectionView');
+    view.classList.add('open');
+    view.style.background = section.bg;
+    
+    // حقن العنوان والأيقونة الإشهارية للقسم في شريط العرض
+    document.getElementById('sectionIcon').innerText = section.icon;
+    document.getElementById('sectionMainTitle').innerText = section.title;
+    
+    // بناء كروت المقالات برمجياً داخل القسم
+    renderArticles();
+}
+
+function closeSection() {
+    // إخلاق لوحة العرض الكامل وإعادة إظهار الواجهة الرئيسية للموقع
+    document.getElementById('sectionView').classList.remove('open');
+    document.getElementById('mainPage').style.display = 'block';
+    currentSectionId = null;
+}
+
+/* ============================================================
+   بناء المقالات ديناميكياً وحقنها في واجهة المستخدم (DOM Rendering)
+============================================================ */
+function renderArticles() {
+    const grid = document.getElementById('articlesGrid');
+    const section = data[currentSectionId];
+    
+    if (!section || !grid) return;
+
+    // تحديث رقم العداد برمجياً في شريط الإحصائيات
+    document.getElementById('articleCount').innerText = section.articles.length;
+    
+    let htmlContent = '';
+
+    // الدوران حول مصفوفة المقالات وبناء هيكل HTML لكل مقال كرت
+    section.articles.forEach(article => {
+        htmlContent += `
+        <div class="article-card" data-id="${article.id}">
+          <button class="delete-btn" onclick="deleteArticle('${article.id}')" title="حذف المقال">
+            <i class="fas fa-trash"></i>
+          </button>
+          
+          <h3 contenteditable="true" spellcheck="false" onblur="updateArticleText('${article.id}', 'title', this.innerText)">${article.title}</h3>
+          <p contenteditable="true" spellcheck="false" onblur="updateArticleText('${article.id}', 'desc', this.innerText)">${article.desc}</p>
+          
+          ${article.link ? `
+            <a href="${article.link}" class="article-link">
+              <i class="fas fa-arrow-left-long" style="font-size:0.75rem"></i> اقرأ المقال كاملاً
+            </a>
+          ` : ''}
+        </div>
+        `;
+    });
+
+    // إضافة الكرت المتقطع المخصص لعملية إدراج المقالات الجديدة في نهاية الشبكة
+    htmlContent += `
+    <div class="add-card" onclick="openModal()">
+      <div class="plus-icon"><i class="fas fa-plus"></i></div>
+      <span>إضافة مقال جديد</span>
+    </div>
+    `;
+
+    grid.innerHTML = htmlContent;
+}
+
+/* ============================================================
+   عمليات التعديل الفوري المباشر (Inline Editing)
+============================================================ */
+// 1. التقاط تعديل عنوان القسم الرئيسي فور خروج مؤشر الكتابة منه
+document.getElementById('sectionMainTitle').addEventListener('blur', function() {
+    if (currentSectionId && this.innerText.trim() !== "") {
+        data[currentSectionId].title = this.innerText.trim();
+        saveData();
+    }
+});
+
+// 2. تحديث نصوص المقالات الفردية (العنوان أو الوصف) بعد التعديل الحي
+function updateArticleText(articleId, field, newValue) {
+    const section = data[currentSectionId];
+    if (!section) return;
+
+    const article = section.articles.find(art => art.id === articleId);
+    if (article && article[field] !== newValue.trim()) {
+        article[field] = newValue.trim();
+        saveData();
+    }
+}
+
+/* ============================================================
+   نافذة إضافة المقالات المنبثقة (Modal Controls & Form Logic)
+============================================================ */
+function openModal() {
+    document.getElementById('addModal').classList.add('open');
+    document.getElementById('modalTitle').focus();
+}
+
+function closeModal() {
+    document.getElementById('addModal').classList.remove('open');
+    // تنظيف الحقول لتهيئتها للاستخدام القادم
+    document.getElementById('modalTitle').value = '';
+    document.getElementById('modalDesc').value = '';
+    document.getElementById('modalLink').value = '';
+}
+
+function confirmAddArticle() {
+    const titleInput = document.getElementById('modalTitle').value.trim();
+    const descInput = document.getElementById('modalDesc').value.trim();
+    const linkInput = document.getElementById('modalLink').value.trim();
+
+    if (!titleInput) {
+        alert('فضلاً، يرجى كتابة عنوان المقال أولاً لتوثيقه.');
+        return;
+    }
+
+    // إنشاء كائن المقال الجديد بمعرف فريد يعتمد على الطابع الزمني الحالي
+    const newArticle = {
+        id: 'art_' + Date.now(),
+        title: titleInput,
+        desc: descInput || 'لا يوجد ملخص متوفر لهذا المقال حالياً، انقر هنا لكتابة ملخص تفصيلي.',
+        link: linkInput
+    };
+
+    // دفع المقال داخل مصفوفة القسم المفعل، وحفظ البيانات وإعادة البناء البصري للشبكة
+    data[currentSectionId].articles.push(newArticle);
+    saveData();
+    renderArticles();
+    closeModal();
+}
+
+/* ============================================================
+   آلية حذف المقالات (Deletion Mechanism)
+============================================================ */
+function deleteArticle(articleId) {
+    if (confirm('هل أنت متأكد تماماً من رغبتك في حذف هذا المقال من السجلات الفكرية للقسم؟')) {
+        const section = data[currentSectionId];
+        // تصفية المصفوفة وإقصاء العنصر المحذوف
+        section.articles = section.articles.filter(art => art.id !== articleId);
+        
+        saveData();
+        renderArticles();
+    }
+}
+
+/* ============================================================
+   التحكم في القائمة الجانبية الموحدة (Universal Sidebar Controls)
+============================================================ */
+const sidebar = document.getElementById('sidebar');
+const overlayPage = document.getElementById('overlayPage');
+const menuBtn = document.getElementById('menuBtn');
+const menuBtn2 = document.getElementById('menuBtn2');
+const closeSidebar = document.getElementById('closeSidebar');
+
+function toggleSidebar(open) {
+    if (open) {
+        sidebar.style.right = '0px';
+        overlayPage.style.display = 'block';
+    } else {
+        sidebar.style.right = '-320px';
+        overlayPage.style.display = 'none';
+    }
+}
+
+if(menuBtn) menuBtn.addEventListener('click', () => toggleSidebar(true));
+if(menuBtn2) menuBtn2.addEventListener('click', () => toggleSidebar(true));
+if(closeSidebar) closeSidebar.addEventListener('click', () => toggleSidebar(false));
+if(overlayPage) overlayPage.addEventListener('click', () => toggleSidebar(false));
+
+// إخفاء الـ overlay عند بداية تشغيل الصفحة تلقائياً لتجنب الحجب البصري
+if(overlayPage) overlayPage.style.display = 'none';
+
+/* ============================================================
+   آلية تبديل الوضع الليلي البصري الموحد (Theme Customization)
+============================================================ */
+const themeBtn = document.getElementById('themeBtn');
+const themeBtn2 = document.getElementById('themeBtn2');
+
+function toggleTheme() {
+    document.body.classList.toggle('light-mode-active');
+    // يمكنك إضافة كود تخصيص ألوان الخلفية هنا إذا أردت دعم الوضع الفاتح الكامل لاحقاً
+    alert('تم تبديل النمط البصري، الواجهة مجهزة ومحسنة افتراضياً للقراءة الليلية الفاخرة.');
+}
+
+if(themeBtn) themeBtn.addEventListener('click', toggleTheme);
+if(themeBtn2) themeBtn2.addEventListener('click', toggleTheme);
+</script>
+</body>
+</html>
+
