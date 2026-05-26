@@ -6,13 +6,12 @@
     <title>محراب التحكم والتحرير الفكري - منصة الحضارة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2 family=Cairo:wght@300;400;600;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Cairo', sans-serif; background: #020617; color: #f8fafc; min-height: 100vh; }
         .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.07); }
         .preview-sticky { position: sticky; top: 40px; }
         .device-mobile { max-width: 380px !important; min-height: 640px !important; border: 10px solid #1e293b; border-radius: 36px; margin: 0 auto; }
-        /* نصوص متجاوبة تماماً للمقالات ومريحة للعين */
         .responsive-article-text p {
             font-size: clamp(0.95rem, 1.2vw + 0.7rem, 1.2rem);
             line-height: clamp(1.8, 2vw + 1.6, 2.3);
@@ -78,7 +77,16 @@
 
                 <div class="space-y-1">
                     <label class="text-[11px] text-gray-400">رابط صورة الخلفية الفنية</label>
-                    <input type="text" id="sci-bg" oninput="updateSciencePreview()" placeholder="ضع رابط الصورة لحمايتها بفلتر التعتيم..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
+                    <input type="text" id="sci-bg" oninput="updateSciencePreview()" placeholder="ضع رابط الصورة للملف هنا..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[11px] text-gray-400">خيارات ومكان عرض صورة العلم</label>
+                    <select id="sci-img-mode" onchange="updateSciencePreview()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
+                        <option value="card-ext">صورة عنصر خارجي</option>
+                        <option value="bg-banner">صورة خلفية فوق (على شكل شريط)</option>
+                        <option value="bg-full" selected>صورة خلفية كاملة</option>
+                    </select>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
@@ -114,7 +122,7 @@
                 
                 <div class="space-y-1">
                     <label class="text-[11px] text-gray-400">اختر العلم الحاضن للأطروحة</label>
-                    <select id="art-category" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]"></select>
+                    <select id="art-category" onchange="updateArticlePreview()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]"></select>
                 </div>
 
                 <div class="space-y-1">
@@ -123,8 +131,22 @@
                 </div>
 
                 <div class="space-y-1">
+                    <label class="text-[11px] text-gray-400">رابط صورة المقال الفنية (خاص بالمقال نفسه)</label>
+                    <input type="text" id="art-bg" oninput="updateArticlePreview()" placeholder="ضع رابط صورة مخصصة لهذا المقال..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[11px] text-gray-400">خيارات ومكان عرض صورة المقال</label>
+                    <select id="art-img-mode" onchange="updateArticlePreview()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
+                        <option value="card-ext">صورة عنصر خارجي</option>
+                        <option value="bg-banner" selected>صورة خلفية فوق (على شكل شريط)</option>
+                        <option value="bg-full">صورة خلفية كاملة</option>
+                    </select>
+                </div>
+
+                <div class="space-y-1">
                     <label class="text-[11px] text-gray-400">المتن الفكري (ادعم الفقرات بـ Enter، واصنع عنواناً فرعياً بنقطتين : كـ أولاً:)</label>
-                    <textarea id="art-text" oninput="updateArticlePreview()" rows="8" placeholder="اكتب المقال هنا بكل عمق وتفصيل..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b] leading-relaxed"></textarea>
+                    <textarea id="art-text" oninput="updateArticlePreview()" rows="6" placeholder="اكتب المقال هنا بكل عمق وتفصيل..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b] leading-relaxed"></textarea>
                 </div>
 
                 <button onclick="saveArticle()" id="btn-save-art" class="w-full bg-[#c7a86b] text-[#020617] font-bold text-xs py-3 rounded-xl hover:bg-[#d4b87a] transition shadow-lg mt-1">
@@ -162,9 +184,14 @@
                     
                     <div id="preview-science-box" class="space-y-3">
                         <span class="text-[11px] text-gray-500 block">معاينة بطاقة العلم في الواجهة الرئيسية:</span>
+                        
+                        <div id="sci-ext-img-container" class="mb-2 hidden">
+                            <img id="p-sci-ext-img" src="" class="w-full h-32 object-cover rounded-xl border border-white/10" alt="External Card Asset">
+                        </div>
+
                         <div id="p-sci-card" class="rounded-2xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden min-h-[220px] bg-gradient-to-br from-amber-950/50 to-slate-950 bg-cover bg-center transition-all duration-300">
-                            <div class="absolute inset-0 bg-slate-950/80 z-0"></div>
-                            <div class="space-y-4 relative z-10">
+                            <div id="p-sci-overlay" class="absolute inset-0 bg-slate-950/80 z-0"></div>
+                            <div class="space-y-4 relative z-10 w-full">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-xl bg-[#c7a86b]/10 border border-[#c7a86b]/20 flex items-center justify-center text-lg text-[#c7a86b]">
                                         <i id="p-sci-icon" class="fas fa-monument"></i>
@@ -182,16 +209,25 @@
 
                     <div id="preview-article-box" class="space-y-3 hidden">
                         <span class="text-[11px] text-gray-500 block">معاينة انسياب وتجاوب متن المقال الفكري داخل شاشات التصفح:</span>
-                        <div class="glass rounded-2xl overflow-hidden border border-white/5 max-h-[500px] overflow-y-auto">
-                            <div id="p-art-banner" class="h-28 bg-slate-900 relative flex items-center justify-center bg-cover bg-center">
-                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-black/50"></div>
-                                <div class="relative z-10 text-center px-4 space-y-1">
-                                    <span class="text-[9px] font-bold text-[#c7a86b] uppercase tracking-widest bg-[#c7a86b]/10 px-2.5 py-0.5 rounded-full border border-[#c7a86b]/20">العلم الحاضن للمقال</span>
-                                    <h2 id="p-art-title" class="text-sm md:text-base font-bold text-white line-clamp-1" style="font-family: 'Reem Kufi', sans-serif;">عنوان المقال يظهر هنا تلقائياً عند الكتابة</h2>
+                        <div id="p-art-main-container" class="glass rounded-2xl overflow-hidden border border-white/5 max-h-[500px] overflow-y-auto relative bg-cover bg-center transition-all duration-300">
+                            <div id="p-art-full-overlay" class="absolute inset-0 bg-slate-950/90 z-0 hidden"></div>
+                            
+                            <div class="relative z-10">
+                                <div id="p-art-banner" class="h-28 bg-slate-900 relative flex items-center justify-center bg-cover bg-center transition-all duration-300">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-black/50"></div>
+                                    <div class="relative z-10 text-center px-4 space-y-1">
+                                        <span id="p-art-badge" class="text-[9px] font-bold text-[#c7a86b] uppercase tracking-widest bg-[#c7a86b]/10 px-2.5 py-0.5 rounded-full border border-[#c7a86b]/20">العلم الحاضن للمقال</span>
+                                        <h2 id="p-art-title" class="text-sm md:text-base font-bold text-white line-clamp-1" style="font-family: 'Reem Kufi', sans-serif;">عنوان المقال يظهر هنا تلقائياً عند الكتابة</h2>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="p-5 md:p-7 text-gray-300 responsive-article-text" id="p-art-body-area">
-                                <p class="text-gray-400 italic">ابدأ بصقل أفكارك وكتابتها في حقل المتن الأيمن، وراقب كيف ينساب الخط ويتجاوب حجمه تلقائياً ليتناسب مع مقاس الهاتف أو الحاسوب المحدد بالأعلى...</p>
+
+                                <div id="art-ext-img-container" class="p-4 pb-0 hidden">
+                                    <img id="p-art-ext-img" src="" class="w-full h-40 object-cover rounded-xl border border-white/10 shadow-lg" alt="Article Card Asset">
+                                </div>
+
+                                <div class="p-5 md:p-7 text-gray-300 responsive-article-text" id="p-art-body-area">
+                                    <p class="text-gray-400 italic">ابدأ بصقل أفكارك وكتابتها في حقل المتن الأيمن، وراقب كيف ينساب الخط ويتجاوب حجمه تلقائياً ليتناسب مع مقاس الهاتف أو الحاسوب المحدد بالأعلى...</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -202,20 +238,17 @@
         </main>
 
     <script>
-        // مصفوفة البنية الأساسية الثابتة للمنصة في حال عدم وجود مخزن محلي سابق
         const coreCategories = [
-            { id: 'islamic', title: 'العلوم الإسلامية', desc: 'دراسات في العقيدة، التطور المذهبي، التجديد الفقهي وأثره النفسي.', icon: 'fas fa-mosque', bg: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1200', color: 'from-emerald-950/40 to-slate-900' },
-            { id: 'politics', title: 'السياسة', desc: 'تحليل الجغرافيا السياسية، صراعات المحاور الكبرى، وأوراق النفوذ الدولي.', icon: 'fas fa-globe-americas', bg: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?q=80&w=1200', color: 'from-blue-950/40 to-slate-900' },
-            { id: 'psychology', title: 'علم النفس', desc: 'خبايا التحليل النفسي الكلاسيكي، سبر أعماق العقل الباطن، وبناء الوعي الجمعي.', icon: 'fas fa-brain', bg: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Sigmund_Freud_LIFE.jpg', color: 'from-purple-950/40 to-slate-900' },
-            { id: 'philosophy', title: 'الفلسفة والفكر', desc: 'رحلة البحث الإنساني عن الحقيقة وصراعات المذاهب الوجودية والعقلانية.', icon: 'fas fa-scroll', bg: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200', color: 'from-amber-950/40 to-slate-900' }
+            { id: 'islamic', title: 'العلوم الإسلامية', desc: 'دراسات في العقيدة، التطور المذهبي، التجديد الفقهي وأثره النفسي.', icon: 'fas fa-mosque', bg: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1200', color: 'from-emerald-950/40 to-slate-900', imgMode: 'bg-full' },
+            { id: 'politics', title: 'السياسة', desc: 'تحليل الجغرافيا السياسية، صراعات المحاور الكبرى، وأوراق النفوذ الدولي.', icon: 'fas fa-globe-americas', bg: './politics-bg.png', color: 'from-blue-950/40 to-slate-900', imgMode: 'bg-full' },
+            { id: 'psychology', title: 'علم النفس', desc: 'خبايا التحليل النفسي الكلاسيكي، سبر أعماق العقل الباطن، وبناء الوعي الجمعي.', icon: 'fas fa-brain', bg: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Sigmund_Freud_LIFE.jpg', color: 'from-purple-950/40 to-slate-900', imgMode: 'bg-full' },
+            { id: 'philosophy', title: 'الفلسفة والفكر', desc: 'رحلة البحث الإنساني عن الحقيقة وصراعات المذاهب الوجودية والعقلانية.', icon: 'fas fa-scroll', bg: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200', color: 'from-amber-950/40 to-slate-900', imgMode: 'bg-full' }
         ];
 
-        // تهيئة الذاكرة إذا كانت فارغة لمنع تجميد لوحة التحكم
         if (!localStorage.getItem('intellectualCategories')) {
             localStorage.setItem('intellectualCategories', JSON.stringify(coreCategories));
         }
 
-        // دالة تغيير محاكي الشاشة البصري (هاتف ضد حاسوب)
         function setDevice(mode) {
             const wrapper = document.getElementById('simulator-wrapper');
             const btnDesktop = document.getElementById('dev-desktop');
@@ -232,7 +265,6 @@
             }
         }
 
-        // دالة التبديل التفاعلي بين ألسنة النشر والتحرير والأرشيف
         function switchTab(tab) {
             document.getElementById('form-science').classList.add('hidden');
             document.getElementById('form-article').classList.add('hidden');
@@ -257,54 +289,104 @@
                 updateArticlePreview();
             } else if (tab === 'archive') {
                 document.getElementById('form-archive').classList.remove('hidden');
-                document.getElementById('preview-article-box').classList.remove('hidden'); // إبقاء المعاينة للمقالات عند مراجعة الأرشيف
+                document.getElementById('preview-article-box').classList.remove('hidden');
                 document.getElementById('tab-archive').className = "w-1/3 py-2 rounded-lg font-bold transition bg-[#c7a86b] text-[#020617]";
                 renderArchiveList();
             }
         }
 
-        // تحديث وإصلاح محرك المعاينة الحية لبطاقات العلوم (الحل للنقطة الثانية)
+        // تطوير محرك العلوم لدعم خيارات العرض الثلاثة دون تدمير القديم
         function updateSciencePreview() {
             const titleInput = document.getElementById('sci-title').value.trim();
             const descInput = document.getElementById('sci-desc').value.trim();
             const bgUrl = document.getElementById('sci-bg').value.trim();
             const icon = document.getElementById('sci-icon').value.trim() || 'fas fa-monument';
             const grad = document.getElementById('sci-color').value;
+            const imgMode = document.getElementById('sci-img-mode').value;
 
-            // حل مشكلة النص الافتراضي بشكل معزول وصارم
             document.getElementById('p-sci-title').innerText = titleInput ? titleInput : 'اسم العلم الافتراضي';
             document.getElementById('p-sci-desc').innerText = descInput ? descInput : 'هنا سيظهر النص والنصيحة الفلسفية التي تسطرها في حقل الوصف الأيمن بالكامل وبشكل متناسق فوري.';
             document.getElementById('p-sci-icon').className = icon;
 
             const card = document.getElementById('p-sci-card');
-            card.className = `rounded-2xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden min-h-[220px] bg-cover bg-center transition-all duration-300 bg-gradient-to-br ${grad}`;
-            
-            if(bgUrl) {
-                card.style.backgroundImage = `url('${bgUrl}')`;
-            } else {
-                card.style.backgroundImage = 'none';
+            const overlay = document.getElementById('p-sci-overlay');
+            const extContainer = document.getElementById('sci-ext-img-container');
+            const extImg = document.getElementById('p-sci-ext-img');
+
+            // تصفير وتفكيك الأنماط القديمة لإعادة بنائها مرنة
+            card.className = `rounded-2xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden min-h-[220px] transition-all duration-300 bg-gradient-to-br ${grad}`;
+            card.style.backgroundImage = 'none';
+            overlay.className = "absolute inset-0 bg-slate-950/80 z-0";
+            extContainer.classList.add('hidden');
+
+            if (bgUrl) {
+                if (imgMode === 'bg-full') {
+                    card.style.backgroundImage = `url('${bgUrl}')`;
+                    overlay.className = "absolute inset-0 bg-slate-950/80 z-0";
+                } else if (imgMode === 'bg-banner') {
+                    card.style.backgroundImage = `url('${bgUrl}')`;
+                    overlay.className = "absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-950/90 to-slate-950 z-0";
+                } else if (imgMode === 'card-ext') {
+                    extImg.src = bgUrl;
+                    extContainer.classList.remove('hidden');
+                }
             }
         }
 
-        // تحديث ومعاينة صياغة المقالات المتجاوبة مع الأجهزة برمجياً
+        // تطوير محرك المقالات لدعم خيارات التنسيق الثلاثة وصورتها المستقلة
         function updateArticlePreview() {
             const title = document.getElementById('art-title').value.trim() || 'عنوان المقال يظهر هنا تلقائياً عند الكتابة';
             const text = document.getElementById('art-text').value.trim();
+            const artBg = document.getElementById('art-bg').value.trim();
+            const imgMode = document.getElementById('art-img-mode').value;
+            
             const bodyArea = document.getElementById('p-art-body-area');
             const dropdown = document.getElementById('art-category');
+            const mainContainer = document.getElementById('p-art-main-container');
+            const fullOverlay = document.getElementById('p-art-full-overlay');
+            const banner = document.getElementById('p-art-banner');
+            const extArtContainer = document.getElementById('art-ext-img-container');
+            const extArtImg = document.getElementById('p-art-ext-img');
 
             document.getElementById('p-art-title').innerText = title;
 
-            // تحديث غلاف وخلفية بانر المقال بشكل حي متفاعل مع العلم المختار
-            if(dropdown && dropdown.value) {
+            // إعدادات الخلفية الافتراضية المستمدة من العلم للحفاظ على روح المنصة الفنية
+            let defaultBg = '';
+            if (dropdown && dropdown.value) {
                 const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
                 const activeCat = categories.find(c => c.id === dropdown.value);
-                if(activeCat && activeCat.bg) {
-                    document.getElementById('p-art-banner').style.backgroundImage = `url('${activeCat.bg}')`;
+                if (activeCat) {
+                    document.getElementById('p-art-badge').innerText = activeCat.title;
+                    defaultBg = activeCat.bg || '';
                 }
             }
 
-            if(!text) {
+            // إعادة ضبط المصنع الافتراضي للمعاينة
+            mainContainer.style.backgroundImage = 'none';
+            fullOverlay.classList.add('hidden');
+            banner.style.backgroundImage = 'none';
+            banner.classList.remove('hidden');
+            extArtContainer.classList.add('hidden');
+
+            // تطبيق مصفوفة الشروط الثلاثة للصورة والمقال
+            const finalImage = artBg ? artBg : defaultBg;
+
+            if (finalImage) {
+                if (imgMode === 'bg-banner') {
+                    banner.style.backgroundImage = `url('${finalImage}')`;
+                } else if (imgMode === 'bg-full') {
+                    mainContainer.style.backgroundImage = `url('${finalImage}')`;
+                    fullOverlay.classList.remove('hidden');
+                    banner.style.backgroundImage = 'none';
+                    banner.classList.add('bg-transparent');
+                } else if (imgMode === 'card-ext') {
+                    banner.style.backgroundImage = 'none';
+                    extArtImg.src = finalImage;
+                    extArtContainer.classList.remove('hidden');
+                }
+            }
+
+            if (!text) {
                 bodyArea.innerHTML = `<p class="text-gray-400 italic">ابدأ بصقل أفكارك وكتابتها في حقل المتن الأيمن، وراقب كيف ينساب الخط ويتجاوب حجمه تلقائياً ليتناسب مع مقاس الهاتف أو الحاسوب المحدد بالأعلى...</p>`;
                 return;
             }
@@ -314,9 +396,9 @@
             
             paragraphs.forEach((para, index) => {
                 const currentText = para.trim();
-                if(index === 0) {
+                if (index === 0) {
                     bodyArea.innerHTML += `<p class="font-normal border-r-4 border-[#c7a86b] pr-3 py-1 bg-white/[0.02] rounded-l-lg text-gray-100">${escapeHtml(currentText)}</p>`;
-                } else if(currentText.length < 90 && (currentText.startsWith('أولاً:') || currentText.startsWith('ثانياً:') || currentText.includes('المبحث') || currentText.endsWith(':'))) {
+                } else if (currentText.length < 90 && (currentText.startsWith('أولاً:') || currentText.startsWith('ثانياً:') || currentText.includes('المبحث') || currentText.endsWith(':'))) {
                     bodyArea.innerHTML += `<h4><i class="fas fa-feather-alt text-xs opacity-60 ml-1"></i> ${escapeHtml(currentText.replace(/:$/, ''))}</h4>`;
                 } else {
                     bodyArea.innerHTML += `<p>${escapeHtml(currentText)}</p>`;
@@ -336,13 +418,13 @@
             if(currentSelection) dropdown.value = currentSelection;
         }
 
-        // دالة الحفظ المزدوجة للعلوم (إضافة جديدة أو تحديث وتعديل علم قديم)
         function saveScience() {
             const title = document.getElementById('sci-title').value.trim();
             const desc = document.getElementById('sci-desc').value.trim();
             const bg = document.getElementById('sci-bg').value.trim();
             const icon = document.getElementById('sci-icon').value.trim();
             const color = document.getElementById('sci-color').value;
+            const imgMode = document.getElementById('sci-img-mode').value;
             const editId = document.getElementById('editing-sci-id').value;
 
             if(!title) { alert('برجاء كتابة عنوان العلم الفكري أولاً!'); return; }
@@ -350,10 +432,9 @@
             let categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
 
             if (editId) {
-                // وضع التعديل لعلم قديم موجود مسبقاً
                 categories = categories.map(cat => {
                     if (cat.id === editId) {
-                        return { ...cat, title, desc, bg, icon, color };
+                        return { ...cat, title, desc, bg, icon, color, imgMode };
                     }
                     return cat;
                 });
@@ -361,9 +442,8 @@
                 alert('تم تحديث وتعديل بيانات العلم بنجاح بالأرشيف والمنصة!');
                 resetScienceForm();
             } else {
-                // وضع البث لعلم جديد بالكامل
                 const id = 'custom_' + Date.now();
-                const newScience = { id, title, desc, icon, bg, color };
+                const newScience = { id, title, desc, icon, bg, color, imgMode };
                 categories.push(newScience);
                 localStorage.setItem('intellectualCategories', JSON.stringify(categories));
                 localStorage.setItem(`${id}Articles`, JSON.stringify([]));
@@ -378,17 +458,19 @@
             document.getElementById('sci-desc').value = '';
             document.getElementById('sci-bg').value = '';
             document.getElementById('sci-icon').value = 'fas fa-monument';
+            document.getElementById('sci-img-mode').value = 'bg-full';
             document.getElementById('sci-form-title').innerHTML = `<i class="fas fa-sliders-h ml-1"></i> إضافة علم فكري جديد`;
             document.getElementById('btn-save-sci').innerText = 'تثبيت وبث العلم في المنصة';
             document.getElementById('cancel-sci-edit').classList.add('hidden');
             updateSciencePreview();
         }
 
-        // دالة الحفظ المزدوجة للمقالات والأطروحات القديمة والجديدة
         function saveArticle() {
             const catId = document.getElementById('art-category').value;
             const title = document.getElementById('art-title').value.trim();
             const text = document.getElementById('art-text').value.trim();
+            const bg = document.getElementById('art-bg').value.trim();
+            const imgMode = document.getElementById('art-img-mode').value;
             
             const editCatId = document.getElementById('editing-art-catId').value;
             const editIdx = document.getElementById('editing-art-idx').value;
@@ -396,23 +478,20 @@
             if(!title || !text) { alert('برجاء إدخال تفاصيل الأطروحة بالكامل!'); return; }
 
             if (editCatId && editIdx !== '') {
-                // 1. حذف المقال القديم من مصفوفته السابقة
                 let oldArticles = JSON.parse(localStorage.getItem(`${editCatId}Articles`)) || [];
                 oldArticles.splice(parseInt(editIdx), 1);
                 localStorage.setItem(`${editCatId}Articles`, JSON.stringify(oldArticles));
 
-                // 2. حقنه في مصفوفة العلم المختار (سواء تغير العلم أم لا)
                 let targetArticles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
-                targetArticles.push({ title, text });
+                targetArticles.push({ title, text, bg, imgMode });
                 localStorage.setItem(`${catId}Articles`, JSON.stringify(targetArticles));
 
                 alert('تم حفظ وتعديل الأطروحة بنجاح في المنصة!');
                 resetArticleForm();
-                switchTab('archive'); // إرجاعه للأرشيف لرؤية النتيجة
+                switchTab('archive');
             } else {
-                // وضع النشر الجديد
                 let savedArticles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
-                savedArticles.push({ title, text });
+                savedArticles.push({ title, text, bg, imgMode });
                 localStorage.setItem(`${catId}Articles`, JSON.stringify(savedArticles));
                 alert(`تم بث أطروحة "${title}" بنجاح!`);
                 resetArticleForm();
@@ -424,13 +503,14 @@
             document.getElementById('editing-art-idx').value = '';
             document.getElementById('art-title').value = '';
             document.getElementById('art-text').value = '';
+            document.getElementById('art-bg').value = '';
+            document.getElementById('art-img-mode').value = 'bg-banner';
             document.getElementById('art-form-title').innerHTML = `<i class="fas fa-pen-fancy ml-1"></i> صياغة ونشر أطروحة مطولة`;
             document.getElementById('btn-save-art').innerText = 'بث المقال في محراب المنصة';
             document.getElementById('cancel-art-edit').classList.add('hidden');
             updateArticlePreview();
         }
 
-        // بناء وعرض لوحة جرد المحتوى والتحرير الكامل للأرشيف (العلوم والمقالات الثابتة والقديمة)
         function renderArchiveList() {
             const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
             const container = document.getElementById('archive-list-container');
@@ -476,7 +556,6 @@
             });
         }
 
-        // استدعاء وتجهيز بيانات علم قديم لتعديله
         function startEditScience(id) {
             const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
             const cat = categories.find(c => c.id === id);
@@ -489,6 +568,7 @@
             document.getElementById('sci-bg').value = cat.bg || '';
             document.getElementById('sci-icon').value = cat.icon || 'fas fa-monument';
             if(cat.color) document.getElementById('sci-color').value = cat.color;
+            if(cat.imgMode) document.getElementById('sci-img-mode').value = cat.imgMode;
 
             document.getElementById('sci-form-title').innerHTML = `<i class="fas fa-edit ml-1 text-amber-400"></i> تعديل بيانات: ${cat.title}`;
             document.getElementById('btn-save-sci').innerText = 'تحديث وتعديل العلم الحالي';
@@ -496,7 +576,6 @@
             updateSciencePreview();
         }
 
-        // استدعاء وتجهيز أطروحة قديمة للتعديل الشامل
         function startEditArticle(catId, idx) {
             const articles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
             const art = articles[idx];
@@ -508,6 +587,8 @@
             document.getElementById('art-category').value = catId;
             document.getElementById('art-title').value = art.title;
             document.getElementById('art-text').value = art.text;
+            document.getElementById('art-bg').value = art.bg || '';
+            if(art.imgMode) document.getElementById('art-img-mode').value = art.imgMode;
 
             document.getElementById('editing-art-catId').value = catId;
             document.getElementById('editing-art-idx').value = idx;
@@ -524,6 +605,8 @@
             if(!art) return;
             document.getElementById('art-title').value = art.title;
             document.getElementById('art-text').value = art.text;
+            document.getElementById('art-bg').value = art.bg || '';
+            if(art.imgMode) document.getElementById('art-img-mode').value = art.imgMode;
             updateArticlePreview();
         }
 
