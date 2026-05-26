@@ -101,38 +101,13 @@
         <p>© ٢٠٢٦ منصة الحضارة الفكرية. جميع الحقوق محفوظة ومحمية برمجياً بالكامل.</p>
     </footer>
 
-        }
-
-        // المستوى الثاني: البانر المخصص والشبكة الفرعية للمقالات المضافة
-        function renderCategoryScreen(catId) {
-            const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
-            const currentCat = categories.find(c => c.id === catId);
-            if(!currentCat) return;
-
-            const banner = document.getElementById('categoryHeroBanner');
-            banner.style.backgroundImage = `url('${currentCat.bg}')`;
-            
-            document.getElementById('categoryFloatingIcon').innerHTML = `<i class="${currentCat.floatingIcon || 'fas fa-landmark'}"></i>`;
-            document.getElementById('categoryViewTitle').innerText = `منصة بحوث: ${currentCat.title}`;
-            document.getElementById('categoryViewDesc').innerText = currentCat.desc;
-
-            const savedArticles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
-            document.getElementById('articlesCountBadge').innerText = `عدد المقالات: ${savedArticles.length}`;
-
-            const articlesGrid = document.getElementById('categoryArticlesGrid');
-            articlesGrid.innerHTML = '';
-
-            if (savedArticles.length === 0) {
-                articlesGrid.innerHTML = `
-                    <div class="col-span-1 md:col-span-2 text-center py-12 opacity-60 text-sm border border-dashed border-white/10 rounded-3xl">
-                        <i class="fas fa-folder-open text-2xl text-[#c7a86b] mb-2 block"></i>
-                        لم يتم نشر أي أطروحات أو مقالات مطولة في هذا العلم حالياً عبر لوحة التحكم.
-                    </div>
-                    <script>
+    <script>
         // الهوية البصرية والرموز المعتمدة للأقسام الفكرية الأربعة
         const coreCategories = [
             { id: 'islamic', title: 'العلوم الإسلامية', desc: 'دراسات في العقيدة، التطور المذهبي، التجديد الفقهي وأثره النفسي.', icon: 'fas fa-mosque', bg: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1200', floatingIcon: 'fas fa-kaaba', color: 'from-emerald-950/40 to-slate-900' },
+            // قسم السياسة: تم دمج صورة الأعلام وتعيين رمز الأمم المتحدة العائم
             { id: 'politics', title: 'السياسة', desc: 'تحليل الجغرافيا السياسية، صراعات المحاور الكبرى، وأوراق النفوذ الدولي.', icon: 'fas fa-globe-americas', bg: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?q=80&w=1200', floatingIcon: 'fas fa-landmark', color: 'from-blue-950/40 to-slate-900' },
+            // قسم علم النفس: تم تجميد صورة العالم سيغموند فرويد في الخلفية
             { id: 'psychology', title: 'علم النفس', desc: 'خبايا التحليل النفسي الكلاسيكي، سبر أعماق العقل الباطن، وبناء الوعي الجمعي.', icon: 'fas fa-brain', bg: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Sigmund_Freud_LIFE.jpg', floatingIcon: 'fas fa-fingerprint', color: 'from-purple-950/40 to-slate-900' },
             { id: 'philosophy', title: 'الفلسفة والفكر', desc: 'رحلة البحث الإنساني عن الحقيقة وصراعات المذاهب الوجودية والعقلانية.', icon: 'fas fa-scroll', bg: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200', floatingIcon: 'fas fa-monument', color: 'from-amber-950/40 to-slate-900' }
         ];
