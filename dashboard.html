@@ -214,7 +214,7 @@
                             
                             <div class="relative z-10">
                                 <div id="p-art-banner" class="h-28 bg-slate-900 relative flex items-center justify-center bg-cover bg-center transition-all duration-300">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-black/50"></div>
+                                    <div id="p-art-banner-overlay" class="absolute inset-0 bg-gradient-to-t from-slate-950 to-black/50"></div>
                                     <div class="relative z-10 text-center px-4 space-y-1">
                                         <span id="p-art-badge" class="text-[9px] font-bold text-[#c7a86b] uppercase tracking-widest bg-[#c7a86b]/10 px-2.5 py-0.5 rounded-full border border-[#c7a86b]/20">العلم الحاضن للمقال</span>
                                         <h2 id="p-art-title" class="text-sm md:text-base font-bold text-white line-clamp-1" style="font-family: 'Reem Kufi', sans-serif;">عنوان المقال يظهر هنا تلقائياً عند الكتابة</h2>
@@ -295,7 +295,6 @@
             }
         }
 
-        // تطوير محرك العلوم لدعم خيارات العرض الثلاثة دون تدمير القديم
         function updateSciencePreview() {
             const titleInput = document.getElementById('sci-title').value.trim();
             const descInput = document.getElementById('sci-desc').value.trim();
@@ -313,7 +312,6 @@
             const extContainer = document.getElementById('sci-ext-img-container');
             const extImg = document.getElementById('p-sci-ext-img');
 
-            // تصفير وتفكيك الأنماط القديمة لإعادة بنائها مرنة
             card.className = `rounded-2xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden min-h-[220px] transition-all duration-300 bg-gradient-to-br ${grad}`;
             card.style.backgroundImage = 'none';
             overlay.className = "absolute inset-0 bg-slate-950/80 z-0";
@@ -333,7 +331,7 @@
             }
         }
 
-        // تطوير محرك المقالات لدعم خيارات التنسيق الثلاثة وصورتها المستقلة
+        // هنا يكمن الإصلاح الفائق الذي قام بتدمير الخلل والتعارض البصري تماماً للأوضاع الثلاثة
         function updateArticlePreview() {
             const title = document.getElementById('art-title').value.trim() || 'عنوان المقال يظهر هنا تلقائياً عند الكتابة';
             const text = document.getElementById('art-text').value.trim();
@@ -345,12 +343,13 @@
             const mainContainer = document.getElementById('p-art-main-container');
             const fullOverlay = document.getElementById('p-art-full-overlay');
             const banner = document.getElementById('p-art-banner');
+            const bannerOverlay = document.getElementById('p-art-banner-overlay');
             const extArtContainer = document.getElementById('art-ext-img-container');
             const extArtImg = document.getElementById('p-art-ext-img');
 
             document.getElementById('p-art-title').innerText = title;
 
-            // إعدادات الخلفية الافتراضية المستمدة من العلم للحفاظ على روح المنصة الفنية
+            // استدعاء الخلفية الافتراضية المستمدة من العلم الفكري الحاضن
             let defaultBg = '';
             if (dropdown && dropdown.value) {
                 const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
@@ -361,26 +360,39 @@
                 }
             }
 
-            // إعادة ضبط المصنع الافتراضي للمعاينة
+            // [إعادة ضبط المصنع التفاعلي] لتفكيك التداخل ومنع ثبات نمط الشريط العلوي القديم
             mainContainer.style.backgroundImage = 'none';
+            mainContainer.classList.remove('bg-cover', 'bg-center');
             fullOverlay.classList.add('hidden');
+            
             banner.style.backgroundImage = 'none';
-            banner.classList.remove('hidden');
+            banner.className = "h-28 bg-slate-900 relative flex items-center justify-center bg-cover bg-center transition-all duration-300";
+            if (bannerOverlay) {
+                bannerOverlay.className = "absolute inset-0 bg-gradient-to-t from-slate-950 to-black/50";
+            }
             extArtContainer.classList.add('hidden');
 
-            // تطبيق مصفوفة الشروط الثلاثة للصورة والمقال
             const finalImage = artBg ? artBg : defaultBg;
 
             if (finalImage) {
                 if (imgMode === 'bg-banner') {
+                    // النمط الأول: الصورة كشريط علوي معتم فقط
                     banner.style.backgroundImage = `url('${finalImage}')`;
                 } else if (imgMode === 'bg-full') {
+                    // النمط الثاني: الصورة خلفية كاملة تغمر المقال بالكامل
                     mainContainer.style.backgroundImage = `url('${finalImage}')`;
+                    mainContainer.classList.add('bg-cover', 'bg-center');
+                    fullOverlay.className = "absolute inset-0 bg-slate-950/90 z-0";
                     fullOverlay.classList.remove('hidden');
-                    banner.style.backgroundImage = 'none';
-                    banner.classList.add('bg-transparent');
+                    
+                    // مسح خلفية وصندوق حجب الشريط العلوي ليصبح شفافاً عائماً وتبرز الخلفية الكاملة بالأسفل
+                    banner.className = "h-28 bg-transparent relative flex items-center justify-center transition-all duration-300";
+                    if (bannerOverlay) bannerOverlay.className = "hidden";
                 } else if (imgMode === 'card-ext') {
-                    banner.style.backgroundImage = 'none';
+                    // النمط الثالث: الصورة كعنصر كارت خارجي مستقل يظهر أسفل ترويسة العنوان
+                    banner.className = "bg-white/5 py-5 relative flex items-center justify-center transition-all duration-300 rounded-xl mx-4 mt-4 border border-white/5";
+                    if (bannerOverlay) bannerOverlay.className = "hidden";
+                    
                     extArtImg.src = finalImage;
                     extArtContainer.classList.remove('hidden');
                 }
