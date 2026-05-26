@@ -3,24 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الحضارة الفكرية</title>
+    <title>منصة الحضارة الفكرية - الإصدار المحدث</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <style>
+        /* الهوية البصرية الجوهرية الثابتة للمنصة */
         body { font-family: 'Cairo', sans-serif; background: #020617; color: #f8fafc; transition: 0.4s ease; overflow-x: hidden; }
         body.light { background: #fdfbf7; color: #0f172a; }
+        
         .hero { background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.93)), url('https://images.unsplash.com/photo-1512632578888-169bbbc64f33?q=80&w=1600&auto=format&fit=crop'); background-size: cover; background-position: center; min-height: 60vh; }
         .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.07); }
         body.light .glass { background: rgba(15, 23, 42, 0.02); border-color: rgba(15, 23, 42, 0.08); }
+        
         .category-card { transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; }
         .category-card:hover { transform: translateY(-8px); border-color: #c7a86b; box-shadow: 0 20px 40px rgba(199, 168, 107, 0.1); }
+        
         .article-card { transition: 0.3s ease; cursor: pointer; }
         .article-card:hover { transform: scale(1.02); border-color: #c7a86b; background: rgba(255,255,255,0.04); }
+        
         .spa-view { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
         .reading-container p { text-justify: inter-word; text-align: justify; }
+
+        /* ------------------------------------------------------------- */
+        /* مساحة اللمسات الفنية الخاصة والعميقة بكل علم (يمكن التوسيع فيها هنا) */
+        /* ------------------------------------------------------------- */
+        .content-sanctuary.science-islamic { border-right-color: #10b981; } /* تمييز العلوم الإسلامية بلمسة خضراء */
+        .content-sanctuary.science-politics { border-right-color: #3b82f6; } /* تمييز السياسة بلمسة زرقاء استراتيجية */
+        .content-sanctuary.science-psychology { border-right-color: #a855f7; } /* تمييز علم النفس بلمسة بنفسجية عميقة */
+        .content-sanctuary.science-philosophy { border-right-color: #f59e0b; } /* تمييز الفلسفة بلمسة ذهبية دافئة */
+        .content-sanctuary.science-custom { border-right-color: #c7a86b; } /* لمسة العلوم الجديدة المضافة */
     </style>
 </head>
 <body class="dark">
@@ -51,8 +65,7 @@
                 <div class="h-6 w-1 bg-[#c7a86b]"></div>
                 <h2 class="text-2xl font-bold" style="font-family: 'Reem Kufi', sans-serif;">مَحرابُ العُلُومِ الأَصِيلَة</h2>
             </div>
-            <div id="categoriesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                </div>
+            <div id="categoriesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
         </main>
     </div>
 
@@ -102,17 +115,15 @@
     </footer>
 
     <script>
-        // الهوية البصرية والرموز المعتمدة للأقسام الفكرية الأربعة
+        // الأقسام والعلوم الافتراضية التأسيسية الأربعة للمنصة
         const coreCategories = [
             { id: 'islamic', title: 'العلوم الإسلامية', desc: 'دراسات في العقيدة، التطور المذهبي، التجديد الفقهي وأثره النفسي.', icon: 'fas fa-mosque', bg: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1200', floatingIcon: 'fas fa-kaaba', color: 'from-emerald-950/40 to-slate-900' },
-            // قسم السياسة: تم دمج صورة الأعلام وتعيين رمز الأمم المتحدة العائم
             { id: 'politics', title: 'السياسة', desc: 'تحليل الجغرافيا السياسية، صراعات المحاور الكبرى، وأوراق النفوذ الدولي.', icon: 'fas fa-globe-americas', bg: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?q=80&w=1200', floatingIcon: 'fas fa-landmark', color: 'from-blue-950/40 to-slate-900' },
-            // قسم علم النفس: تم تجميد صورة العالم سيغموند فرويد في الخلفية
             { id: 'psychology', title: 'علم النفس', desc: 'خبايا التحليل النفسي الكلاسيكي، سبر أعماق العقل الباطن، وبناء الوعي الجمعي.', icon: 'fas fa-brain', bg: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Sigmund_Freud_LIFE.jpg', floatingIcon: 'fas fa-fingerprint', color: 'from-purple-950/40 to-slate-900' },
-            { id: 'philosophy', title: 'الفلسفة والفكر', desc: 'رحلة البحث الإنساني عن الحقيقة وصراعات المذاهب الوجودية والعقلانية.', icon: 'fas fa-scroll', bg: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200', floatingIcon: 'fas fa-monument', color: 'from-amber-950/40 to-slate-900' }
+            { id: 'philosophy', title: 'الفلسفة والفكر', desc: 'رحلة البحث الإنساني عن الحقيقة وصраعات المذاهب الوجودية والعقلانية.', icon: 'fas fa-scroll', bg: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200', floatingIcon: 'fas fa-monument', color: 'from-amber-950/40 to-slate-900' }
         ];
 
-        // الأطروحات الفكرية التأسيسية للمنصة (تُحقن فقط إذا كانت قاعدة البيانات فارغة تماماً)
+        // الأطروحات التأسيسية الضخمة (تُحقن تلقائياً كقاعدة انطلاق أولى فقط)
         const initialAcademicArticles = {
             islamic: [
                 { title: "الصراع الفكري والمذهبي عبر التاريخ المعاصر", text: "مقدمة تحليلية في نشأة المدارس والتيارات العقائدية وصراعاتها الفكرية الكبرى عبر العصور الإسلامية.\nالمبحث الأول: الجذور التاريخية والسياسية للاختلاف العَقَدي الأول ونشأة الفرق الحركية من عهد الفتنة الكبرى.\nالمبحث الثاني: آفاق التجديد الفكري المعاصر وكيفية استيعاب التنوع المذهبي داخل البناء الحضاري المعاصر." },
@@ -130,20 +141,20 @@
             ]
         };
 
-        // دالة التأسيس الذكي: تفحص أولاً إذا كان المستخدم قد أضاف بيانات عبر لوحة التحكم لمنع الكتابة فوقها
+        // دالة التأسيس والتحقق الذكي لحماية البيانات وضمان عدم التداخل
         function initPlatformStorage() {
             if (!localStorage.getItem('intellectualCategories')) {
                 localStorage.setItem('intellectualCategories', JSON.stringify(coreCategories));
             }
+            // حقن المقالات التأسيسية فقط للأقسام التي لا تملك أي بيانات مسبقة منعا للكتابة فوق تعديلات المستخدم
             coreCategories.forEach(cat => {
-                // التلاؤم المطلق: التفتيش عن البيانات باستخدام نفس المفاتيح الدقيقة المعتمدة في لوحة التحكم
                 if (!localStorage.getItem(`${cat.id}Articles`)) {
                     localStorage.setItem(`${cat.id}Articles`, JSON.stringify(initialAcademicArticles[cat.id] || []));
                 }
             });
         }
 
-        // موجه الحركة والتبديل المتوالي ثلاثي المستويات (SPA Engine)
+        // محرك توجيه الحركة والتبديل ذو الحماية العالية (SPA Navigation Engine)
         function navigateTo(viewId, catId = null, articleIdx = null) {
             document.querySelectorAll('.spa-view').forEach(v => v.classList.add('hidden'));
             
@@ -160,26 +171,35 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // المستوى الأول: الواجهة الرئيسية واحتساب عدد المقالات ديناميكياً من لوحة التحكم
+        // المستوى الأول: بناء شبكة العلوم وقراءة الأقسام المضافة حديثاً تلقائياً
         function renderHomeScreen() {
-            const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
+            // جلب الأقسام من localStorage أولاً لقراءة أي علم جديد تم إنشاؤه عبر لوحة التحكم
+            let categories = JSON.parse(localStorage.getItem('intellectualCategories'));
+            if (!categories || categories.length === 0) {
+                categories = coreCategories;
+            }
+            
             const grid = document.getElementById('categoriesGrid');
             if(!grid) return;
             grid.innerHTML = '';
 
             categories.forEach(cat => {
-                // جلب التحديثات الفورية التي تمت في لوحة التحكم لهذا العلم
                 const articles = JSON.parse(localStorage.getItem(`${cat.id}Articles`)) || [];
+                // وضع معالم افتراضية متناسقة في حال كان العلم مضافاً جديداً بدون خصائص تصميمية
+                const currentBg = cat.bg || 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200';
+                const currentIcon = cat.icon || 'fas fa-book-open';
+                const currentGrad = cat.color || 'from-slate-900 to-slate-950';
+
                 grid.innerHTML += `
-                    <div onclick="navigateTo('category', '${cat.id}')" class="category-card glass rounded-3xl p-8 flex flex-col justify-between border relative overflow-hidden bg-gradient-to-br ${cat.color || 'from-slate-900 to-slate-950'}">
+                    <div onclick="navigateTo('category', '${cat.id}')" class="category-card glass rounded-3xl p-8 flex flex-col justify-between border relative overflow-hidden bg-gradient-to-br ${currentGrad}">
                         <div class="space-y-4 relative z-10">
                             <div class="flex items-center gap-3.5">
                                 <div class="w-12 h-12 rounded-2xl bg-[#c7a86b]/10 border border-[#c7a86b]/20 flex items-center justify-center text-xl text-[#c7a86b]">
-                                    <i class="${cat.icon || 'fas fa-book'}"></i>
+                                    <i class="${currentIcon}"></i>
                                 </div>
                                 <h3 class="text-xl font-bold tracking-wide text-[#c7a86b]" style="font-family: 'Reem Kufi', sans-serif;">${escapeHtml(cat.title)}</h3>
                             </div>
-                            <p class="text-sm opacity-75 text-gray-400 leading-relaxed font-light">${escapeHtml(cat.desc)}</p>
+                            <p class="text-sm opacity-75 text-gray-400 leading-relaxed font-light">${escapeHtml(cat.desc || 'قسم فكري مستحدث ينضم لمحراب علوم منصة الحضارة.')}</p>
                         </div>
                         <div class="pt-6 mt-6 border-t border-white/5 flex justify-between items-center relative z-10 text-xs">
                             <span class="text-gray-400">البحوث المتوفرة: <strong class="text-[#c7a86b] font-bold">${articles.length}</strong></span>
@@ -190,23 +210,41 @@
             });
         }
 
-        // المستوى الثاني: البانر المخصص والشبكة الفرعية للمقالات المضافة
+        // المستوى الثاني: البانر الذكي وجدول البحوث (تم إصلاح الثغرة الأمنية والدخول لجميع العلوم المستحدثة)
         function renderCategoryScreen(catId) {
-            const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
-            const currentCat = categories.find(c => c.id === catId);
-            if(!currentCat) return;
-
-            const banner = document.getElementById('categoryHeroBanner');
-            banner.style.backgroundImage = `url('${currentCat.bg}')`;
+            let categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
+            let currentCat = categories.find(c => c.id === catId);
             
-            document.getElementById('categoryFloatingIcon').innerHTML = `<i class="${currentCat.floatingIcon || 'fas fa-landmark'}"></i>`;
-            document.getElementById('categoryViewTitle').innerText = `منصة بحوث: ${currentCat.title}`;
-            document.getElementById('categoryViewDesc').innerText = currentCat.desc;
+            // في حال لم يجد العلم في المصفوفة المصنفة (حماية مضافة للعلوم الديناميكية)
+            if(!currentCat) {
+                currentCat = { id: catId, title: catId, desc: 'قسم فكري مضاف حديثاً عبر لوحة التحكم.', bg: '', floatingIcon: '' };
+            }
 
-            const savedArticles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
-            document.getElementById('articlesCountBadge').innerText = `عدد المقالات: ${savedArticles.length}`;
+            const defaultBg = 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200';
+            const banner = document.getElementById('categoryHeroBanner');
+            if (banner) banner.style.backgroundImage = `url('${currentCat.bg || defaultBg}')`;
+            
+            const iconEl = document.getElementById('categoryFloatingIcon');
+            if (iconEl) iconEl.innerHTML = `<i class="${currentCat.floatingIcon || 'fas fa-feather'}"></i>`;
+            
+            const titleEl = document.getElementById('categoryViewTitle');
+            if (titleEl) titleEl.innerText = `منصة بحوث: ${currentCat.title}`;
+            
+            const descEl = document.getElementById('categoryViewDesc');
+            if (descEl) descEl.innerText = currentCat.desc;
+
+            // توليد وفحص مصفوفة المقالات المخصصة للعلم فوراً لمنع أي توقف برمي
+            let savedArticles = JSON.parse(localStorage.getItem(`${catId}Articles`));
+            if (!savedArticles) {
+                savedArticles = [];
+                localStorage.setItem(`${catId}Articles`, JSON.stringify([]));
+            }
+            
+            const badgeEl = document.getElementById('articlesCountBadge');
+            if (badgeEl) badgeEl.innerText = `عدد المقالات: ${savedArticles.length}`;
 
             const articlesGrid = document.getElementById('categoryArticlesGrid');
+            if (!articlesGrid) return;
             articlesGrid.innerHTML = '';
 
             if (savedArticles.length === 0) {
@@ -235,10 +273,12 @@
             });
         }
 
-        // المستوى الثالث: محراب القراءة الأكاديمي والتقسيم الذاتي للعنوانين والفقرات دون تدمير النص الأصلي
+        // المستوى الثالث: المعالجة الفلسفية الذكية للنصوص وتوزيع الهويات المخصصة (Classes)
         function renderArticleScreen(catId, articleIdx) {
             const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
-            const currentCat = categories.find(c => c.id === catId);
+            let currentCat = categories.find(c => c.id === catId);
+            if(!currentCat) { currentCat = { id: catId, title: 'علم مستحدث', bg: '' }; }
+            
             const savedArticles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
             const article = savedArticles[articleIdx];
             if(!article) return;
@@ -246,44 +286,51 @@
             document.getElementById('articleCategoryBreadcrumb').innerText = currentCat.title;
             document.getElementById('articleViewTitle').innerText = article.title;
 
-            // آلية مطابقة الخلفية المتفاعلة مع عنوان المقال بذكاء
             const articleBanner = document.getElementById('articleHeroBanner');
-            let matchedBg = currentCat.bg; 
+            let matchedBg = currentCat.bg || 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200'; 
 
+            // تغيير الخلفية التفاعلية الحية للمقالات الحساسة
             if (article.title.includes('إيران') || article.title.includes('الشاه') || article.title.includes('الثورة')) {
                 matchedBg = 'https://images.unsplash.com/photo-1561485039-765c8e81686d?q=80&w=1200';
             } else if (article.title.includes('الدعاء') || article.title.includes('الإسلامي')) {
                 matchedBg = 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1200';
             }
-            articleBanner.style.backgroundImage = `url('${matchedBg}')`;
+            if (articleBanner) articleBanner.style.backgroundImage = `url('${matchedBg}')`;
 
-            document.getElementById('backToCategoryBtn').onclick = () => navigateTo('category', catId);
+            const backBtn = document.getElementById('backToCategoryBtn');
+            if (backBtn) backBtn.onclick = () => navigateTo('category', catId);
 
             const contentArea = document.getElementById('articleContentArea');
+            if (!contentArea) return;
             contentArea.innerHTML = '';
 
-            // تقسيم النص المكتوب في لوحة التحكم بناءً على الأسطر لمنح القراءة طابعاً منظماً
             const paragraphs = article.text.split('\n').filter(p => p.trim() !== '');
             
             if (paragraphs.length > 0) {
+                // تحديد نمط الفئة الفنية المخصصة للعلم لتسخيرها مستقبلاً في ملف الـ CSS
+                let scienceClass = `science-${catId}`;
+                if (!['islamic', 'politics', 'psychology', 'philosophy'].includes(catId)) {
+                    scienceClass = 'science-custom';
+                }
+
                 paragraphs.forEach((para, index) => {
                     const text = para.trim();
                     if (index === 0) {
-                        // السطر الأول يعامل كمقدمة عريضة ومبهرة
+                        // السطر التمهيدي الأول يحمل فئة المحراب المخصصة للعلم `content-sanctuary ${scienceClass}`
                         contentArea.innerHTML += `
-                            <p class="text-lg text-gray-100 font-medium leading-relaxed mb-8 border-r-4 border-[#c7a86b] pr-4 py-1 bg-white/[0.01] rounded-l-xl">
+                            <p class="content-sanctuary ${scienceClass} text-lg text-gray-100 font-medium leading-relaxed mb-8 border-r-4 pr-4 py-1 bg-white/[0.01] rounded-l-xl">
                                 ${escapeHtml(text)}
                             </p>
                         `;
                     } else if (text.length < 75 && (text.startsWith('أولاً:') || text.startsWith('ثانياً:') || text.startsWith('ثالثاً:') || text.includes('المبحث') || text.endsWith(':') || text.startsWith('أولاً') || text.startsWith('ثانياً'))) {
-                        // تحويل السطور القصيرة المبتدئة بالتنقيط أو المباحث إلى عناوين بارزة (H3) تلقائياً
+                        // تحويل المباحث تلقائياً إلى عناوين مميزة
                         contentArea.innerHTML += `
                             <h3 class="text-xl md:text-2xl font-bold text-[#c7a86b] pt-6 pb-2 border-b border-white/5 mt-8 flex items-center gap-2" style="font-family: 'Reem Kufi', sans-serif;">
                                 <i class="fas fa-feather-alt text-xs opacity-70"></i> ${escapeHtml(text.replace(/:$/, ''))}
                             </h3>
                         `;
                     } else {
-                        // سائر صلب المقال يظهر كفقرات عادية منسقة ومريحة للعين
+                        // الفقرات النصية الاعتيادية المطولة
                         contentArea.innerHTML += `
                             <p class="text-base text-gray-300 md:text-lg leading-loose text-justify mb-5 font-light opacity-95">
                                 ${escapeHtml(text)}
@@ -296,6 +343,7 @@
             }
         }
 
+        // آلية التبديل المرن بين الوضع اللامع والداكن
         function toggleTheme() {
             const body = document.body;
             body.classList.toggle('light');
@@ -307,14 +355,16 @@
             }
         }
 
+        // دالة حماية وحقن النصوص لمنع التداخل وحجب ثغرات XSS
         function escapeHtml(str) { 
             if(!str) return ''; 
             return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); 
         }
 
+        // انطلاق المعمارية الفكرية فور تحميل مستندات المتصفح
         document.addEventListener('DOMContentLoaded', () => {
             initPlatformStorage();
-            navigateTo('home');
+            renderHomeScreen();
         });
     </script>
 </body>
