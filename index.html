@@ -172,35 +172,36 @@
         }
 
         // المستوى الأول: بناء شبكة العلوم وقراءة الأقسام المضافة حديثاً تلقائياً
-        // المستوى الأول: بناء شبكة العلوم ودعم أنماط العرض القادمة من لوحة التحكم
+     // المستوى الأول: بناء شبكة العلوم ودعم أنماط العرض الثلاثة بفصل هيكلي صارم لمنع التداخل
         function renderHomeScreen() {
-            // جلب الأقسام من localStorage أولاً لقراءة أي علم جديد تم إنشاؤه عبر لوحة التحكم
             let categories = JSON.parse(localStorage.getItem('intellectualCategories'));
             if (!categories || categories.length === 0) {
                 categories = coreCategories;
             }
             
-            const grid = document.getElementById('categoriesGrid'); // المعرّف الحقيقي لملفك
+            const grid = document.getElementById('categoriesGrid');
             if(!grid) return;
             grid.innerHTML = '';
 
             categories.forEach(cat => {
                 const articles = JSON.parse(localStorage.getItem(`${cat.id}Articles`)) || [];
                 
-                // تأمين المتغيرات وروابط الصور القادمة من لوحة التحكم
+                // جلب القيم وتأمين الروابط الافتراضية بدقة
                 const currentBg = cat.bg || cat.background || 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1200';
                 const currentIcon = cat.icon || 'fas fa-book-open';
                 const currentGrad = cat.color || 'from-slate-900 to-slate-950';
                 
-                // قراءة نمط العرض (خلفية كاملة / شريط / خارجي)
-                const mode = cat.imgMode || cat.imageMode || 'full-bg'; 
+                // قراءة النمط المختار من لوحة التحكم وتنظيف النص لضمان دقة المطابقة
+                let mode = cat.imgMode || cat.imageMode || cat.displayMode || 'full-bg';
+                mode = mode.toLowerCase().trim();
 
                 let cardHtml = '';
 
-                if (mode === 'full-bg') {
-                    // [النمط الأول: خلفية كاملة مدمجة مع تدرج مظلم للقراءة]
+                // النمط الأول: خلفية كاملة (Full Background)
+                // يتم عزل الصورة تماماً في الخلفية مع تدرج مظلم للقراءة الرصينة
+                if (mode.includes('full') || mode === '1') {
                     cardHtml = `
-                        <div onclick="navigateTo('category', '${cat.id}')" class="category-card glass rounded-3xl p-8 flex flex-col justify-between border border-white/5 relative overflow-hidden bg-cover bg-center" style="background-image: linear-gradient(rgba(2, 6, 23, 0.82), rgba(2, 6, 23, 0.93)), url('${currentBg}'); min-height: 260px;">
+                        <div onclick="navigateTo('category', '${cat.id}')" class="category-card glass rounded-3xl p-8 flex flex-col justify-between border border-white/5 relative overflow-hidden bg-cover bg-center" style="background-image: linear-gradient(rgba(2, 6, 23, 0.84), rgba(2, 6, 23, 0.94)), url('${currentBg}'); min-height: 270px;">
                             <div class="space-y-4 relative z-10">
                                 <div class="flex items-center gap-3.5">
                                     <div class="w-12 h-12 rounded-2xl bg-[#c7a86b]/10 border border-[#c7a86b]/20 flex items-center justify-center text-xl text-[#c7a86b]">
@@ -216,31 +217,37 @@
                             </div>
                         </div>
                     `;
-                } else if (mode === 'banner') {
-                    // [النمط الثاني: شريط علوي منفصل]
+                } 
+                // النمط الثاني: شريط علوي منفصل (Top Banner)
+                // تُعرض الصورة كشريط في الأعلى فقط، بينما تظل حاوية النصوص بتدرجها المظلم النقي بدون تداخل خلفي
+                else if (mode.includes('banner') || mode === '2') {
                     cardHtml = `
-                        <div onclick="navigateTo('category', '${cat.id}')" class="category-card glass rounded-3xl flex flex-col justify-between border border-white/5 relative overflow-hidden bg-gradient-to-br ${currentGrad}">
-                            <div class="w-full h-32 bg-cover bg-center border-b border-white/5" style="background-image: url('${currentBg}')"></div>
-                            <div class="p-8 space-y-4 flex-1">
-                                <div class="flex items-center gap-3.5">
-                                    <div class="w-12 h-12 rounded-2xl bg-[#c7a86b]/10 border border-[#c7a86b]/20 flex items-center justify-center text-xl text-[#c7a86b]">
-                                        <i class="${currentIcon}"></i>
+                        <div onclick="navigateTo('category', '${cat.id}')" class="category-card glass rounded-3xl flex flex-col justify-between border border-white/5 relative overflow-hidden bg-gradient-to-br ${currentGrad}" style="min-height: 380px;">
+                            <div class="w-full h-36 bg-cover bg-center border-b border-white/5" style="background-image: url('${currentBg}')"></div>
+                            <div class="p-8 space-y-4 flex-1 flex flex-col justify-between">
+                                <div class="space-y-4">
+                                    <div class="flex items-center gap-3.5">
+                                        <div class="w-12 h-12 rounded-2xl bg-[#c7a86b]/10 border border-[#c7a86b]/20 flex items-center justify-center text-xl text-[#c7a86b]">
+                                            <i class="${currentIcon}"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold tracking-wide text-[#c7a86b]" style="font-family: 'Reem Kufi', sans-serif;">${escapeHtml(cat.title)}</h3>
                                     </div>
-                                    <h3 class="text-xl font-bold tracking-wide text-[#c7a86b]" style="font-family: 'Reem Kufi', sans-serif;">${escapeHtml(cat.title)}</h3>
+                                    <p class="text-sm opacity-75 text-gray-400 leading-relaxed font-light line-clamp-3">${escapeHtml(cat.desc || 'قسم فكري مستحدث ينضم لمحراب علوم منصة الحضارة.')}</p>
                                 </div>
-                                <p class="text-sm opacity-75 text-gray-400 leading-relaxed font-light">${escapeHtml(cat.desc || 'قسم فكري مستحدث ينضم لمحراب علوم منصة الحضارة.')}</p>
-                            </div>
-                            <div class="mx-8 pb-6 pt-4 border-t border-white/5 flex justify-between items-center text-xs">
-                                <span class="text-gray-400">البحوث المتوفرة: <strong class="text-[#c7a86b] font-bold">${articles.length}</strong></span>
-                                <span class="text-[#c7a86b] font-semibold flex items-center gap-1.5 hover:underline">دخول المنصة <i class="fas fa-chevron-left text-[10px]"></i></span>
+                                <div class="pt-4 border-t border-white/5 flex justify-between items-center text-xs w-full">
+                                    <span class="text-gray-400">البحوث: <strong class="text-[#c7a86b] font-bold">${articles.length}</strong></span>
+                                    <span class="text-[#c7a86b] font-semibold flex items-center gap-1.5 hover:underline">دخول المنصة <i class="fas fa-chevron-left text-[10px]"></i></span>
+                                </div>
                             </div>
                         </div>
                     `;
-                } else {
-                    // [النمط الثالث: كارت خارجي عريض بصورة جانبية مخصصة]
+                } 
+                // النمط الثالث والأخير: كارت خارجي عريض بصورة جانبية (External Side Card / Fallback)
+                // كارت يمتد على مساحة عرضية كاملة مع صورة جانبية معزولة داخل إطارها الخاص
+                else {
                     cardHtml = `
                         <div onclick="navigateTo('category', '${cat.id}')" class="category-card glass rounded-3xl p-8 flex flex-col sm:flex-row gap-6 justify-between border border-white/5 relative overflow-hidden bg-gradient-to-br ${currentGrad} md:col-span-2">
-                            <div class="w-full sm:w-40 h-40 rounded-2xl overflow-hidden flex-shrink-0 border border-white/5 shadow-inner">
+                            <div class="w-full sm:w-44 h-40 rounded-2xl overflow-hidden flex-shrink-0 border border-white/10 shadow-inner">
                                 <img src="${currentBg}" class="w-full h-full object-cover" alt="${escapeHtml(cat.title)}">
                             </div>
                             <div class="flex flex-col justify-between flex-1 space-y-4">
@@ -261,6 +268,10 @@
                         </div>
                     `;
                 }
+
+                grid.innerHTML += cardHtml;
+            });
+        }
 
                 grid.innerHTML += cardHtml;
             });
