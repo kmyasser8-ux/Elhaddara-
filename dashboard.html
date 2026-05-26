@@ -106,6 +106,12 @@
                     </div>
                 </div>
 
+                <!-- حقل الأيقونة العائمة (تمت إضافته) -->
+                <div class="space-y-1">
+                    <label class="text-[11px] text-gray-400">الأيقونة العائمة للعلم (في صفحة التصنيف)</label>
+                    <input type="text" id="sci-floating-icon" oninput="updateSciencePreview()" value="fas fa-feather" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-left focus:outline-none focus:border-[#c7a86b]" dir="ltr">
+                </div>
+
                 <button onclick="saveScience()" id="btn-save-sci" class="w-full bg-[#c7a86b] text-[#020617] font-bold text-xs py-3 rounded-xl hover:bg-[#d4b87a] transition shadow-lg mt-1">
                     <i class="fas fa-check-circle ml-1"></i> تثبيت وبث العلم في المنصة
                 </button>
@@ -239,10 +245,10 @@
 
     <script>
         const coreCategories = [
-            { id: 'islamic', title: 'العلوم الإسلامية', desc: 'دراسات في العقيدة، التطور المذهبي، التجديد الفقهي وأثره النفسي.', icon: 'fas fa-mosque', bg: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1200', color: 'from-emerald-950/40 to-slate-900', imgMode: 'bg-full' },
-            { id: 'politics', title: 'السياسة', desc: 'تحليل الجغرافيا السياسية، صراعات المحاور الكبرى، وأوراق النفوذ الدولي.', icon: 'fas fa-globe-americas', bg: './politics-bg.png', color: 'from-blue-950/40 to-slate-900', imgMode: 'bg-full' },
-            { id: 'psychology', title: 'علم النفس', desc: 'خبايا التحليل النفسي الكلاسيكي، سبر أعماق العقل الباطن، وبناء الوعي الجمعي.', icon: 'fas fa-brain', bg: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Sigmund_Freud_LIFE.jpg', color: 'from-purple-950/40 to-slate-900', imgMode: 'bg-full' },
-            { id: 'philosophy', title: 'الفلسفة والفكر', desc: 'رحلة البحث الإنساني عن الحقيقة وصراعات المذاهب الوجودية والعقلانية.', icon: 'fas fa-scroll', bg: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200', color: 'from-amber-950/40 to-slate-900', imgMode: 'bg-full' }
+            { id: 'islamic', title: 'العلوم الإسلامية', desc: 'دراسات في العقيدة، التطور المذهبي، التجديد الفقهي وأثره النفسي.', icon: 'fas fa-mosque', bg: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1200', color: 'from-emerald-950/40 to-slate-900', imgMode: 'bg-full', floatingIcon: 'fas fa-kaaba' },
+            { id: 'politics', title: 'السياسة', desc: 'تحليل الجغرافيا السياسية، صراعات المحاور الكبرى، وأوراق النفوذ الدولي.', icon: 'fas fa-globe-americas', bg: './politics-bg.png', color: 'from-blue-950/40 to-slate-900', imgMode: 'bg-full', floatingIcon: 'fas fa-landmark' },
+            { id: 'psychology', title: 'علم النفس', desc: 'خبايا التحليل النفسي الكلاسيكي، سبر أعماق العقل الباطن، وبناء الوعي الجمعي.', icon: 'fas fa-brain', bg: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Sigmund_Freud_LIFE.jpg', color: 'from-purple-950/40 to-slate-900', imgMode: 'bg-full', floatingIcon: 'fas fa-fingerprint' },
+            { id: 'philosophy', title: 'الفلسفة والفكر', desc: 'رحلة البحث الإنساني عن الحقيقة وصراعات المذاهب الوجودية والعقلانية.', icon: 'fas fa-scroll', bg: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200', color: 'from-amber-950/40 to-slate-900', imgMode: 'bg-full', floatingIcon: 'fas fa-monument' }
         ];
 
         if (!localStorage.getItem('intellectualCategories')) {
@@ -331,7 +337,7 @@
             }
         }
 
-        // هنا يكمن الإصلاح الفائق الذي قام بتدمير الخلل والتعارض البصري تماماً للأوضاع الثلاثة
+        // دالة معاينة المقال (تم إصلاحها لدعم imgMode الخاص بالمقال)
         function updateArticlePreview() {
             const title = document.getElementById('art-title').value.trim() || 'عنوان المقال يظهر هنا تلقائياً عند الكتابة';
             const text = document.getElementById('art-text').value.trim();
@@ -360,7 +366,7 @@
                 }
             }
 
-            // [إعادة ضبط المصنع التفاعلي] لتفكيك التداخل ومنع ثبات نمط الشريط العلوي القديم
+            // إعادة ضبط المصنع التفاعلي
             mainContainer.style.backgroundImage = 'none';
             mainContainer.classList.remove('bg-cover', 'bg-center');
             fullOverlay.classList.add('hidden');
@@ -376,20 +382,16 @@
 
             if (finalImage) {
                 if (imgMode === 'bg-banner') {
-                    // النمط الأول: الصورة كشريط علوي معتم فقط
                     banner.style.backgroundImage = `url('${finalImage}')`;
                 } else if (imgMode === 'bg-full') {
-                    // النمط الثاني: الصورة خلفية كاملة تغمر المقال بالكامل
                     mainContainer.style.backgroundImage = `url('${finalImage}')`;
                     mainContainer.classList.add('bg-cover', 'bg-center');
                     fullOverlay.className = "absolute inset-0 bg-slate-950/90 z-0";
                     fullOverlay.classList.remove('hidden');
                     
-                    // مسح خلفية وصندوق حجب الشريط العلوي ليصبح شفافاً عائماً وتبرز الخلفية الكاملة بالأسفل
                     banner.className = "h-28 bg-transparent relative flex items-center justify-center transition-all duration-300";
                     if (bannerOverlay) bannerOverlay.className = "hidden";
                 } else if (imgMode === 'card-ext') {
-                    // النمط الثالث: الصورة كعنصر كارت خارجي مستقل يظهر أسفل ترويسة العنوان
                     banner.className = "bg-white/5 py-5 relative flex items-center justify-center transition-all duration-300 rounded-xl mx-4 mt-4 border border-white/5";
                     if (bannerOverlay) bannerOverlay.className = "hidden";
                     
@@ -430,6 +432,7 @@
             if(currentSelection) dropdown.value = currentSelection;
         }
 
+        // دالة حفظ العلم (تمت إضافة floatingIcon)
         function saveScience() {
             const title = document.getElementById('sci-title').value.trim();
             const desc = document.getElementById('sci-desc').value.trim();
@@ -437,6 +440,7 @@
             const icon = document.getElementById('sci-icon').value.trim();
             const color = document.getElementById('sci-color').value;
             const imgMode = document.getElementById('sci-img-mode').value;
+            const floatingIcon = document.getElementById('sci-floating-icon').value.trim() || 'fas fa-feather';
             const editId = document.getElementById('editing-sci-id').value;
 
             if(!title) { alert('برجاء كتابة عنوان العلم الفكري أولاً!'); return; }
@@ -446,7 +450,7 @@
             if (editId) {
                 categories = categories.map(cat => {
                     if (cat.id === editId) {
-                        return { ...cat, title, desc, bg, icon, color, imgMode };
+                        return { ...cat, title, desc, bg, icon, color, imgMode, floatingIcon };
                     }
                     return cat;
                 });
@@ -455,7 +459,7 @@
                 resetScienceForm();
             } else {
                 const id = 'custom_' + Date.now();
-                const newScience = { id, title, desc, icon, bg, color, imgMode };
+                const newScience = { id, title, desc, icon, bg, color, imgMode, floatingIcon };
                 categories.push(newScience);
                 localStorage.setItem('intellectualCategories', JSON.stringify(categories));
                 localStorage.setItem(`${id}Articles`, JSON.stringify([]));
@@ -471,12 +475,14 @@
             document.getElementById('sci-bg').value = '';
             document.getElementById('sci-icon').value = 'fas fa-monument';
             document.getElementById('sci-img-mode').value = 'bg-full';
+            document.getElementById('sci-floating-icon').value = 'fas fa-feather';
             document.getElementById('sci-form-title').innerHTML = `<i class="fas fa-sliders-h ml-1"></i> إضافة علم فكري جديد`;
             document.getElementById('btn-save-sci').innerText = 'تثبيت وبث العلم في المنصة';
             document.getElementById('cancel-sci-edit').classList.add('hidden');
             updateSciencePreview();
         }
 
+        // دالة حفظ المقال (تم إصلاحها لحفظ imgMode بشكل صحيح)
         function saveArticle() {
             const catId = document.getElementById('art-category').value;
             const title = document.getElementById('art-title').value.trim();
@@ -568,6 +574,7 @@
             });
         }
 
+        // دالة تعديل العلم (تم إصلاحها لقراءة floatingIcon و imgMode و color)
         function startEditScience(id) {
             const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
             const cat = categories.find(c => c.id === id);
@@ -581,6 +588,7 @@
             document.getElementById('sci-icon').value = cat.icon || 'fas fa-monument';
             if(cat.color) document.getElementById('sci-color').value = cat.color;
             if(cat.imgMode) document.getElementById('sci-img-mode').value = cat.imgMode;
+            if(cat.floatingIcon) document.getElementById('sci-floating-icon').value = cat.floatingIcon;
 
             document.getElementById('sci-form-title').innerHTML = `<i class="fas fa-edit ml-1 text-amber-400"></i> تعديل بيانات: ${cat.title}`;
             document.getElementById('btn-save-sci').innerText = 'تحديث وتعديل العلم الحالي';
