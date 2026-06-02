@@ -7,7 +7,177 @@
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+
+    /* تدمير أي خلفية بيضاء وإجبار المتصفح على اللون الكحلي الفخم */
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+      background: #0b1020 !important; 
+      color: white !important;
+      transition: background 0.3s ease;
+    }
+
+    /* شريط التنقل العلوي */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #11182e;
+      border-bottom: 1px solid #2a3558;
+    }
+
+    .logo {
+      color: #c7a86b;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .actions button {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: white;
+    }
+
+    .actions a {
+      color: #c7a86b;
+      text-decoration: none;
+      font-weight: bold;
+      border: 1px solid #c7a86b;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+
+    .actions a:hover {
+      background: #c7a86b;
+      color: #0b1020;
+    }
+
+    /* توزيع شبكة العلوم الفكرية */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    /* بطاقة العلم الفكري المحدثة */
+    .grid .card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 24px;
+      background: #151d35 !important;
+      border: 1px solid #2a3558;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: .3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .grid .card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      color: #c7a86b;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .grid .card small {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .grid .card:hover {
+      transform: translateY(-5px);
+      border-color: #c7a86b;
+      box-shadow: 0 10px 25px rgba(199, 168, 107, 0.15);
+    }
+
+    /* حاوية الأيقونة الذكية داخل البطاقة */
+    .card-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: rgba(199, 168, 107, 0.1) !important;
+      color: #c7a86b;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      margin-bottom: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .grid .card:hover .card-icon {
+      background: #c7a86b !important;
+      color: #0b1020;
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* محرك استبدال الواجهات */
+    .view {
+      display: none; 
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .view.active {
+      display: block !important;
+    }
+
+    #articleContent {
+      line-height: 1.8;
+      font-size: 1.15rem;
+      color: #cbd5e1;
+      white-space: pre-line;
+    }
+
+    /* زر العودة */
+    button[onclick^="go"] {
+      background: #11182e;
+      color: #c7a86b;
+      border: 1px solid #2a3558;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      font-weight: bold;
+      margin-bottom: 20px;
+      transition: 0.2s;
+    }
+
+    button[onclick^="go"]:hover {
+      background: #c7a86b;
+      color: #11182e;
+    }
+
+    /* المظهر الفاتح الطارئ في حال تم تفعيله بالخطأ */
+    body.light {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    body.light .nav { background: #ffffff; border-bottom: 1px solid #e2e8f0; }
+    body.light .grid .card { background: #ffffff !important; border-color: #cbd5e1; }
+    body.light .card h3 { color: #b5965c; }
+    body.light .card-icon { background: rgba(181, 150, 92, 0.1) !important; color: #b5965c; }
+    body.light #articleContent { color: #334155; }
+  </style>
 </head>
 <body>
 
@@ -20,15 +190,14 @@
   </div>
 
   <div id="homeView" class="view active">
-    <h2 style="color: #c7a86b; margin-bottom: 25px; border-bottom: 1px solid #2a3558; pb-2">الأقسام والعلوم الفكرية</h2>
+    <h2 style="color: #c7a86b; margin-bottom: 25px; border-bottom: 1px solid #2a3558; padding-bottom: 8px;">الأقسام والعلوم الفكرية</h2>
     <div id="categories" class="grid"></div>
   </div>
 
   <div id="categoryView" class="view">
     <button onclick="goHome()">← العودة للرئيسية</button>
     <h2 id="categoryTitle" style="color: #c7a86b; margin-bottom: 20px;"></h2>
-    <div id="articles" class="articles-list">
-      </div>
+    <div id="articles"></div>
   </div>
 
   <div id="articleView" class="view">
