@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة التحكم - منصة الحضارة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #020617;
+      color: #fff;
+    }
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      outline: none;
+    }
+    button {
+      background: #c7a86b;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body class="p-6">
+
+  <h1 class="text-2xl font-bold mb-6 text-[#c7a86b]">
+    لوحة التحكم - منصة الحضارة
+  </h1>
+
+  <!-- إضافة علم -->
+  <div class="card">
+    <h2 class="font-bold mb-2">➕ إضافة علم جديد</h2>
+    <input id="catTitle" placeholder="اسم العلم">
+    <input id="catDesc" placeholder="وصف العلم">
+    <button onclick="addCategory()">إضافة علم</button>
+  </div>
+
+  <!-- قائمة العلوم -->
+  <div class="card">
+    <h2 class="font-bold mb-2">📚 العلوم الحالية</h2>
+    <div id="categoriesList"></div>
+  </div>
+
+  <!-- إضافة مقال -->
+  <div class="card">
+    <h2 class="font-bold mb-2">📝 إضافة مقال</h2>
+
+    <select id="selectedCategory"></select>
+
+    <input id="articleTitle" placeholder="عنوان المقال">
+    <textarea id="articleText" placeholder="نص المقال" rows="6"></textarea>
+
+    <button onclick="addArticle()">نشر المقال</button>
+  </div>
+
+<script>
+let categories = JSON.parse(localStorage.getItem('intellectualCategories')) || [];
+
+// توليد ID بسيط
+function slug(text){
+  return text.toLowerCase().replace(/\s+/g,'-').replace(/[^\w\u0600-\u06FF-]/g,'');
+}
+
+// حفظ
+function save(){
+  localStorage.setItem('intellectualCategories', JSON.stringify(categories));
+}
+
+// عرض العلوم
+function render(){
+  const list = document.getElementById('categoriesList');
+  const select = document.getElementById('selectedCategory');
+
+  list.innerHTML = '';
+  select.innerHTML = '';
+
+  categories.forEach((c, i) => {
+
+    // list
+    list.innerHTML += `
+      <div class="flex justify-between items-center border-b border-white/10 py-2">
+        <div>
+          <div class="font-bold text-[#c7a86b]">${c.title}</div>
+          <div class="text-xs text-gray-400">${c.desc || ''}</div>
+        </div>
+        <button onclick="deleteCategory(${i})">حذف</button>
+      </div>
+    `;
+
+    // select
+    select.innerHTML += `<option value="${c.id}">${c.title}</option>`;
+  });
+}
+
+// إضافة علم
+function addCategory(){
+  const title = document.getElementById('catTitle').value;
+  const desc = document.getElementById('catDesc').value;
+
+  if(!title) return alert('اكتب اسم العلم');
+
+  categories.push({
+    id: slug(title),
+    title,
+    desc
+  });
+
+  save();
+  render();
+}
+
+// حذف علم
+function deleteCategory(i){
+  const cat = categories[i];
+  categories.splice(i,1);
+
+  // حذف مقالاته
+  localStorage.removeItem(cat.id + 'Articles');
+
+  save();
+  render();
+}
+
+// إضافة مقال
+function addArticle(){
+  const catId = document.getElementById('selectedCategory').value;
+  const title = document.getElementById('articleTitle').value;
+  const text = document.getElementById('articleText').value;
+
+  if(!catId || !title || !text) {
+    return alert('اكمل جميع الحقول');
+  }
+
+  const key = catId + 'Articles';
+  const articles = JSON.parse(localStorage.getItem(key)) || [];
+
+  articles.push({
+    title,
+    text
+  });
+
+  localStorage.setItem(key, JSON.stringify(articles));
+
+  alert('تم نشر المقال 🚀');
+
+  document.getElementById('articleTitle').value = '';
+  document.getElementById('articleText').value = '';
+}
+
+render();
+</script>
+
+</body>
+</html>
