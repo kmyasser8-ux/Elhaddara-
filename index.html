@@ -1,261 +1,50 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصة الحضارة الفكرية - النسخة المطورة</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>منصة الحضارة</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
-
-<style>
-body{
-    font-family:'Cairo',sans-serif;
-    background:#020617;
-    color:#f8fafc;
-    transition:0.4s;
-}
-body.light{
-    background:#fdfbf7;
-    color:#0f172a;
-}
-
-.glass{
-    background:rgba(255,255,255,0.03);
-    backdrop-filter:blur(12px);
-    border:1px solid rgba(255,255,255,0.07);
-}
-
-.category-card{
-    transition:0.4s;
-    cursor:pointer;
-}
-.category-card:hover{
-    transform:translateY(-8px);
-    border-color:#c7a86b;
-}
-
-.article-card{
-    transition:0.3s;
-    cursor:pointer;
-}
-.article-card:hover{
-    transform:scale(1.02);
-    border-color:#c7a86b;
-}
-
-.hidden{display:none;}
-</style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="dark">
+<body>
 
-<!-- NAV -->
-<nav class="glass flex justify-between items-center px-6 py-4">
-    <div class="text-[#c7a86b] font-bold text-xl" style="font-family:'Reem Kufi'">
-        الحضارة
-    </div>
-
-    <button onclick="toggleTheme()" id="themeBtn">
-        <i class="fas fa-sun"></i>
-    </button>
+<nav class="nav">
+  <div class="logo">الحضارة</div>
+  <div class="actions">
+    <button onclick="toggleTheme()">🌓</button>
+    <a href="dashboard.html">لوحة التحكم</a>
+  </div>
 </nav>
 
-<!-- HOME -->
-<div id="homeView">
+<main>
 
-    <div class="text-center py-16">
-        <h1 class="text-4xl font-bold">منصة الحضارة الفكرية</h1>
-        <p class="text-gray-400 mt-3">موسوعة فكرية قابلة للتوسع</p>
-    </div>
+  <!-- HOME -->
+  <section id="homeView" class="view active">
+    <h1>الأقسام الفكرية</h1>
+    <div id="categories" class="grid"></div>
+  </section>
 
-    <div id="categoriesGrid" class="grid md:grid-cols-2 gap-6 px-6"></div>
+  <!-- CATEGORY -->
+  <section id="categoryView" class="view">
+    <button onclick="goHome()">← رجوع</button>
+    <h2 id="categoryTitle"></h2>
+    <div id="articles"></div>
+  </section>
 
-</div>
+  <!-- ARTICLE -->
+  <section id="articleView" class="view">
+    <button onclick="goCategory()">← رجوع</button>
+    <h2 id="articleTitle"></h2>
+    <div id="articleContent"></div>
+  </section>
 
-<!-- CATEGORY -->
-<div id="categoryView" class="hidden px-6 py-10">
+</main>
 
-    <button onclick="goHome()" class="mb-6 text-[#c7a86b]">
-        ← العودة
-    </button>
-
-    <h2 id="categoryTitle" class="text-3xl font-bold mb-6"></h2>
-
-    <div id="articlesGrid" class="grid md:grid-cols-2 gap-4"></div>
-</div>
-
-<!-- ARTICLE -->
-<div id="articleView" class="hidden px-6 py-10">
-
-    <button onclick="backToCategory()" class="mb-6 text-[#c7a86b]">
-        ← رجوع
-    </button>
-
-    <h1 id="articleTitle" class="text-2xl font-bold mb-4"></h1>
-
-    <div id="articleContent" class="leading-loose text-gray-300"></div>
-</div>
-
-<script>
-/* =========================
-   DATA SYSTEM (NEW CORE)
-========================= */
-
-const STORAGE_KEY = "hadara_data";
-
-/* default data */
-const coreCategories = [
-{
-    id:"islamic",
-    title:"العلوم الإسلامية",
-    desc:"دراسات فكرية",
-    bg:"",
-    icon:"fa-mosque",
-    articles:[
-        {id:"1",title:"الدعاء وأثره",text:"نص تجريبي\nفقرة ثانية"}
-    ]
-},
-{
-    id:"politics",
-    title:"السياسة",
-    desc:"تحليل سياسي",
-    bg:"",
-    icon:"fa-globe",
-    articles:[]
-}
-];
-
-/* load data */
-function getData(){
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || coreCategories;
-}
-
-/* save data */
-function saveData(data){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-/* init */
-function init(){
-    if(!localStorage.getItem(STORAGE_KEY)){
-        saveData(coreCategories);
-    }
-}
-
-/* =========================
-   RENDER HOME
-========================= */
-
-function renderHome(){
-    const grid = document.getElementById("categoriesGrid");
-    const data = getData();
-
-    grid.innerHTML = "";
-
-    data.forEach(cat=>{
-        grid.innerHTML += `
-        <div class="glass category-card p-6 rounded-2xl"
-        onclick="openCategory('${cat.id}')">
-
-            <h3 class="text-xl font-bold text-[#c7a86b]">
-                ${cat.title}
-            </h3>
-
-            <p class="text-gray-400 text-sm mt-2">
-                ${cat.desc}
-            </p>
-
-            <div class="mt-4 text-xs text-gray-500">
-                المقالات: ${cat.articles.length}
-            </div>
-
-        </div>
-        `;
-    });
-}
-
-/* =========================
-   CATEGORY VIEW
-========================= */
-
-let currentCategoryId = null;
-
-function openCategory(id){
-    currentCategoryId = id;
-
-    const data = getData();
-    const cat = data.find(c=>c.id===id);
-
-    document.getElementById("homeView").classList.add("hidden");
-    document.getElementById("categoryView").classList.remove("hidden");
-
-    document.getElementById("categoryTitle").innerText = cat.title;
-
-    const grid = document.getElementById("articlesGrid");
-    grid.innerHTML = "";
-
-    cat.articles.forEach((a,i)=>{
-        grid.innerHTML += `
-        <div class="glass article-card p-4 rounded-xl"
-        onclick="openArticle(${i})">
-
-            <h4 class="text-[#c7a86b] font-bold">${a.title}</h4>
-            <p class="text-gray-400 text-sm">
-                ${a.text.substring(0,80)}...
-            </p>
-
-        </div>
-        `;
-    });
-}
-
-/* =========================
-   ARTICLE VIEW
-========================= */
-
-function openArticle(index){
-    const data = getData();
-    const cat = data.find(c=>c.id===currentCategoryId);
-
-    const article = cat.articles[index];
-
-    document.getElementById("categoryView").classList.add("hidden");
-    document.getElementById("articleView").classList.remove("hidden");
-
-    document.getElementById("articleTitle").innerText = article.title;
-    document.getElementById("articleContent").innerText = article.text;
-}
-
-/* =========================
-   NAV
-========================= */
-
-function goHome(){
-    document.getElementById("categoryView").classList.add("hidden");
-    document.getElementById("homeView").classList.remove("hidden");
-}
-
-function backToCategory(){
-    document.getElementById("articleView").classList.add("hidden");
-    document.getElementById("categoryView").classList.remove("hidden");
-}
-
-/* =========================
-   THEME
-========================= */
-
-function toggleTheme(){
-    document.body.classList.toggle("light");
-}
-
-/* INIT */
-document.addEventListener("DOMContentLoaded",()=>{
-    init();
-    renderHome();
-});
-</script>
+<script src="data.js"></script>
+<script src="storage.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
