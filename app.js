@@ -10,10 +10,20 @@ function renderHome(){
   Storage.getCategories().forEach(c=>{
     const count = Storage.getArticles(c.id).length;
 
+    // مصفوفة افتراضية لتحديد أيقونة ذكية بناءً على المعرف، وإذا لم يجدها يضع أيقونة الكتاب الفخرية
+    const icons = {
+      islamic: "🕌",
+      politics: "⚖️",
+      psychology: "🧠",
+      philosophy: "📜"
+    };
+    const currentIcon = icons[c.id] || "📚";
+
     box.innerHTML += `
       <div class="card" onclick="openCategory('${c.id}','${c.title}')">
+        <div class="card-icon">${currentIcon}</div>
         <h3>${c.title}</h3>
-        <small>${count} مقالات</small>
+        <small><i class="fa-solid fa-file-lines"></i> ${count} مقالات</small>
       </div>
     `;
   });
