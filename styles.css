@@ -1,49 +1,172 @@
-/* أضف هذه التنسيقات أسفل ملف styles.css الحالي */
+/* استيراد خط Cairo */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap');
 
-/* تنسيق حاوية الأيقونة داخل بطاقة العلم */
-.card-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 45px;
-    height: 45px;
-    background: rgba(199, 168, 107, 0.1); /* لون ذهبي شفاف */
-    color: #c7a86b; /* اللون الذهبي الحضاري */
-    border-radius: 10px;
-    font-size: 1.4rem;
-    margin-bottom: 12px;
-    transition: all 0.3s ease;
+/* الخلفية الأساسية للمنصة (الوضع الداكن الفخم هو الافتراضي دائماً) */
+body {
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  background: #0b1020 !important; /* إجبار المتصفح على اللون الكحلي الداكن لمنع اللون الأبيض */
+  color: white;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* تأثير حركي رائع للأيقونة عند تمرير الماوس على بطاقة العلم */
-.card:hover .card-icon {
-    background: #c7a86b;
-    color: #0b1020;
-    transform: scale(1.1) rotate(5deg);
+/* تنسيق شريط التنقل */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: #11182e;
+  border-bottom: 1px solid #2a3558;
 }
 
-/* تحسين شكل بطاقة العلم الفكري في الصفحة الرئيسية */
+.logo {
+  color: #c7a86b;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.actions button {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: white;
+}
+
+.actions a {
+  color: #c7a86b;
+  text-decoration: none;
+  font-weight: bold;
+  border: 1px solid #c7a86b;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.actions a:hover {
+  background: #c7a86b;
+  color: #0b1020 !important;
+}
+
+/* تنسيق شبكة العرض والبطاقات المحدثة بالأيقونات */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* بطاقة العلم الفكري - خلفية كحلية متناسقة وليست بيضاء */
 .grid .card {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 24px;
-    background: #151d35;
-    border: 1px solid #2a3558;
-    border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+  background: #151d35 !important; /* حماية الخلفية الداكنة للبطاقة */
+  border: 1px solid #2a3558;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: .3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .grid .card h3 {
-    font-size: 1.25rem;
-    margin: 8px 0;
-    font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #c7a86b;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .grid .card small {
-    font-size: 0.85rem;
-    color: #94a3b8;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
+
+.grid .card:hover {
+  transform: translateY(-5px);
+  border-color: #c7a86b;
+  box-shadow: 0 10px 25px rgba(199, 168, 107, 0.15);
+}
+
+/* تنسيق حاوية الأيقونة الذكية داخل البطاقة */
+.card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(199, 168, 107, 0.1) !important; /* ذهبي شفاف خفيف */
+  color: #c7a86b;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  margin-bottom: 14px;
+  transition: all 0.3s ease;
+}
+
+/* تأثير حركة الأيقونة عند تمرير الفأرة */
+.grid .card:hover .card-icon {
+  background: #c7a86b !important;
+  color: #0b1020;
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* محرك العرض والتبديل (Views) */
+.view {
+  display: none; 
+  padding: 30px;
+  max-w: 1200px;
+  margin: 0 auto;
+}
+.view.active {
+  display: block;
+}
+
+#articleContent {
+  line-height: 1.8;
+  font-size: 1.15rem;
+  color: #cbd5e1;
+  white-space: pre-line;
+}
+
+/* زر الرجوع الموحد */
+button[onclick^="go"] {
+  background: #11182e;
+  color: #c7a86b;
+  border: 1px solid #2a3558;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-weight: bold;
+  margin-bottom: 20px;
+  transition: 0.2s;
+}
+
+button[onclick^="go"]:hover {
+  background: #c7a86b;
+  color: #11182e;
+}
+
+/* 🌓 تنسيقات المظهر الفاتح (فقط إذا قام المستخدم بضغطه عمداً) */
+body.light {
+  background: #f8fafc !important;
+  color: #0f172a;
+}
+body.light .nav { background: #ffffff; border-bottom: 1px solid #e2e8f0; }
+body.light .logo { color: #b5965c; }
+body.light .grid .card { background: #ffffff !important; border-color: #cbd5e1; color: #0f172a; }
+body.light .card h3 { color: #b5965c; }
+body.light .card-icon { background: rgba(181, 150, 92, 0.1) !important; color: #b5965c; }
+body.light #articleContent { color: #334155; }
+body.light button[onclick^="go"] { background: #ffffff; border-color: #cbd5e1; }
