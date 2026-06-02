@@ -58,6 +58,7 @@
       background: #ef4444;
       color: white;
       padding: 6px 12px;
+      font-radius: 10px;
       font-size: 0.875rem;
     }
   </style>
@@ -67,7 +68,7 @@
 
   <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
     <h1 class="text-2xl font-bold text-[#c7a86b]">
-      <i class="fa-solid to fa-sliders ml-2"></i> لوحة التحكم - منصة الحضارة
+      <i class="fa-solid fa-sliders ml-2"></i> لوحة التحكم - منصة الحضارة
     </h1>
     <a href="index.html" class="text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition">
       <i class="fa-solid fa-house ml-1"></i> عرض المنصة
@@ -78,8 +79,7 @@
     <h2 class="font-bold mb-4 text-lg flex items-center gap-2">
       <i class="fa-solid fa-folder-plus text-[#c7a86b]"></i> إضافة علم فكري جديد
     </h2>
-    <input id="catTitle" placeholder="مثال: العلوم الإسلامية، الفلسفة...">
-    <input id="catDesc" placeholder="وصف مختصر للقسم الفكري...">
+    <input id="catTitle" placeholder="مثال: العلوم الإسلامية، الفلسفة، العلم السياسي...">
     <button onclick="addCategory()">إضافة العلم</button>
   </div>
 
@@ -104,95 +104,104 @@
     <button onclick="addArticle()">نشر المقال الآن 🚀</button>
   </div>
 
+<script src="data.js"></script>
+
 <script>
-// جلب البيانات من الـ localStorage المشترك مع التصفح المحرك للمنصة
-let categories = JSON.parse(localStorage.getItem('intellectualCategories')) || [];
+// مزامنة البيانات بين الذاكرة الافتراضية والـ localStorage بهيكلية DEFAULT_DATA الصحيحة
+let platformData = JSON.parse(localStorage.getItem('elhaddara_db')) || (typeof DEFAULT_DATA !== 'undefined' ? DEFAULT_DATA : { categories: [], articles: {} });
 
-// توليد المعرفات (Slug) بشكل يدوي متوافق مع الحروف العربية والإنجليزية
-function slug(text){
+// توليد المعرفات (ID) بالإنجليزية لضمان عمل الروابط بدون مشاكل توافقية
+function generateId(text) {
   return text.toLowerCase()
-             .replace(/\s+/g,'-')
-             .replace(/[^\w\u0600-\u06FF-]/g,'');
+             .replace(/\s+/g, '-')
+             .replace(/[^\w-]/g, ''); // يفضل كتابة أسماء العلوم بالإنجليزية لتوليد معرف سليم، أو استخدام تحويل الحروف المباشر
 }
 
-// حفظ التغييرات في المتصفح
-function save(){
-  localStorage.setItem('intellectualCategories', JSON.stringify(categories));
+// حفظ البيانات في المتصفح بالهيكلية الموحدة للمنصة
+function save() {
+  localStorage.setItem('elhaddara_db', JSON.stringify(platformData));
 }
 
-// رندرة وعرض الأقسام الفكرية داخل القوائم والـ Select Dropdown
-function render(){
+// عرض البيانات في لوحة التحكم وتحديث القوائم
+function render() {
   const list = document.getElementById('categoriesList');
   const select = document.getElementById('selectedCategory');
 
   list.innerHTML = '';
   select.innerHTML = '';
 
-  if(categories.length === 0) {
+  if (!platformData.categories || platformData.categories.length === 0) {
     list.innerHTML = `<div class="text-gray-500 text-sm py-2">لا توجد أقسام مضافة حالياً.</div>`;
     select.innerHTML = `<option value="">-- يجب إضافة علم أولاً --</option>`;
     return;
   }
 
-  categories.forEach((c, i) => {
-    // بناء قائمة الإدارة للحذف والمعاينة
+  platformData.categories.forEach((c) => {
+    // عرض العلوم في قائمة الإدارة
     list.innerHTML += `
       <div class="flex justify-between items-center border-b border-white/5 py-3 transition hover:bg-white/[0.01] px-2 rounded-lg">
         <div>
           <div class="font-bold text-[#c7a86b] text-base">${c.title}</div>
-          <div class="text-xs text-gray-400 mt-1">${c.desc || 'لا يوجد وصف لهذا العلم.'}</div>
+          <div class="text-xs text-gray-400 mt-1">المعرف البرمجي: ${c.id}</div>
         </div>
-        <button class="btn-delete" onclick="deleteCategory(${i})">
+        <button class="btn-delete" onclick="deleteCategory('${c.id}')">
           <i class="fa-solid fa-trash-can ml-1"></i> حذف
         </button>
       </div>
     `;
 
-    // بناء قائمة الخيارات المتاحة لإضافة مقال
+    // عرض الخيارات في قائمة نشر المقالات
     select.innerHTML += `<option value="${c.id}">${c.title}</option>`;
   });
 }
 
-// إضافة قسم علمي جديد
-function addCategory(){
+// إضافة علم فكري جديد متوافق مع بنية data.js
+function addCategory() {
   const titleInput = document.getElementById('catTitle');
-  const descInput = document.getElementById('catDesc');
-  
   const title = titleInput.value.trim();
-  const desc = descInput.value.trim();
 
-  if(!title) return alert('الرجاء كتابة اسم العلم الفكري أولاً!');
+  if (!title) return alert('الرجاء كتابة اسم العلم الفكري!');
 
-  // التحقق من عدم تكرار القسم
-  const id = slug(title);
-  if(categories.some(c => c.id === id)) return alert('هذا القسم موجود بالفعل!');
+  // إذا تم إدخال الاسم بالعربية، نولد معرف فريد، ويفضل كتابة اسم العلم أو التحقق من عدم التكرار
+  let id = generateId(title);
+  if(!id) {
+    // تأمين لتوليد ID عشوائي إذا كان الاسم كاملاً بحروف عربية ولم يولد المعرف الإنجليزي بشكل صحيح
+    id = 'cat_' + Date.now();
+  }
 
-  categories.push({ id, title, desc });
+  if (platformData.categories.some(c => c.id === id)) {
+    return alert('هذا القسم أو المعرف موجود بالفعل!');
+  }
 
-  save();
-  render();
-
-  // تصفير الحقول بعد النجاح
-  titleInput.value = '';
-  descInput.value = '';
-}
-
-// حذف قسم علمي مع مقالاته المرتبطة به
-function deleteCategory(i){
-  if(!confirm('هل أنت متأكد من حذف هذا العلم؟ سيتم حذف جميع المقالات التابعة له نهائياً!')) return;
+  // إضافة القسم في مصفوفة categories
+  platformData.categories.push({ id: id, title: title });
   
-  const cat = categories[i];
-  categories.splice(i, 1);
+  // إنشاء مصفوفة فارغة للمقالات تابعة لهذا الـ ID لكي لا يحدث كراش في الصفحة الرئيسية
+  if (!platformData.articles[id]) {
+    platformData.articles[id] = [];
+  }
 
-  // حذف المقالات التابعة له من الـ localStorage لتجنب تراكم الملفات الميتة
-  localStorage.removeItem(cat.id + 'Articles');
+  save();
+  render();
+  titleInput.value = '';
+}
+
+// حذف قسم علمي وكافة مقالاته المرتبطة به من الهيكل الموحد
+function deleteCategory(id) {
+  if (!confirm('هل أنت متأكد من حذف هذا العلم؟ سيتم حذف جميع المقالات التابعة له نهائياً من قاعدة البيانات!')) return;
+
+  // فتلرة القسم وحذفه
+  platformData.categories = platformData.categories.filter(c => c.id !== id);
+  
+  // حذف كائن المقالات الخاص به تماماً
+  delete platformData.articles[id];
 
   save();
   render();
 }
 
-// إضافة مقال جديد داخل القسم المحدد
-function addArticle(){
+// إضافة مقال جديد داخل الهيكلية المجمعة
+function addArticle() {
   const catId = document.getElementById('selectedCategory').value;
   const titleInput = document.getElementById('articleTitle');
   const textInput = document.getElementById('articleText');
@@ -200,25 +209,29 @@ function addArticle(){
   const title = titleInput.value.trim();
   const text = textInput.value.trim();
 
-  if(!catId || catId === "" || !title || !text) {
+  if (!catId || !title || !text) {
     return alert('الرجاء إكمال جميع الحقول واختيار القسم المناسب لنشر المقال.');
   }
 
-  const key = catId + 'Articles';
-  const articles = JSON.parse(localStorage.getItem(key)) || [];
+  // التأكد من تهيئة مصفوفة المقالات للقسم منعاً لأي خطأ غير متوقع
+  if (!platformData.articles[catId]) {
+    platformData.articles[catId] = [];
+  }
 
-  articles.push({ title, text });
+  // دفع المقال الجديد داخل القسم المخصص له في الكائن الموحد
+  platformData.articles[catId].push({
+    title: title,
+    text: text
+  });
 
-  localStorage.setItem(key, JSON.stringify(articles));
+  save();
+  alert('تم نشر المقال بنجاح وربطه بالقسم الموحد! 🚀');
 
-  alert('تم نشر المقال في قسم ' + categories.find(c => c.id === catId).title + ' بنجاح! 🚀');
-
-  // تصفير الحقول
   titleInput.value = '';
   textInput.value = '';
 }
 
-// التشغيل الأولي عند تحميل الصفحة
+// التشغيل الفوري والتحميل الإيجابي للبيانات
 render();
 </script>
 
