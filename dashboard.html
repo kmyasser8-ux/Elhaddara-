@@ -7,195 +7,231 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background: #020617;
-      color: #fff;
+      background: #0b1020; /* نفس لون خلفية المنصة الرئيسية الموحد */
+      color: #ffffff;
     }
-    .card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
+    /* تأثيرات فخمة للبطاقات المتوافقة مع ستايل المنصة */
+    .admin-card {
+      background: #151d35;
+      border: 1px solid #2a3558;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
     input, textarea, select {
       width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      margin-bottom: 12px;
+      padding: 12px 16px;
+      margin-top: 8px;
+      margin-bottom: 14px;
       border-radius: 10px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white;
+      background: #11182e;
+      border: 1px solid #2a3558;
+      color: #ffffff;
       outline: none;
+      transition: all 0.3s ease;
     }
     input:focus, textarea:focus, select:focus {
       border-color: #c7a86b;
+      box-shadow: 0 0 0 2px rgba(199, 168, 107, 0.2);
     }
-    button {
-      background: #c7a86b;
-      padding: 10px 18px;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #020617;
-    }
-    button:hover { opacity: 0.9; }
-    .btn-delete { background: #ef4444; color: white; padding: 6px 12px; }
   </style>
 </head>
 
-<body class="p-6 max-w-4xl mx-auto">
+<body class="p-4 md:p-8 max-w-5xl mx-auto mb-12">
 
-  <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
-    <h1 class="text-2xl font-bold text-[#c7a86b]">
-      <i class="fa-solid fa-sliders ml-2"></i> لوحة التحكم - منصة الحضارة
-    </h1>
-    <a href="index.html" class="text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition">
-      <i class="fa-solid fa-house ml-1"></i> عرض المنصة
+  <div class="flex flex-col sm:flex-row justify-between items-center mb-8 border-b border-[#2a3558] pb-6 gap-4">
+    <div class="flex items-center gap-3">
+      <div class="bg-[#c7a86b]/10 p-3 rounded-xl text-[#c7a86b]">
+        <i class="fa-solid fa-chart-line text-2xl"></i>
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold text-[#c7a86b]">لوحة التحكم وتوجيه البيانات</h1>
+        <p class="text-xs text-gray-400 mt-1">إدارة العلوم الفكرية والمقالات لمنصة الحضارة</p>
+      </div>
+    </div>
+    <a href="index.html" class="flex items-center gap-2 text-sm font-semibold border border-[#c7a86b] text-[#c7a86b] hover:bg-[#c7a86b] hover:text-[#0b1020] px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-[#c7a86b]/5">
+      <i class="fa-solid fa-arrow-up-right-from-square"></i> عرض المنصة الرئيسية
     </a>
   </div>
 
-  <div class="card">
-    <h2 class="font-bold mb-4 text-lg flex items-center gap-2">
-      <i class="fa-solid fa-folder-plus text-[#c7a86b]"></i> إضافة علم فكري جديد
-    </h2>
-    <input id="catTitle" placeholder="مثال: العلوم الإسلامية، الفلسفة، العلم السياسي...">
-    <button onclick="handleAddCategory()">إضافة العلم</button>
-  </div>
-
-  <div class="card">
-    <h2 class="font-bold mb-4 text-lg flex items-center gap-2">
-      <i class="fa-solid fa-list text-[#c7a86b]"></i> العلوم الحالية في المنصة
-    </h2>
-    <div id="categoriesList" class="space-y-2"></div>
-  </div>
-
-  <div class="card">
-    <h2 class="font-bold mb-4 text-lg flex items-center gap-2">
-      <i class="fa-solid fa-pen-nib text-[#c7a86b]"></i> نشر مقال جديد
-    </h2>
-
-    <label class="text-sm text-gray-400">اختر القسم الفكري المستهدف:</label>
-    <select id="selectedCategory"></select>
-
-    <input id="articleTitle" placeholder="عنوان المقال الجديد">
-    <textarea id="articleText" placeholder="اكتب نص المقال بالتفصيل هنا..." rows="6"></textarea>
-
-    <button onclick="handleAddArticle()">نشر المقال الآن 🚀</button>
-  </div>
-
-<script src="data.js"></script>
-<script src="storage.js"></script>
-
-<script>
-  // تهيئة مخزن البيانات الموحد فور تحميل الصفحة
-  Storage.init();
-
-  // توليد معرفات برمجية (IDs) سليمة ومطابقة لما يتوقعه نظام المنصة
-  function generateId(text) {
-    return text.toLowerCase()
-               .replace(/\s+/g, '-')
-               .replace(/[^\w-]/g, '') || 'cat-' + Date.now();
-  }
-
-  // رندرة وتحديث الواجهة بالاعتماد الكلي على كائن Storage الموحد
-  function renderDashboard() {
-    const list = document.getElementById('categoriesList');
-    const select = document.getElementById('selectedCategory');
-
-    list.innerHTML = '';
-    select.innerHTML = '';
-
-    const categories = Storage.getCategories();
-
-    if (categories.length === 0) {
-      list.innerHTML = `<div class="text-gray-500 text-sm py-2">لا توجد أقسام مضافة حالياً.</div>`;
-      select.innerHTML = `<option value="">-- يجب إضافة علم أولاً --</option>`;
-      return;
-    }
-
-    categories.forEach((c) => {
-      // حساب عدد المقالات الفعلي لكل قسم فكري باستخدام المحرك الموحد
-      const count = Storage.getArticles(c.id).length;
-      
-      list.innerHTML += `
-        <div class="flex justify-between items-center border-b border-white/5 py-3 px-2 rounded-lg hover:bg-white/[0.01]">
-          <div>
-            <div class="font-bold text-[#c7a86b] text-base">${c.title}</div>
-            <div class="text-xs text-gray-400 mt-1">يحتوي على (${count}) مقالات</div>
-          </div>
-          <button class="btn-delete rounded-lg" onclick="handleDeleteCategory('${c.id}')">حذف العلم</button>
-        </div>
-      `;
-      select.innerHTML += `<option value="${c.id}">${c.title}</option>`;
-    });
-  }
-
-  // إضافة قسم علمي جديد بالتوافق مع بنية الـ Storage الكلية
-  function handleAddCategory() {
-    const titleInput = document.getElementById('catTitle');
-    const title = titleInput.value.trim();
-    if (!title) return alert('الرجاء كتابة اسم العلم الفكري!');
-
-    const id = generateId(title);
-    const data = Storage.get(); // جلب كائن البيانات الكامل
-
-    if (data.categories.some(c => c.id === id)) {
-      return alert('هذا القسم موجود بالفعل!');
-    }
-
-    // تعديل البيانات بداخل الكائن الموحد وحفظها
-    data.categories.push({ id, title });
-    if (!data.articles[id]) data.articles[id] = [];
-
-    Storage.save(data); // الحفظ الآمن عبر دالة الحفظ الرسمية للـ Storage
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     
-    alert('تم إضافة العلم الفكري الجديد بنجاح! 🎉');
-    titleInput.value = '';
+    <div class="lg:col-span-2 space-y-6">
+      
+      <div class="admin-card">
+        <h2 class="font-bold text-lg text-[#c7a86b] mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-folder-plus"></i> إضافة علم فكري جديد
+        </h2>
+        <div>
+          <label class="text-xs text-gray-400 font-semibold">اسم العلم الفكري</label>
+          <input id="catTitle" placeholder="مثال: العلوم الإسلامية، الفلسفة، علم الاجتماع...">
+        </div>
+        <button onclick="handleAddCategory()" class="w-full mt-2 bg-[#c7a86b] hover:bg-[#b5965c] text-[#0b1020] font-bold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-[#c7a86b]/10">
+          <i class="fa-solid fa-plus"></i> إدراج العلم في النظام
+        </button>
+      </div>
+
+      <div class="admin-card">
+        <h2 class="font-bold text-lg text-[#c7a86b] mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-feather-pointed"></i> نشر مقال علمي جديد
+        </h2>
+        
+        <div>
+          <label class="text-xs text-gray-400 font-semibold">تخصيص القسم الفكري المستهدف</label>
+          <select id="selectedCategory"></select>
+        </div>
+
+        <div>
+          <label class="text-xs text-gray-400 font-semibold">عنوان المقال</label>
+          <input id="articleTitle" placeholder="اكتب عنواناً جذاباً ومعبراً...">
+        </div>
+
+        <div>
+          <label class="text-xs text-gray-400 font-semibold">محتوى ونص المقال التفصيلي</label>
+          <textarea id="articleText" placeholder="اكتب نص المقال الفكري هنا..." rows="6"></textarea>
+        </div>
+
+        <button onclick="handleAddArticle()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/10">
+          <i class="fa-solid fa-paper-plane"></i> نشر المقال فوراً 🚀
+        </button>
+      </div>
+
+    </div>
+
+    <div class="lg:col-span-1">
+      <div class="admin-card h-full">
+        <h2 class="font-bold text-lg text-[#c7a86b] mb-4 flex items-center gap-2 border-b border-[#2a3558] pb-3">
+          <i class="fa-solid fa-boxes-stacked"></i> العلوم الحالية (<span id="catCounter">0</span>)
+        </h2>
+        
+        <div id="categoriesList" class="space-y-3 max-h-[600px] overflow-y-auto pr-1">
+          </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+
+  <script>
+    // تهيئة نظام التخزين
+    Storage.init();
+
+    // توليد المعرفات الفريدة
+    function generateId(text) {
+      return text.toLowerCase()
+                 .replace(/\s+/g, '-')
+                 .replace(/[^\w-]/g, '') || 'cat-' + Date.now();
+    }
+
+    // تحديث وعرض لوحة التحكم بالكامل بتنسيق فخم وتجنب الأزرار العارية
+    function renderDashboard() {
+      const list = document.getElementById('categoriesList');
+      const select = document.getElementById('selectedCategory');
+      const counter = document.getElementById('catCounter');
+
+      list.innerHTML = '';
+      select.innerHTML = '';
+
+      const categories = Storage.getCategories();
+      counter.innerText = categories.length;
+
+      if (categories.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-8 text-gray-500 text-sm border-2 border-dashed border-[#2a3558] rounded-xl">
+            <i class="fa-solid fa-folder-open text-2xl mb-2 block"></i>
+            قاعدة البيانات فارغة حالياً
+          </div>`;
+        select.innerHTML = `<option value="">-- يجب إضافة علم أولاً --</option>`;
+        return;
+      }
+
+      categories.forEach((c) => {
+        const count = Storage.getArticles(c.id).length;
+        
+        // حل المشكلة: بناء علم على شكل "بطاقة إدارية منسقة بالكامل" وبألوان متوافقة وليس مجرد أزرار
+        list.innerHTML += `
+          <div class="bg-[#11182e] border border-[#2a3558] p-4 rounded-xl flex flex-col justify-between gap-3 transition-all hover:border-[#c7a86b]/40">
+            <div class="flex items-start gap-2.5">
+              <div class="bg-[#c7a86b]/10 text-[#c7a86b] text-xs p-2 rounded-lg mt-1">
+                <i class="fa-solid fa-bookmark"></i>
+              </div>
+              <div>
+                <div class="font-bold text-sm text-gray-100">${c.title}</div>
+                <div class="text-[11px] text-gray-400 mt-0.5"><i class="fa-solid fa-file-lines ml-1"></i> ${count} مقالات منشورة</div>
+              </div>
+            </div>
+            <button class="w-full text-center bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-semibold py-2 rounded-lg border border-red-500/20 transition-all duration-150" onclick="handleDeleteCategory('${c.id}')">
+              <i class="fa-solid fa-trash-can ml-1"></i> إزالة هذا العلم
+            </button>
+          </div>
+        `;
+        
+        select.innerHTML += `<option value="${c.id}">${c.title}</option>`;
+      });
+    }
+
+    // إضافة قسم علمي
+    function handleAddCategory() {
+      const titleInput = document.getElementById('catTitle');
+      const title = titleInput.value.trim();
+      if (!title) return alert('الرجاء إدخال اسم العلم الفكري!');
+
+      const id = generateId(title);
+      const data = Storage.get();
+
+      if (data.categories.some(c => c.id === id)) return alert('هذا العلم الفكري مسجل في المنصة مسبقاً!');
+
+      data.categories.push({ id, title });
+      if (!data.articles[id]) data.articles[id] = [];
+
+      Storage.save(data);
+      titleInput.value = '';
+      renderDashboard();
+    }
+
+    // إضافة مقال
+    function handleAddArticle() {
+      const catId = document.getElementById('selectedCategory').value;
+      const titleInput = document.getElementById('articleTitle');
+      const textInput = document.getElementById('articleText');
+
+      const title = titleInput.value.trim();
+      const text = textInput.value.trim();
+
+      if (!catId || !title || !text) return alert('يرجى ملء جميع الحقول واختيار القسم الفكري المناسب!');
+
+      Storage.addArticle(catId, { title, text });
+
+      alert('تم نشر المقال الفكري وربطه بالقسم بنجاح! 🚀');
+      titleInput.value = '';
+      textInput.value = '';
+      renderDashboard();
+    }
+
+    // حذف علم
+    function handleDeleteCategory(id) {
+      if (!confirm('تحذير: هل أنت متأكد من حذف هذا العلم الفكري؟ سيؤدي هذا لحذف كافة مقالاته من المنصة نهائياً!')) return;
+
+      const data = Storage.get();
+      data.categories = data.categories.filter(c => c.id !== id);
+      delete data.articles[id];
+
+      Storage.save(data);
+      renderDashboard();
+    }
+
+    // التشغيل الفوري والتحميل المتناغم للبيانات
     renderDashboard();
-  }
-
-  // نشر مقال جديد بالاعتماد على دالة الاستدعاء الذكية addArticle
-  function handleAddArticle() {
-    const catId = document.getElementById('selectedCategory').value;
-    const titleInput = document.getElementById('articleTitle');
-    const textInput = document.getElementById('articleText');
-
-    const title = titleInput.value.trim();
-    const text = textInput.value.trim();
-
-    if (!catId || !title || !text) return alert('الرجاء إكمال جميع الحقول المستهدفة لنشر المقال.');
-
-    // استخدام دالة إضافة المقال المباشرة من ملف storage.js الفعلي الخاص بك
-    Storage.addArticle(catId, { title, text });
-
-    alert('تم نشر المقال بنجاح ومزامنته فوراً مع الواجهة الرئيسية! 🚀');
-    titleInput.value = '';
-    textInput.value = '';
-    renderDashboard();
-  }
-
-  // حذف قسم فكري وحذف الكائن المرتبط به عبر الـ Storage
-  function handleDeleteCategory(id) {
-    if (!confirm('هل تريد حذف القسم وكل مقالاته نهائياً؟ سيتم تطبيق هذا في كامل المنصة.')) return;
-
-    const data = Storage.get();
-    data.categories = data.categories.filter(c => c.id !== id);
-    delete data.articles[id];
-
-    Storage.save(data);
-    renderDashboard();
-  }
-
-  // التشغيل الأولي المباشر
-  renderDashboard();
-</script>
+  </script>
 </body>
 </html>
