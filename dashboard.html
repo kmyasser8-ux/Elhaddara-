@@ -1,661 +1,150 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محراب التحكم والتحرير الفكري - منصة الحضارة</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Cairo', sans-serif; background: #020617; color: #f8fafc; min-height: 100vh; }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.07); }
-        .preview-sticky { position: sticky; top: 40px; }
-        .device-mobile { max-width: 380px !important; min-height: 640px !important; border: 10px solid #1e293b; border-radius: 36px; margin: 0 auto; }
-        .responsive-article-text p {
-            font-size: clamp(0.95rem, 1.2vw + 0.7rem, 1.2rem);
-            line-height: clamp(1.8, 2vw + 1.6, 2.3);
-            text-align: justify;
-            margin-bottom: 1.5rem;
-            font-weight: 300;
-            opacity: 0.95;
-        }
-        .responsive-article-text h4 {
-            font-size: clamp(1.1rem, 1.5vw + 0.8rem, 1.4rem);
-            color: #c7a86b;
-            font-weight: 700;
-            margin-top: 2rem;
-            margin-bottom: 0.75rem;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>محراب التحكم - منصة الحضارة</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+body{font-family:'Cairo',sans-serif;background:#020617;color:#f8fafc}
+.glass{background:rgba(255,255,255,.03);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08)}
+.preview{transition:.3s ease}
+.device-mobile{max-width:380px;margin:auto;border:10px solid #1e293b;border-radius:30px}
+</style>
 </head>
-<body class="p-4 md:p-10">
 
-    <header class="max-w-7xl mx-auto mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-white/5 pb-6">
-        <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-[#c7a86b]" style="font-family: 'Reem Kufi', sans-serif;">مِعْمَارُ التَّحْريرِ وَالتَّحَكُّمِ الفِكْرِي الكامل</h1>
-            <p class="text-xs md:text-sm text-gray-400 font-light mt-1">المصنع الشامل لبث العلوم، صياغة الأطروحات، وتعديل الأرشيف القديم بمعاينة حية متجاوبة.</p>
-        </div>
-        <a href="index.html" class="glass text-xs text-gray-300 px-4 py-2.5 rounded-full hover:text-[#c7a86b] transition flex items-center gap-2">
-            <i class="fas fa-eye"></i> العودة ومقامات القراءة بالمنصة
-        </a>
-    </header>
+<body class="p-6">
+
+<header class="mb-6 flex justify-between items-center">
+<h1 class="text-[#c7a86b] text-xl font-bold">لوحة التحكم الفكرية</h1>
+<button onclick="location.href='index.html'" class="text-xs text-gray-300">رجوع</button>
+</header>
+
+<!-- Tabs -->
+<div class="glass p-2 rounded-xl flex gap-2 text-xs mb-6">
+<button onclick="switchTab('science')" id="tab-science" class="flex-1 py-2 bg-[#c7a86b] text-black rounded">العلوم</button>
+<button onclick="switchTab('article')" id="tab-article" class="flex-1 py-2">المقالات</button>
+<button onclick="switchTab('archive')" id="tab-archive" class="flex-1 py-2">الأرشيف</button>
+</div>
+
+<!-- SCIENCE -->
+<div id="science" class="glass p-4 rounded-xl space-y-3">
+<input id="sci-title" placeholder="اسم العلم" class="w-full p-2 bg-black/20 rounded">
+<textarea id="sci-desc" placeholder="وصف" class="w-full p-2 bg-black/20 rounded"></textarea>
+<input id="sci-bg" placeholder="رابط صورة" class="w-full p-2 bg-black/20 rounded">
+
+<button onclick="saveScience()" class="w-full bg-[#c7a86b] text-black py-2 rounded font-bold">
+حفظ العلم
+</button>
+
+<div id="science-preview" class="mt-4 p-4 glass rounded"></div>
+</div>
+
+<!-- ARTICLE -->
+<div id="article" class="hidden glass p-4 rounded-xl space-y-3">
+
+<select id="art-category" class="w-full p-2 bg-black/20 rounded"></select>
+<input id="art-title" placeholder="عنوان المقال" class="w-full p-2 bg-black/20 rounded">
+<textarea id="art-text" placeholder="المقال..." class="w-full p-2 bg-black/20 rounded h-32"></textarea>
+
+<button onclick="saveArticle()" class="w-full bg-[#c7a86b] text-black py-2 rounded font-bold">
+نشر المقال
+</button>
+
+<div id="article-preview" class="mt-4 glass p-4"></div>
+</div>
+
+<!-- ARCHIVE -->
+<div id="archive" class="hidden glass p-4 rounded-xl">
+<div id="archive-list"></div>
+</div>
+
+<script>
+const LS_KEY="hcategories";
+
+const defaultData=[
+{id:"philo",title:"الفلسفة",desc:"فكر عميق",bg:""},
+{id:"psych",title:"علم النفس",desc:"العقل البشري",bg:""}
+];
+
+function getData(){
+return JSON.parse(localStorage.getItem(LS_KEY))||defaultData;
+}
+
+function saveData(d){
+localStorage.setItem(LS_KEY,JSON.stringify(d));
+}
+
+function switchTab(t){
+["science","article","archive"].forEach(x=>{
+document.getElementById(x).classList.add("hidden");
+});
+document.getElementById(t).classList.remove("hidden");
+}
+
+function saveScience(){
+let data=getData();
+data.push({
+id:Date.now(),
+title:document.getElementById("sci-title").value,
+desc:document.getElementById("sci-desc").value,
+bg:document.getElementById("sci-bg").value
+});
+saveData(data);
+loadCats();
+alert("تم الحفظ 🚀");
+}
+
+function loadCats(){
+let cats=getData();
+let sel=document.getElementById("art-category");
+sel.innerHTML="";
+cats.forEach(c=>{
+sel.innerHTML+=`<option value="${c.id}">${c.title}</option>`;
+});
+}
+
+function saveArticle(){
+let cat=document.getElementById("art-category").value;
+let key="art_"+cat;
+
+let articles=JSON.parse(localStorage.getItem(key))||[];
+
+articles.push({
+title:document.getElementById("art-title").value,
+text:document.getElementById("art-text").value
+});
+
+localStorage.setItem(key,JSON.stringify(articles));
+
+renderArchive();
+alert("تم النشر 🚀");
+}
+
+function renderArchive(){
+let cats=getData();
+let box=document.getElementById("archive-list");
+box.innerHTML="";
+
+cats.forEach(c=>{
+let arts=JSON.parse(localStorage.getItem("art_"+c.id))||[];
+
+box.innerHTML+=`
+<div class="mb-4 p-3 glass rounded">
+<h3 class="text-[#c7a86b] font-bold">${c.title}</h3>
+<p class="text-xs text-gray-400">${arts.length} مقالات</p>
+</div>`;
+});
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+loadCats();
+renderArchive();
+});
+</script>
 
-    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        <section class="lg:col-span-5 space-y-6">
-            
-            <div class="glass p-1.5 rounded-xl flex gap-1 text-[11px] md:text-xs">
-                <button onclick="switchTab('science')" id="tab-science" class="w-1/3 py-2 rounded-lg font-bold transition bg-[#c7a86b] text-[#020617]">
-                    <i class="fas fa-folder-plus ml-1"></i> العلوم الفكرية
-                </button>
-                <button onclick="switchTab('article')" id="tab-article" class="w-1/3 py-2 rounded-lg font-bold transition text-gray-400 hover:text-white">
-                    <i class="fas fa-file-signature ml-1"></i> الأطروحات والمقالات
-                </button>
-                <button onclick="switchTab('archive')" id="tab-archive" class="w-1/3 py-2 rounded-lg font-bold transition text-gray-400 hover:text-white">
-                    <i class="fas fa-archive ml-1"></i> تعديل الأرشيف القديم
-                </button>
-            </div>
-
-            <div id="form-science" class="glass rounded-2xl p-5 md:p-6 space-y-4">
-                <div class="flex justify-between items-center">
-                    <h2 id="sci-form-title" class="text-base font-bold text-[#c7a86b]"><i class="fas fa-sliders-h ml-1"></i> إضافة علم فكري جديد</h2>
-                    <button id="cancel-sci-edit" onclick="resetScienceForm()" class="text-[10px] bg-red-950/40 text-red-400 px-2.5 py-1 rounded hidden">إلغاء التعديل</button>
-                </div>
-                
-                <input type="hidden" id="editing-sci-id" value="">
-
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400">اسم العلم الفكري</label>
-                    <input type="text" id="sci-title" oninput="updateSciencePreview()" placeholder="مثال: الاستشراق، المذاهب الكلامية..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
-                </div>
-
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400">الوصف الفلسفي لبطاقة العرض</label>
-                    <textarea id="sci-desc" oninput="updateSciencePreview()" rows="2" placeholder="نبذة عميقة تظهر بالواجهة الرئيسية..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]"></textarea>
-                </div>
-
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400">رابط صورة الخلفية الفنية</label>
-                    <input type="text" id="sci-bg" oninput="updateSciencePreview()" placeholder="ضع رابط الصورة للملف هنا..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
-                </div>
-
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400">خيارات ومكان عرض صورة العلم</label>
-                    <select id="sci-img-mode" onchange="updateSciencePreview()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
-                        <option value="card-ext">صورة عنصر خارجي</option>
-                        <option value="bg-banner">صورة خلفية فوق (على شكل شريط)</option>
-                        <option value="bg-full" selected>صورة خلفية كاملة</option>
-                    </select>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="space-y-1">
-                        <label class="text-[11px] text-gray-400">أيقونة العلم (FontAwesome)</label>
-                        <input type="text" id="sci-icon" oninput="updateSciencePreview()" value="fas fa-monument" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-left focus:outline-none focus:border-[#c7a86b]" dir="ltr">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[11px] text-gray-400">هوية تدرج الألوان</label>
-                        <select id="sci-color" onchange="updateSciencePreview()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
-                            <option value="from-amber-950/50 to-slate-950">ذهبي دافئ غامق</option>
-                            <option value="from-emerald-950/50 to-slate-950">أخضر تراثي إسلامي</option>
-                            <option value="from-blue-950/50 to-slate-950">أزرق سياسي عميق</option>
-                            <option value="from-purple-950/50 to-slate-950">بنفسجي سيكولوجي مريح</option>
-                            <option value="from-rose-950/50 to-slate-950">أحمر قرمزي فلسفي</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- حقل الأيقونة العائمة (تمت إضافته) -->
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400">الأيقونة العائمة للعلم (في صفحة التصنيف)</label>
-                    <input type="text" id="sci-floating-icon" oninput="updateSciencePreview()" value="fas fa-feather" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-left focus:outline-none focus:border-[#c7a86b]" dir="ltr">
-                </div>
-
-                <button onclick="saveScience()" id="btn-save-sci" class="w-full bg-[#c7a86b] text-[#020617] font-bold text-xs py-3 rounded-xl hover:bg-[#d4b87a] transition shadow-lg mt-1">
-                    <i class="fas fa-check-circle ml-1"></i> تثبيت وبث العلم في المنصة
-                </button>
-            </div>
-
-            <div id="form-article" class="glass rounded-2xl p-5 md:p-6 space-y-4 hidden">
-                <div class="flex justify-between items-center">
-                    <h2 id="art-form-title" class="text-base font-bold text-[#c7a86b]"><i class="fas fa-pen-fancy ml-1"></i> صياغة ونشر أطروحة مطولة</h2>
-                    <button id="cancel-art-edit" onclick="resetArticleForm()" class="text-[10px] bg-red-950/40 text-red-400 px-2.5 py-1 rounded hidden">إلغاء التعديل</button>
-                </div>
-
-                <input type="hidden" id="editing-art-catId" value="">
-                <input type="hidden" id="editing-art-idx" value="">
-                
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400">اختر العلم الحاضن للأطروحة</label>
-                    <select id="art-category" onchange="updateArticlePreview()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]"></select>
-                </div>
-
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400">عنوان المقال أو المبحث</label>
-                    <input type="text" id="art-title" oninput="updateArticlePreview()" placeholder="مثال: الفتنة الكبرى وسؤال الشرعية الفقهية..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
-                </div>
-
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400">رابط صورة المقال الفنية (خاص بالمقال نفسه)</label>
-                    <input type="text" id="art-bg" oninput="updateArticlePreview()" placeholder="ضع رابط صورة مخصصة لهذا المقال..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
-                </div>
-
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400">خيارات ومكان عرض صورة المقال</label>
-                    <select id="art-img-mode" onchange="updateArticlePreview()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b]">
-                        <option value="card-ext">صورة عنصر خارجي</option>
-                        <option value="bg-banner" selected>صورة خلفية فوق (على شكل شريط)</option>
-                        <option value="bg-full">صورة خلفية كاملة</option>
-                    </select>
-                </div>
-
-                <div class="space-y-1">
-                    <label class="text-[11px] text-gray-400">المتن الفكري (ادعم الفقرات بـ Enter، واصنع عنواناً فرعياً بنقطتين : كـ أولاً:)</label>
-                    <textarea id="art-text" oninput="updateArticlePreview()" rows="6" placeholder="اكتب المقال هنا بكل عمق وتفصيل..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#c7a86b] leading-relaxed"></textarea>
-                </div>
-
-                <button onclick="saveArticle()" id="btn-save-art" class="w-full bg-[#c7a86b] text-[#020617] font-bold text-xs py-3 rounded-xl hover:bg-[#d4b87a] transition shadow-lg mt-1">
-                    <i class="fas fa-paper-plane ml-1"></i> بث المقال في محراب المنصة
-                </button>
-            </div>
-
-            <div id="form-archive" class="glass rounded-2xl p-5 md:p-6 space-y-4 hidden">
-                <h2 class="text-base font-bold text-[#c7a86b] mb-2"><i class="fas fa-boxes ml-1"></i> جرد وتحرير الأرشيف الحالي بالمنصة</h2>
-                <div id="archive-list-container" class="space-y-4 max-h-[460px] overflow-y-auto pr-1">
-                    </div>
-            </div>
-
-        </section>
-
-        <section class="lg:col-span-7">
-            <div class="preview-sticky space-y-4">
-                
-                <div class="border-b border-white/5 pb-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-[#c7a86b] animate-pulse"></span>
-                        <h2 class="text-xs font-bold tracking-wider text-gray-400 uppercase">محراب الفلترة والمعاينة الحية للأجهزة</h2>
-                    </div>
-                    <div class="bg-white/5 p-1 rounded-lg flex gap-1 border border-white/5 text-[10px]">
-                        <button onclick="setDevice('desktop')" id="dev-desktop" class="px-3 py-1 rounded font-semibold transition bg-[#c7a86b] text-[#020617]">
-                            <i class="fas fa-desktop ml-1"></i> شاشة حاسوب
-                        </button>
-                        <button onclick="setDevice('mobile')" id="dev-mobile" class="px-3 py-1 rounded font-semibold transition text-gray-400 hover:text-white">
-                            <i class="fas fa-mobile-alt ml-1"></i> شاشة هاتف
-                        </button>
-                    </div>
-                </div>
-
-                <div id="simulator-wrapper" class="w-full transition-all duration-300">
-                    
-                    <div id="preview-science-box" class="space-y-3">
-                        <span class="text-[11px] text-gray-500 block">معاينة بطاقة العلم في الواجهة الرئيسية:</span>
-                        
-                        <div id="sci-ext-img-container" class="mb-2 hidden">
-                            <img id="p-sci-ext-img" src="" class="w-full h-32 object-cover rounded-xl border border-white/10" alt="External Card Asset">
-                        </div>
-
-                        <div id="p-sci-card" class="rounded-2xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden min-h-[220px] bg-gradient-to-br from-amber-950/50 to-slate-950 bg-cover bg-center transition-all duration-300">
-                            <div id="p-sci-overlay" class="absolute inset-0 bg-slate-950/80 z-0"></div>
-                            <div class="space-y-4 relative z-10 w-full">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl bg-[#c7a86b]/10 border border-[#c7a86b]/20 flex items-center justify-center text-lg text-[#c7a86b]">
-                                        <i id="p-sci-icon" class="fas fa-monument"></i>
-                                    </div>
-                                    <h3 id="p-sci-title" class="text-lg md:text-xl font-bold text-[#c7a86b]" style="font-family: 'Reem Kufi', sans-serif;">اسم العلم الافتراضي</h3>
-                                </div>
-                                <p id="p-sci-desc" class="text-xs md:text-sm text-gray-300 leading-relaxed font-light opacity-80">هنا سيظهر النص والنصيحة الفلسفية التي تسطرها في حقل الوصف الأيمن بالكامل وبشكل متناسق فوري.</p>
-                            </div>
-                            <div class="pt-4 mt-4 border-t border-white/5 flex justify-between items-center relative z-10 text-[11px] text-gray-400">
-                                <span>البحوث المتوفرة: <strong class="text-[#c7a86b]">0</strong></span>
-                                <span class="text-[#c7a86b] flex items-center gap-1">دخول المنصة <i class="fas fa-chevron-left text-[8px]"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="preview-article-box" class="space-y-3 hidden">
-                        <span class="text-[11px] text-gray-500 block">معاينة انسياب وتجاوب متن المقال الفكري داخل شاشات التصفح:</span>
-                        <div id="p-art-main-container" class="glass rounded-2xl overflow-hidden border border-white/5 max-h-[500px] overflow-y-auto relative bg-cover bg-center transition-all duration-300">
-                            <div id="p-art-full-overlay" class="absolute inset-0 bg-slate-950/90 z-0 hidden"></div>
-                            
-                            <div class="relative z-10">
-                                <div id="p-art-banner" class="h-28 bg-slate-900 relative flex items-center justify-center bg-cover bg-center transition-all duration-300">
-                                    <div id="p-art-banner-overlay" class="absolute inset-0 bg-gradient-to-t from-slate-950 to-black/50"></div>
-                                    <div class="relative z-10 text-center px-4 space-y-1">
-                                        <span id="p-art-badge" class="text-[9px] font-bold text-[#c7a86b] uppercase tracking-widest bg-[#c7a86b]/10 px-2.5 py-0.5 rounded-full border border-[#c7a86b]/20">العلم الحاضن للمقال</span>
-                                        <h2 id="p-art-title" class="text-sm md:text-base font-bold text-white line-clamp-1" style="font-family: 'Reem Kufi', sans-serif;">عنوان المقال يظهر هنا تلقائياً عند الكتابة</h2>
-                                    </div>
-                                </div>
-
-                                <div id="art-ext-img-container" class="p-4 pb-0 hidden">
-                                    <img id="p-art-ext-img" src="" class="w-full h-40 object-cover rounded-xl border border-white/10 shadow-lg" alt="Article Card Asset">
-                                </div>
-
-                                <div class="p-5 md:p-7 text-gray-300 responsive-article-text" id="p-art-body-area">
-                                    <p class="text-gray-400 italic">ابدأ بصقل أفكارك وكتابتها في حقل المتن الأيمن، وراقب كيف ينساب الخط ويتجاوب حجمه تلقائياً ليتناسب مع مقاس الهاتف أو الحاسوب المحدد بالأعلى...</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-        </main>
-
-    <script>
-        const coreCategories = [
-            { id: 'islamic', title: 'العلوم الإسلامية', desc: 'دراسات في العقيدة، التطور المذهبي، التجديد الفقهي وأثره النفسي.', icon: 'fas fa-mosque', bg: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1200', color: 'from-emerald-950/40 to-slate-900', imgMode: 'bg-full', floatingIcon: 'fas fa-kaaba' },
-            { id: 'politics', title: 'السياسة', desc: 'تحليل الجغرافيا السياسية، صراعات المحاور الكبرى، وأوراق النفوذ الدولي.', icon: 'fas fa-globe-americas', bg: './politics-bg.png', color: 'from-blue-950/40 to-slate-900', imgMode: 'bg-full', floatingIcon: 'fas fa-landmark' },
-            { id: 'psychology', title: 'علم النفس', desc: 'خبايا التحليل النفسي الكلاسيكي، سبر أعماق العقل الباطن، وبناء الوعي الجمعي.', icon: 'fas fa-brain', bg: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Sigmund_Freud_LIFE.jpg', color: 'from-purple-950/40 to-slate-900', imgMode: 'bg-full', floatingIcon: 'fas fa-fingerprint' },
-            { id: 'philosophy', title: 'الفلسفة والفكر', desc: 'رحلة البحث الإنساني عن الحقيقة وصراعات المذاهب الوجودية والعقلانية.', icon: 'fas fa-scroll', bg: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200', color: 'from-amber-950/40 to-slate-900', imgMode: 'bg-full', floatingIcon: 'fas fa-monument' }
-        ];
-
-        if (!localStorage.getItem('intellectualCategories')) {
-            localStorage.setItem('intellectualCategories', JSON.stringify(coreCategories));
-        }
-
-        function setDevice(mode) {
-            const wrapper = document.getElementById('simulator-wrapper');
-            const btnDesktop = document.getElementById('dev-desktop');
-            const btnMobile = document.getElementById('dev-mobile');
-
-            if(mode === 'mobile') {
-                wrapper.className = "device-mobile transition-all duration-300";
-                btnMobile.className = "px-3 py-1 rounded font-semibold transition bg-[#c7a86b] text-[#020617]";
-                btnDesktop.className = "px-3 py-1 rounded font-semibold transition text-gray-400 hover:text-white";
-            } else {
-                wrapper.className = "w-full transition-all duration-300";
-                btnDesktop.className = "px-3 py-1 rounded font-semibold transition bg-[#c7a86b] text-[#020617]";
-                btnMobile.className = "px-3 py-1 rounded font-semibold transition text-gray-400 hover:text-white";
-            }
-        }
-
-        function switchTab(tab) {
-            document.getElementById('form-science').classList.add('hidden');
-            document.getElementById('form-article').classList.add('hidden');
-            document.getElementById('form-archive').classList.add('hidden');
-            document.getElementById('preview-science-box').classList.add('hidden');
-            document.getElementById('preview-article-box').classList.add('hidden');
-
-            document.getElementById('tab-science').className = "w-1/3 py-2 rounded-lg font-bold transition text-gray-400 hover:text-white";
-            document.getElementById('tab-article').className = "w-1/3 py-2 rounded-lg font-bold transition text-gray-400 hover:text-white";
-            document.getElementById('tab-archive').className = "w-1/3 py-2 rounded-lg font-bold transition text-gray-400 hover:text-white";
-
-            if (tab === 'science') {
-                document.getElementById('form-science').classList.remove('hidden');
-                document.getElementById('preview-science-box').classList.remove('hidden');
-                document.getElementById('tab-science').className = "w-1/3 py-2 rounded-lg font-bold transition bg-[#c7a86b] text-[#020617]";
-                updateSciencePreview();
-            } else if (tab === 'article') {
-                document.getElementById('form-article').classList.remove('hidden');
-                document.getElementById('preview-article-box').classList.remove('hidden');
-                document.getElementById('tab-article').className = "w-1/3 py-2 rounded-lg font-bold transition bg-[#c7a86b] text-[#020617]";
-                loadCategoriesDropdown();
-                updateArticlePreview();
-            } else if (tab === 'archive') {
-                document.getElementById('form-archive').classList.remove('hidden');
-                document.getElementById('preview-article-box').classList.remove('hidden');
-                document.getElementById('tab-archive').className = "w-1/3 py-2 rounded-lg font-bold transition bg-[#c7a86b] text-[#020617]";
-                renderArchiveList();
-            }
-        }
-
-        function updateSciencePreview() {
-            const titleInput = document.getElementById('sci-title').value.trim();
-            const descInput = document.getElementById('sci-desc').value.trim();
-            const bgUrl = document.getElementById('sci-bg').value.trim();
-            const icon = document.getElementById('sci-icon').value.trim() || 'fas fa-monument';
-            const grad = document.getElementById('sci-color').value;
-            const imgMode = document.getElementById('sci-img-mode').value;
-
-            document.getElementById('p-sci-title').innerText = titleInput ? titleInput : 'اسم العلم الافتراضي';
-            document.getElementById('p-sci-desc').innerText = descInput ? descInput : 'هنا سيظهر النص والنصيحة الفلسفية التي تسطرها في حقل الوصف الأيمن بالكامل وبشكل متناسق فوري.';
-            document.getElementById('p-sci-icon').className = icon;
-
-            const card = document.getElementById('p-sci-card');
-            const overlay = document.getElementById('p-sci-overlay');
-            const extContainer = document.getElementById('sci-ext-img-container');
-            const extImg = document.getElementById('p-sci-ext-img');
-
-            card.className = `rounded-2xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden min-h-[220px] transition-all duration-300 bg-gradient-to-br ${grad}`;
-            card.style.backgroundImage = 'none';
-            overlay.className = "absolute inset-0 bg-slate-950/80 z-0";
-            extContainer.classList.add('hidden');
-
-            if (bgUrl) {
-                if (imgMode === 'bg-full') {
-                    card.style.backgroundImage = `url('${bgUrl}')`;
-                    overlay.className = "absolute inset-0 bg-slate-950/80 z-0";
-                } else if (imgMode === 'bg-banner') {
-                    card.style.backgroundImage = `url('${bgUrl}')`;
-                    overlay.className = "absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-950/90 to-slate-950 z-0";
-                } else if (imgMode === 'card-ext') {
-                    extImg.src = bgUrl;
-                    extContainer.classList.remove('hidden');
-                }
-            }
-        }
-
-        // دالة معاينة المقال (تم إصلاحها لدعم imgMode الخاص بالمقال)
-        function updateArticlePreview() {
-            const title = document.getElementById('art-title').value.trim() || 'عنوان المقال يظهر هنا تلقائياً عند الكتابة';
-            const text = document.getElementById('art-text').value.trim();
-            const artBg = document.getElementById('art-bg').value.trim();
-            const imgMode = document.getElementById('art-img-mode').value;
-            
-            const bodyArea = document.getElementById('p-art-body-area');
-            const dropdown = document.getElementById('art-category');
-            const mainContainer = document.getElementById('p-art-main-container');
-            const fullOverlay = document.getElementById('p-art-full-overlay');
-            const banner = document.getElementById('p-art-banner');
-            const bannerOverlay = document.getElementById('p-art-banner-overlay');
-            const extArtContainer = document.getElementById('art-ext-img-container');
-            const extArtImg = document.getElementById('p-art-ext-img');
-
-            document.getElementById('p-art-title').innerText = title;
-
-            // استدعاء الخلفية الافتراضية المستمدة من العلم الفكري الحاضن
-            let defaultBg = '';
-            if (dropdown && dropdown.value) {
-                const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
-                const activeCat = categories.find(c => c.id === dropdown.value);
-                if (activeCat) {
-                    document.getElementById('p-art-badge').innerText = activeCat.title;
-                    defaultBg = activeCat.bg || '';
-                }
-            }
-
-            // إعادة ضبط المصنع التفاعلي
-            mainContainer.style.backgroundImage = 'none';
-            mainContainer.classList.remove('bg-cover', 'bg-center');
-            fullOverlay.classList.add('hidden');
-            
-            banner.style.backgroundImage = 'none';
-            banner.className = "h-28 bg-slate-900 relative flex items-center justify-center bg-cover bg-center transition-all duration-300";
-            if (bannerOverlay) {
-                bannerOverlay.className = "absolute inset-0 bg-gradient-to-t from-slate-950 to-black/50";
-            }
-            extArtContainer.classList.add('hidden');
-
-            const finalImage = artBg ? artBg : defaultBg;
-
-            if (finalImage) {
-                if (imgMode === 'bg-banner') {
-                    banner.style.backgroundImage = `url('${finalImage}')`;
-                } else if (imgMode === 'bg-full') {
-                    mainContainer.style.backgroundImage = `url('${finalImage}')`;
-                    mainContainer.classList.add('bg-cover', 'bg-center');
-                    fullOverlay.className = "absolute inset-0 bg-slate-950/90 z-0";
-                    fullOverlay.classList.remove('hidden');
-                    
-                    banner.className = "h-28 bg-transparent relative flex items-center justify-center transition-all duration-300";
-                    if (bannerOverlay) bannerOverlay.className = "hidden";
-                } else if (imgMode === 'card-ext') {
-                    banner.className = "bg-white/5 py-5 relative flex items-center justify-center transition-all duration-300 rounded-xl mx-4 mt-4 border border-white/5";
-                    if (bannerOverlay) bannerOverlay.className = "hidden";
-                    
-                    extArtImg.src = finalImage;
-                    extArtContainer.classList.remove('hidden');
-                }
-            }
-
-            if (!text) {
-                bodyArea.innerHTML = `<p class="text-gray-400 italic">ابدأ بصقل أفكارك وكتابتها في حقل المتن الأيمن، وراقب كيف ينساب الخط ويتجاوب حجمه تلقائياً ليتناسب مع مقاس الهاتف أو الحاسوب المحدد بالأعلى...</p>`;
-                return;
-            }
-
-            bodyArea.innerHTML = '';
-            const paragraphs = text.split('\n').filter(p => p.trim() !== '');
-            
-            paragraphs.forEach((para, index) => {
-                const currentText = para.trim();
-                if (index === 0) {
-                    bodyArea.innerHTML += `<p class="font-normal border-r-4 border-[#c7a86b] pr-3 py-1 bg-white/[0.02] rounded-l-lg text-gray-100">${escapeHtml(currentText)}</p>`;
-                } else if (currentText.length < 90 && (currentText.startsWith('أولاً:') || currentText.startsWith('ثانياً:') || currentText.includes('المبحث') || currentText.endsWith(':'))) {
-                    bodyArea.innerHTML += `<h4><i class="fas fa-feather-alt text-xs opacity-60 ml-1"></i> ${escapeHtml(currentText.replace(/:$/, ''))}</h4>`;
-                } else {
-                    bodyArea.innerHTML += `<p>${escapeHtml(currentText)}</p>`;
-                }
-            });
-        }
-
-        function loadCategoriesDropdown() {
-            const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
-            const dropdown = document.getElementById('art-category');
-            if(!dropdown) return;
-            const currentSelection = dropdown.value;
-            dropdown.innerHTML = '';
-            categories.forEach(cat => {
-                dropdown.innerHTML += `<option value="${cat.id}">${cat.title}</option>`;
-            });
-            if(currentSelection) dropdown.value = currentSelection;
-        }
-
-        // دالة حفظ العلم (تمت إضافة floatingIcon)
-        function saveScience() {
-            const title = document.getElementById('sci-title').value.trim();
-            const desc = document.getElementById('sci-desc').value.trim();
-            const bg = document.getElementById('sci-bg').value.trim();
-            const icon = document.getElementById('sci-icon').value.trim();
-            const color = document.getElementById('sci-color').value;
-            const imgMode = document.getElementById('sci-img-mode').value;
-            const floatingIcon = document.getElementById('sci-floating-icon').value.trim() || 'fas fa-feather';
-            const editId = document.getElementById('editing-sci-id').value;
-
-            if(!title) { alert('برجاء كتابة عنوان العلم الفكري أولاً!'); return; }
-
-            let categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
-
-            if (editId) {
-                categories = categories.map(cat => {
-                    if (cat.id === editId) {
-                        return { ...cat, title, desc, bg, icon, color, imgMode, floatingIcon };
-                    }
-                    return cat;
-                });
-                localStorage.setItem('intellectualCategories', JSON.stringify(categories));
-                alert('تم تحديث وتعديل بيانات العلم بنجاح بالأرشيف والمنصة!');
-                resetScienceForm();
-            } else {
-                const id = 'custom_' + Date.now();
-                const newScience = { id, title, desc, icon, bg, color, imgMode, floatingIcon };
-                categories.push(newScience);
-                localStorage.setItem('intellectualCategories', JSON.stringify(categories));
-                localStorage.setItem(`${id}Articles`, JSON.stringify([]));
-                alert(`تم بث العلم الجديد "${title}" بنجاح!`);
-                resetScienceForm();
-            }
-        }
-
-        function resetScienceForm() {
-            document.getElementById('editing-sci-id').value = '';
-            document.getElementById('sci-title').value = '';
-            document.getElementById('sci-desc').value = '';
-            document.getElementById('sci-bg').value = '';
-            document.getElementById('sci-icon').value = 'fas fa-monument';
-            document.getElementById('sci-img-mode').value = 'bg-full';
-            document.getElementById('sci-floating-icon').value = 'fas fa-feather';
-            document.getElementById('sci-form-title').innerHTML = `<i class="fas fa-sliders-h ml-1"></i> إضافة علم فكري جديد`;
-            document.getElementById('btn-save-sci').innerText = 'تثبيت وبث العلم في المنصة';
-            document.getElementById('cancel-sci-edit').classList.add('hidden');
-            updateSciencePreview();
-        }
-
-        // دالة حفظ المقال (تم إصلاحها لحفظ imgMode بشكل صحيح)
-        function saveArticle() {
-            const catId = document.getElementById('art-category').value;
-            const title = document.getElementById('art-title').value.trim();
-            const text = document.getElementById('art-text').value.trim();
-            const bg = document.getElementById('art-bg').value.trim();
-            const imgMode = document.getElementById('art-img-mode').value;
-            
-            const editCatId = document.getElementById('editing-art-catId').value;
-            const editIdx = document.getElementById('editing-art-idx').value;
-
-            if(!title || !text) { alert('برجاء إدخال تفاصيل الأطروحة بالكامل!'); return; }
-
-            if (editCatId && editIdx !== '') {
-                let oldArticles = JSON.parse(localStorage.getItem(`${editCatId}Articles`)) || [];
-                oldArticles.splice(parseInt(editIdx), 1);
-                localStorage.setItem(`${editCatId}Articles`, JSON.stringify(oldArticles));
-
-                let targetArticles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
-                targetArticles.push({ title, text, bg, imgMode });
-                localStorage.setItem(`${catId}Articles`, JSON.stringify(targetArticles));
-
-                alert('تم حفظ وتعديل الأطروحة بنجاح في المنصة!');
-                resetArticleForm();
-                switchTab('archive');
-            } else {
-                let savedArticles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
-                savedArticles.push({ title, text, bg, imgMode });
-                localStorage.setItem(`${catId}Articles`, JSON.stringify(savedArticles));
-                alert(`تم بث أطروحة "${title}" بنجاح!`);
-                resetArticleForm();
-            }
-        }
-
-        function resetArticleForm() {
-            document.getElementById('editing-art-catId').value = '';
-            document.getElementById('editing-art-idx').value = '';
-            document.getElementById('art-title').value = '';
-            document.getElementById('art-text').value = '';
-            document.getElementById('art-bg').value = '';
-            document.getElementById('art-img-mode').value = 'bg-banner';
-            document.getElementById('art-form-title').innerHTML = `<i class="fas fa-pen-fancy ml-1"></i> صياغة ونشر أطروحة مطولة`;
-            document.getElementById('btn-save-art').innerText = 'بث المقال في محراب المنصة';
-            document.getElementById('cancel-art-edit').classList.add('hidden');
-            updateArticlePreview();
-        }
-
-        function renderArchiveList() {
-            const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
-            const container = document.getElementById('archive-list-container');
-            if(!container) return;
-            container.innerHTML = '';
-
-            categories.forEach(cat => {
-                const articles = JSON.parse(localStorage.getItem(`${cat.id}Articles`)) || [];
-                
-                let html = `
-                    <div class="border border-white/10 rounded-xl p-4 bg-slate-900/40 space-y-3">
-                        <div class="flex justify-between items-center bg-white/5 p-2.5 rounded-lg border border-white/5">
-                            <div class="flex items-center gap-2">
-                                <i class="${cat.icon} text-[#c7a86b] text-sm"></i>
-                                <span class="text-xs font-bold text-white">${cat.title}</span>
-                            </div>
-                            <div class="flex gap-2">
-                                <button onclick="startEditScience('${cat.id}')" class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-1 rounded hover:bg-amber-500 hover:text-black transition">تعديل العلم</button>
-                                <button onclick="deleteScience('${cat.id}')" class="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-1 rounded hover:bg-red-500 hover:text-white transition">حذف</button>
-                            </div>
-                        </div>
-                        <div class="space-y-1.5 pl-2 border-r border-white/5 pr-2">
-                `;
-
-                if(articles.length === 0) {
-                    html += `<p class="text-[10px] text-gray-500 italic">لا توجد مقالات منشورة في هذا العلم بعد.</p>`;
-                } else {
-                    articles.forEach((art, idx) => {
-                        html += `
-                            <div class="flex justify-between items-center text-[11px] bg-black/20 p-2 rounded border border-white/5">
-                                <span class="text-gray-300 truncate max-w-[180px] cursor-pointer hover:text-[#c7a86b]" onclick="previewSpecificArchiveArticle('${cat.id}', ${idx})"><i class="fas fa-file-alt ml-1 opacity-50"></i> ${art.title}</span>
-                                <div class="flex gap-1.5">
-                                    <button onclick="startEditArticle('${cat.id}', ${idx})" class="text-[9px] text-blue-400 hover:underline"><i class="fas fa-edit"></i></button>
-                                    <button onclick="deleteArticle('${cat.id}', ${idx})" class="text-[9px] text-red-400 hover:underline"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-
-                html += `</div></div>`;
-                container.innerHTML += html;
-            });
-        }
-
-        // دالة تعديل العلم (تم إصلاحها لقراءة floatingIcon و imgMode و color)
-        function startEditScience(id) {
-            const categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
-            const cat = categories.find(c => c.id === id);
-            if(!cat) return;
-
-            switchTab('science');
-            document.getElementById('editing-sci-id').value = cat.id;
-            document.getElementById('sci-title').value = cat.title;
-            document.getElementById('sci-desc').value = cat.desc || '';
-            document.getElementById('sci-bg').value = cat.bg || '';
-            document.getElementById('sci-icon').value = cat.icon || 'fas fa-monument';
-            if(cat.color) document.getElementById('sci-color').value = cat.color;
-            if(cat.imgMode) document.getElementById('sci-img-mode').value = cat.imgMode;
-            if(cat.floatingIcon) document.getElementById('sci-floating-icon').value = cat.floatingIcon;
-
-            document.getElementById('sci-form-title').innerHTML = `<i class="fas fa-edit ml-1 text-amber-400"></i> تعديل بيانات: ${cat.title}`;
-            document.getElementById('btn-save-sci').innerText = 'تحديث وتعديل العلم الحالي';
-            document.getElementById('cancel-sci-edit').classList.remove('hidden');
-            updateSciencePreview();
-        }
-
-        function startEditArticle(catId, idx) {
-            const articles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
-            const art = articles[idx];
-            if(!art) return;
-
-            switchTab('article');
-            loadCategoriesDropdown();
-            
-            document.getElementById('art-category').value = catId;
-            document.getElementById('art-title').value = art.title;
-            document.getElementById('art-text').value = art.text;
-            document.getElementById('art-bg').value = art.bg || '';
-            if(art.imgMode) document.getElementById('art-img-mode').value = art.imgMode;
-
-            document.getElementById('editing-art-catId').value = catId;
-            document.getElementById('editing-art-idx').value = idx;
-
-            document.getElementById('art-form-title').innerHTML = `<i class="fas fa-edit ml-1 text-blue-400"></i> تعديل ومراجعة الأطروحة`;
-            document.getElementById('btn-save-art').innerText = 'تحديث وحفظ التعديلات على المقال';
-            document.getElementById('cancel-art-edit').classList.remove('hidden');
-            updateArticlePreview();
-        }
-
-        function previewSpecificArchiveArticle(catId, idx) {
-            const articles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
-            const art = articles[idx];
-            if(!art) return;
-            document.getElementById('art-title').value = art.title;
-            document.getElementById('art-text').value = art.text;
-            document.getElementById('art-bg').value = art.bg || '';
-            if(art.imgMode) document.getElementById('art-img-mode').value = art.imgMode;
-            updateArticlePreview();
-        }
-
-        function deleteScience(id) {
-            if(!confirm('تحذير فكري: هل أنت متأكد من حذف هذا العلم بالكامل؟ سيتم مسح بطاقته ومقالاته التابعة له نهائياً من الذاكرة!')) return;
-            let categories = JSON.parse(localStorage.getItem('intellectualCategories')) || coreCategories;
-            categories = categories.filter(c => c.id !== id);
-            localStorage.setItem('intellectualCategories', JSON.stringify(categories));
-            localStorage.removeItem(`${id}Articles`);
-            renderArchiveList();
-        }
-
-        function deleteArticle(catId, idx) {
-            if(!confirm('هل تود حذف هذه الأطروحة نهائياً من محراب القراءة؟')) return;
-            let articles = JSON.parse(localStorage.getItem(`${catId}Articles`)) || [];
-            articles.splice(idx, 1);
-            localStorage.setItem(`${catId}Articles`, JSON.stringify(articles));
-            renderArchiveList();
-        }
-
-        function escapeHtml(str) { 
-            if(!str) return ''; 
-            return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); 
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            updateSciencePreview();
-            loadCategoriesDropdown();
-        });
-    </script>
 </body>
 </html>
