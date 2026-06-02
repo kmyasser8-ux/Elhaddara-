@@ -4,77 +4,75 @@
   <meta charset="UTF-8">
   <title>لوحة التحكم - منصة الحضارة</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
   <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-      background: #0b1020; /* نفس لون خلفية المنصة الرئيسية الموحد */
-      color: #ffffff;
-    }
-    /* تأثيرات فخمة للبطاقات المتوافقة مع ستايل المنصة */
-    .admin-card {
-      background: #151d35;
-      border: 1px solid #2a3558;
-      border-radius: 14px;
-      padding: 24px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 12px 16px;
-      margin-top: 8px;
-      margin-bottom: 14px;
-      border-radius: 10px;
-      background: #11182e;
-      border: 1px solid #2a3558;
-      color: #ffffff;
-      outline: none;
-      transition: all 0.3s ease;
-    }
-    input:focus, textarea:focus, select:focus {
-      border-color: #c7a86b;
-      box-shadow: 0 0 0 2px rgba(199, 168, 107, 0.2);
-    }
+    body { font-family: 'Cairo', sans-serif; background: #0b1020; color: #ffffff; }
+    .admin-card { background: #151d35; border: 1px solid #2a3558; border-radius: 14px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    input, textarea, select { width: 100%; padding: 12px 16px; margin-top: 8px; margin-bottom: 14px; border-radius: 10px; background: #11182e; border: 1px solid #2a3558; color: #ffffff; outline: none; }
+    input:focus, textarea:focus, select:focus { border-color: #c7a86b; }
+    .color-picker-wrapper { display: flex; align-items: center; gap: 15px; background: #11182e; border: 1px solid #2a3558; padding: 8px 12px; border-radius: 10px; margin-top: 8px; margin-bottom: 14px; }
+    input[type="color"] { width: 50px; height: 40px; padding: 0; margin: 0; border: none; background: transparent; cursor: pointer; }
   </style>
 </head>
-
-<body class="p-4 md:p-8 max-w-5xl mx-auto mb-12">
+<body class="p-4 md:p-8 max-w-6xl mx-auto mb-12">
 
   <div class="flex flex-col sm:flex-row justify-between items-center mb-8 border-b border-[#2a3558] pb-6 gap-4">
     <div class="flex items-center gap-3">
-      <div class="bg-[#c7a86b]/10 p-3 rounded-xl text-[#c7a86b]">
-        <i class="fa-solid fa-chart-line text-2xl"></i>
-      </div>
+      <div class="bg-[#c7a86b]/10 p-3 rounded-xl text-[#c7a86b]"><i class="fa-solid fa-sliders text-2xl"></i></div>
       <div>
         <h1 class="text-2xl font-bold text-[#c7a86b]">لوحة التحكم وتوجيه البيانات</h1>
-        <p class="text-xs text-gray-400 mt-1">إدارة العلوم الفكرية والمقالات لمنصة الحضارة</p>
+        <p class="text-xs text-gray-400 mt-1">تخصيص الألوان والخطوط بشكل حر وغير محدود</p>
       </div>
     </div>
-    <a href="index.html" class="flex items-center gap-2 text-sm font-semibold border border-[#c7a86b] text-[#c7a86b] hover:bg-[#c7a86b] hover:text-[#0b1020] px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-[#c7a86b]/5">
+    <a href="index.html" class="flex items-center gap-2 text-sm font-semibold border border-[#c7a86b] text-[#c7a86b] hover:bg-[#c7a86b] hover:text-[#0b1020] px-5 py-2.5 rounded-xl transition-all">
       <i class="fa-solid fa-arrow-up-right-from-square"></i> عرض المنصة الرئيسية
     </a>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    
     <div class="lg:col-span-2 space-y-6">
       
+      <div class="admin-card border-amber-500/30">
+        <h2 class="font-bold text-lg text-amber-400 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-palette"></i> تخصيص مظهر وحرية الألوان والخطوط (Settings)
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs text-gray-400 font-semibold">أي لون أساسي للهوية (النصوص، الإطارات، الأزرار)</label>
+            <div class="color-picker-wrapper">
+              <input type="color" id="settingThemeColor" value="#c7a86b">
+              <span class="text-sm text-gray-300">اختر أي لون تريده حراً</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-400 font-semibold">أي لون للخلفية الرئيسية (الداكنة أو الفاتحة)</label>
+            <div class="color-picker-wrapper">
+              <input type="color" id="settingBgColor" value="#0b1020">
+              <span class="text-sm text-gray-300">اختر لون خلفية الموقع</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs text-gray-400 font-semibold">اكتب اسم أي خط عربي/إنجليزي من Google Fonts</label>
+          <input type="text" id="settingFont" placeholder="مثال: Cairo أو Tajawal أو Almarai أو Amiri ...">
+          <p class="text-[11px] text-gray-400 -mt-2 mb-3">بإمكانك كتابة اسم أي خط متواجد على موقع Google Fonts وسيتم تفعيله تلقائياً في المنصة.</p>
+        </div>
+
+        <button onclick="handleSaveSettings()" class="w-full bg-amber-500 hover:bg-amber-600 text-[#0b1020] font-bold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-amber-500/10">
+          <i class="fa-solid fa-floppy-disk"></i> حفظ وتطبيق التصميم المفتوح فوراً
+        </button>
+      </div>
+
       <div class="admin-card">
         <h2 class="font-bold text-lg text-[#c7a86b] mb-4 flex items-center gap-2">
           <i class="fa-solid fa-folder-plus"></i> إضافة علم فكري جديد
         </h2>
-        <div>
-          <label class="text-xs text-gray-400 font-semibold">اسم العلم الفكري</label>
-          <input id="catTitle" placeholder="مثال: العلوم الإسلامية، الفلسفة، علم الاجتماع...">
-        </div>
-        <button onclick="handleAddCategory()" class="w-full mt-2 bg-[#c7a86b] hover:bg-[#b5965c] text-[#0b1020] font-bold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-[#c7a86b]/10">
+        <input id="catTitle" placeholder="مثال: العلوم الإسلامية، الفلسفة...">
+        <button onclick="handleAddCategory()" class="w-full bg-[#c7a86b] hover:bg-[#b5965c] text-[#0b1020] font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
           <i class="fa-solid fa-plus"></i> إدراج العلم في النظام
         </button>
       </div>
@@ -83,23 +81,10 @@
         <h2 class="font-bold text-lg text-[#c7a86b] mb-4 flex items-center gap-2">
           <i class="fa-solid fa-feather-pointed"></i> نشر مقال علمي جديد
         </h2>
-        
-        <div>
-          <label class="text-xs text-gray-400 font-semibold">تخصيص القسم الفكري المستهدف</label>
-          <select id="selectedCategory"></select>
-        </div>
-
-        <div>
-          <label class="text-xs text-gray-400 font-semibold">عنوان المقال</label>
-          <input id="articleTitle" placeholder="اكتب عنواناً جذاباً ومعبراً...">
-        </div>
-
-        <div>
-          <label class="text-xs text-gray-400 font-semibold">محتوى ونص المقال التفصيلي</label>
-          <textarea id="articleText" placeholder="اكتب نص المقال الفكري هنا..." rows="6"></textarea>
-        </div>
-
-        <button onclick="handleAddArticle()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/10">
+        <select id="selectedCategory"></select>
+        <input id="articleTitle" placeholder="عنوان المقال الجديد...">
+        <textarea id="articleText" placeholder="اكتب نص المقال الفكري هنا..." rows="5"></textarea>
+        <button onclick="handleAddArticle()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
           <i class="fa-solid fa-paper-plane"></i> نشر المقال فوراً 🚀
         </button>
       </div>
@@ -111,126 +96,110 @@
         <h2 class="font-bold text-lg text-[#c7a86b] mb-4 flex items-center gap-2 border-b border-[#2a3558] pb-3">
           <i class="fa-solid fa-boxes-stacked"></i> العلوم الحالية (<span id="catCounter">0</span>)
         </h2>
-        
-        <div id="categoriesList" class="space-y-3 max-h-[600px] overflow-y-auto pr-1">
-          </div>
+        <div id="categoriesList" class="space-y-3 max-h-[600px] overflow-y-auto pr-1"></div>
       </div>
     </div>
-
   </div>
 
   <script src="data.js"></script>
   <script src="storage.js"></script>
-
   <script>
-    // تهيئة نظام التخزين
     Storage.init();
 
-    // توليد المعرفات الفريدة
     function generateId(text) {
-      return text.toLowerCase()
-                 .replace(/\s+/g, '-')
-                 .replace(/[^\w-]/g, '') || 'cat-' + Date.now();
+      return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '') || 'cat-' + Date.now();
     }
 
-    // تحديث وعرض لوحة التحكم بالكامل بتنسيق فخم وتجنب الأزرار العارية
+    function loadCurrentSettings() {
+      const data = Storage.get();
+      if (data.settings) {
+        document.getElementById('settingThemeColor').value = data.settings.themeColor || '#c7a86b';
+        document.getElementById('settingBgColor').value = data.settings.bgColor || '#0b1020';
+        document.getElementById('settingFont').value = data.settings.fontName || 'Cairo';
+      }
+    }
+
+    function handleSaveSettings() {
+      const data = Storage.get();
+      data.settings = {
+        themeColor: document.getElementById('settingThemeColor').value,
+        bgColor: document.getElementById('settingBgColor').value,
+        fontName: document.getElementById('settingFont').value.trim() || 'Cairo'
+      };
+      Storage.save(data);
+      alert('تم حفظ إعدادات التصميم المفتوح! الألوان والخط الجديد سيتم حقنهم ديناميكياً في الواجهة الرئيسية. 🎉');
+    }
+
     function renderDashboard() {
       const list = document.getElementById('categoriesList');
       const select = document.getElementById('selectedCategory');
       const counter = document.getElementById('catCounter');
-
-      list.innerHTML = '';
-      select.innerHTML = '';
+      list.innerHTML = ''; select.innerHTML = '';
 
       const categories = Storage.getCategories();
       counter.innerText = categories.length;
 
       if (categories.length === 0) {
-        list.innerHTML = `
-          <div class="text-center py-8 text-gray-500 text-sm border-2 border-dashed border-[#2a3558] rounded-xl">
-            <i class="fa-solid fa-folder-open text-2xl mb-2 block"></i>
-            قاعدة البيانات فارغة حالياً
-          </div>`;
+        list.innerHTML = `<div class="text-center py-8 text-gray-500 text-sm border-2 border-dashed border-[#2a3558] rounded-xl">لا توجد أقسام حالياً</div>`;
         select.innerHTML = `<option value="">-- يجب إضافة علم أولاً --</option>`;
         return;
       }
 
       categories.forEach((c) => {
         const count = Storage.getArticles(c.id).length;
-        
-        // حل المشكلة: بناء علم على شكل "بطاقة إدارية منسقة بالكامل" وبألوان متوافقة وليس مجرد أزرار
         list.innerHTML += `
-          <div class="bg-[#11182e] border border-[#2a3558] p-4 rounded-xl flex flex-col justify-between gap-3 transition-all hover:border-[#c7a86b]/40">
+          <div class="bg-[#11182e] border border-[#2a3558] p-4 rounded-xl flex flex-col justify-between gap-3">
             <div class="flex items-start gap-2.5">
-              <div class="bg-[#c7a86b]/10 text-[#c7a86b] text-xs p-2 rounded-lg mt-1">
-                <i class="fa-solid fa-bookmark"></i>
-              </div>
+              <div class="bg-[#c7a86b]/10 text-[#c7a86b] text-xs p-2 rounded-lg mt-1"><i class="fa-solid fa-bookmark"></i></div>
               <div>
                 <div class="font-bold text-sm text-gray-100">${c.title}</div>
-                <div class="text-[11px] text-gray-400 mt-0.5"><i class="fa-solid fa-file-lines ml-1"></i> ${count} مقالات منشورة</div>
+                <div class="text-[11px] text-gray-400 mt-0.5">${count} مقالات منشورة</div>
               </div>
             </div>
-            <button class="w-full text-center bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-semibold py-2 rounded-lg border border-red-500/20 transition-all duration-150" onclick="handleDeleteCategory('${c.id}')">
-              <i class="fa-solid fa-trash-can ml-1"></i> إزالة هذا العلم
-            </button>
+            <button class="w-full text-center bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-semibold py-2 rounded-lg border border-red-500/20 transition-all" onclick="handleDeleteCategory('${c.id}')">إزالة العلم</button>
           </div>
         `;
-        
         select.innerHTML += `<option value="${c.id}">${c.title}</option>`;
       });
     }
 
-    // إضافة قسم علمي
     function handleAddCategory() {
       const titleInput = document.getElementById('catTitle');
       const title = titleInput.value.trim();
-      if (!title) return alert('الرجاء إدخال اسم العلم الفكري!');
-
+      if (!title) return alert('الرجاء إدخال اسم العلم!');
       const id = generateId(title);
       const data = Storage.get();
-
-      if (data.categories.some(c => c.id === id)) return alert('هذا العلم الفكري مسجل في المنصة مسبقاً!');
-
+      if (data.categories.some(c => c.id === id)) return alert('هذا العلم موجود بالفعل!');
       data.categories.push({ id, title });
       if (!data.articles[id]) data.articles[id] = [];
-
       Storage.save(data);
       titleInput.value = '';
       renderDashboard();
     }
 
-    // إضافة مقال
     function handleAddArticle() {
       const catId = document.getElementById('selectedCategory').value;
       const titleInput = document.getElementById('articleTitle');
       const textInput = document.getElementById('articleText');
-
       const title = titleInput.value.trim();
       const text = textInput.value.trim();
-
-      if (!catId || !title || !text) return alert('يرجى ملء جميع الحقول واختيار القسم الفكري المناسب!');
-
+      if (!catId || !title || !text) return alert('يرجى ملء جميع الحقول!');
       Storage.addArticle(catId, { title, text });
-
-      alert('تم نشر المقال الفكري وربطه بالقسم بنجاح! 🚀');
-      titleInput.value = '';
-      textInput.value = '';
+      alert('تم نشر المقال بنجاح! 🚀');
+      titleInput.value = ''; textInput.value = '';
       renderDashboard();
     }
 
-    // حذف علم
     function handleDeleteCategory(id) {
-      if (!confirm('تحذير: هل أنت متأكد من حذف هذا العلم الفكري؟ سيؤدي هذا لحذف كافة مقالاته من المنصة نهائياً!')) return;
-
+      if (!confirm('هل تريد حذف هذا العلم وكافة مقالاته نهائياً؟')) return;
       const data = Storage.get();
       data.categories = data.categories.filter(c => c.id !== id);
       delete data.articles[id];
-
       Storage.save(data);
       renderDashboard();
     }
 
-    // التشغيل الفوري والتحميل المتناغم للبيانات
+    loadCurrentSettings();
     renderDashboard();
   </script>
 </body>
