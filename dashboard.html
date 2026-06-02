@@ -5,6 +5,10 @@
   <title>لوحة التحكم - منصة الحضارة</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
@@ -15,82 +19,108 @@
       color: #fff;
     }
     .card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
     }
     input, textarea, select {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 6px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       border-radius: 10px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: white;
       outline: none;
+      transition: all 0.3s ease;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: #c7a86b;
+      background: rgba(255, 255, 255, 0.08);
     }
     button {
       background: #c7a86b;
-      padding: 10px 14px;
+      padding: 10px 18px;
       border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
+      color: #020617;
+      transition: all 0.2s ease;
     }
     button:hover {
       opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    .btn-delete {
+      background: #ef4444;
+      color: white;
+      padding: 6px 12px;
+      font-size: 0.875rem;
     }
   </style>
 </head>
 
-<body class="p-6">
+<body class="p-6 max-w-4xl mx-auto">
 
-  <h1 class="text-2xl font-bold mb-6 text-[#c7a86b]">
-    لوحة التحكم - منصة الحضارة
-  </h1>
-
-  <!-- إضافة علم -->
-  <div class="card">
-    <h2 class="font-bold mb-2">➕ إضافة علم جديد</h2>
-    <input id="catTitle" placeholder="اسم العلم">
-    <input id="catDesc" placeholder="وصف العلم">
-    <button onclick="addCategory()">إضافة علم</button>
+  <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+    <h1 class="text-2xl font-bold text-[#c7a86b]">
+      <i class="fa-solid to fa-sliders ml-2"></i> لوحة التحكم - منصة الحضارة
+    </h1>
+    <a href="index.html" class="text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition">
+      <i class="fa-solid fa-house ml-1"></i> عرض المنصة
+    </a>
   </div>
 
-  <!-- قائمة العلوم -->
   <div class="card">
-    <h2 class="font-bold mb-2">📚 العلوم الحالية</h2>
-    <div id="categoriesList"></div>
+    <h2 class="font-bold mb-4 text-lg flex items-center gap-2">
+      <i class="fa-solid fa-folder-plus text-[#c7a86b]"></i> إضافة علم فكري جديد
+    </h2>
+    <input id="catTitle" placeholder="مثال: العلوم الإسلامية، الفلسفة...">
+    <input id="catDesc" placeholder="وصف مختصر للقسم الفكري...">
+    <button onclick="addCategory()">إضافة العلم</button>
   </div>
 
-  <!-- إضافة مقال -->
   <div class="card">
-    <h2 class="font-bold mb-2">📝 إضافة مقال</h2>
+    <h2 class="font-bold mb-4 text-lg flex items-center gap-2">
+      <i class="fa-solid fa-list text-[#c7a86b]"></i> العلوم الحالية في المنصة
+    </h2>
+    <div id="categoriesList" class="space-y-2"></div>
+  </div>
 
+  <div class="card">
+    <h2 class="font-bold mb-4 text-lg flex items-center gap-2">
+      <i class="fa-solid fa-pen-nib text-[#c7a86b]"></i> نشر مقال جديد
+    </h2>
+
+    <label class="text-sm text-gray-400">اختر القسم الفكري المستهدف:</label>
     <select id="selectedCategory"></select>
 
-    <input id="articleTitle" placeholder="عنوان المقال">
-    <textarea id="articleText" placeholder="نص المقال" rows="6"></textarea>
+    <input id="articleTitle" placeholder="عنوان المقال الجديد">
+    <textarea id="articleText" placeholder="اكتب نص المقال بالتفصيل هنا..." rows="6"></textarea>
 
-    <button onclick="addArticle()">نشر المقال</button>
+    <button onclick="addArticle()">نشر المقال الآن 🚀</button>
   </div>
 
 <script>
+// جلب البيانات من الـ localStorage المشترك مع التصفح المحرك للمنصة
 let categories = JSON.parse(localStorage.getItem('intellectualCategories')) || [];
 
-// توليد ID بسيط
+// توليد المعرفات (Slug) بشكل يدوي متوافق مع الحروف العربية والإنجليزية
 function slug(text){
-  return text.toLowerCase().replace(/\s+/g,'-').replace(/[^\w\u0600-\u06FF-]/g,'');
+  return text.toLowerCase()
+             .replace(/\s+/g,'-')
+             .replace(/[^\w\u0600-\u06FF-]/g,'');
 }
 
-// حفظ
+// حفظ التغييرات في المتصفح
 function save(){
   localStorage.setItem('intellectualCategories', JSON.stringify(categories));
 }
 
-// عرض العلوم
+// رندرة وعرض الأقسام الفكرية داخل القوائم والـ Select Dropdown
 function render(){
   const list = document.getElementById('categoriesList');
   const select = document.getElementById('selectedCategory');
@@ -98,79 +128,97 @@ function render(){
   list.innerHTML = '';
   select.innerHTML = '';
 
-  categories.forEach((c, i) => {
+  if(categories.length === 0) {
+    list.innerHTML = `<div class="text-gray-500 text-sm py-2">لا توجد أقسام مضافة حالياً.</div>`;
+    select.innerHTML = `<option value="">-- يجب إضافة علم أولاً --</option>`;
+    return;
+  }
 
-    // list
+  categories.forEach((c, i) => {
+    // بناء قائمة الإدارة للحذف والمعاينة
     list.innerHTML += `
-      <div class="flex justify-between items-center border-b border-white/10 py-2">
+      <div class="flex justify-between items-center border-b border-white/5 py-3 transition hover:bg-white/[0.01] px-2 rounded-lg">
         <div>
-          <div class="font-bold text-[#c7a86b]">${c.title}</div>
-          <div class="text-xs text-gray-400">${c.desc || ''}</div>
+          <div class="font-bold text-[#c7a86b] text-base">${c.title}</div>
+          <div class="text-xs text-gray-400 mt-1">${c.desc || 'لا يوجد وصف لهذا العلم.'}</div>
         </div>
-        <button onclick="deleteCategory(${i})">حذف</button>
+        <button class="btn-delete" onclick="deleteCategory(${i})">
+          <i class="fa-solid fa-trash-can ml-1"></i> حذف
+        </button>
       </div>
     `;
 
-    // select
+    // بناء قائمة الخيارات المتاحة لإضافة مقال
     select.innerHTML += `<option value="${c.id}">${c.title}</option>`;
   });
 }
 
-// إضافة علم
+// إضافة قسم علمي جديد
 function addCategory(){
-  const title = document.getElementById('catTitle').value;
-  const desc = document.getElementById('catDesc').value;
+  const titleInput = document.getElementById('catTitle');
+  const descInput = document.getElementById('catDesc');
+  
+  const title = titleInput.value.trim();
+  const desc = descInput.value.trim();
 
-  if(!title) return alert('اكتب اسم العلم');
+  if(!title) return alert('الرجاء كتابة اسم العلم الفكري أولاً!');
 
-  categories.push({
-    id: slug(title),
-    title,
-    desc
-  });
+  // التحقق من عدم تكرار القسم
+  const id = slug(title);
+  if(categories.some(c => c.id === id)) return alert('هذا القسم موجود بالفعل!');
+
+  categories.push({ id, title, desc });
 
   save();
   render();
+
+  // تصفير الحقول بعد النجاح
+  titleInput.value = '';
+  descInput.value = '';
 }
 
-// حذف علم
+// حذف قسم علمي مع مقالاته المرتبطة به
 function deleteCategory(i){
+  if(!confirm('هل أنت متأكد من حذف هذا العلم؟ سيتم حذف جميع المقالات التابعة له نهائياً!')) return;
+  
   const cat = categories[i];
-  categories.splice(i,1);
+  categories.splice(i, 1);
 
-  // حذف مقالاته
+  // حذف المقالات التابعة له من الـ localStorage لتجنب تراكم الملفات الميتة
   localStorage.removeItem(cat.id + 'Articles');
 
   save();
   render();
 }
 
-// إضافة مقال
+// إضافة مقال جديد داخل القسم المحدد
 function addArticle(){
   const catId = document.getElementById('selectedCategory').value;
-  const title = document.getElementById('articleTitle').value;
-  const text = document.getElementById('articleText').value;
+  const titleInput = document.getElementById('articleTitle');
+  const textInput = document.getElementById('articleText');
 
-  if(!catId || !title || !text) {
-    return alert('اكمل جميع الحقول');
+  const title = titleInput.value.trim();
+  const text = textInput.value.trim();
+
+  if(!catId || catId === "" || !title || !text) {
+    return alert('الرجاء إكمال جميع الحقول واختيار القسم المناسب لنشر المقال.');
   }
 
   const key = catId + 'Articles';
   const articles = JSON.parse(localStorage.getItem(key)) || [];
 
-  articles.push({
-    title,
-    text
-  });
+  articles.push({ title, text });
 
   localStorage.setItem(key, JSON.stringify(articles));
 
-  alert('تم نشر المقال 🚀');
+  alert('تم نشر المقال في قسم ' + categories.find(c => c.id === catId).title + ' بنجاح! 🚀');
 
-  document.getElementById('articleTitle').value = '';
-  document.getElementById('articleText').value = '';
+  // تصفير الحقول
+  titleInput.value = '';
+  textInput.value = '';
 }
 
+// التشغيل الأولي عند تحميل الصفحة
 render();
 </script>
 
