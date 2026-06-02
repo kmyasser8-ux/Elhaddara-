@@ -1,57 +1,83 @@
 let currentCategory = null;
 
+// تأمين تهيئة نظام التخزين الموحد للمنصة
 Storage.init();
 
-/* HOME */
+/* 🏠 HOME VIEW (عرض الصفحة الرئيسية) */
 function renderHome(){
   const box = document.getElementById("categories");
+  if (!box) return; // تأمين منع الأخطاء البرمجية في حال عدم وجود العنصر
+  
   box.innerHTML = "";
 
-  Storage.getCategories().forEach(c=>{
+  // جلب العلوم الحالية من المحرك الذكي الموحد
+  Storage.getCategories().forEach(c => {
     const count = Storage.getArticles(c.id).length;
 
-    // مصفوفة افتراضية لتحديد أيقونة ذكية بناءً على المعرف، وإذا لم يجدها يضع أيقونة الكتاب الفخرية
+    // مصفوفة ذكية لتحديد الأيقونة المناسبة لكل علم تلقائياً
     const icons = {
       islamic: "🕌",
       politics: "⚖️",
       psychology: "🧠",
       philosophy: "📜"
     };
+    // استخدام الأيقونة المخصصة أو أيقونة كتاب فخرية لأي علم جديد يتم إنشاؤه
     const currentIcon = icons[c.id] || "📚";
 
+    // بناء البطاقات بتنسيق متناغم مع ستايل التعديل الأخير في styles.css
     box.innerHTML += `
       <div class="card" onclick="openCategory('${c.id}','${c.title}')">
         <div class="card-icon">${currentIcon}</div>
         <h3>${c.title}</h3>
-        <small><i class="fa-solid fa-file-lines"></i> ${count} مقالات</small>
+        <small><i class="fa-solid fa-file-lines ml-1"></i> ${count} مقالات</small>
       </div>
     `;
   });
 }
 
-/* CATEGORY */
-function openCategory(id,title){
+/* 📂 CATEGORY VIEW (عرض المقالات داخل العلم) */
+function openCategory(id, title){
   currentCategory = id;
 
   switchView("categoryView");
 
+  // إذا تم استدعاء الدالة من زر الرجوع بدون تمرير العنوان، نجلبه من الـ Storage
+  if (!title) {
+    const cat = Storage.getCategories().find(c => c.id === id);
+    title = cat ? cat.title : "";
+  }
+
   document.getElementById("categoryTitle").innerText = title;
 
   const box = document.getElementById("articles");
+  if (!box) return;
   box.innerHTML = "";
 
-  Storage.getArticles(id).forEach((a,i)=>{
+  const articles = Storage.getArticles(id);
+
+  if (articles.length === 0) {
+    box.innerHTML = `
+      <div style="color: #94a3b8; padding: 20px; text-align: center;">
+        لا توجد مقالات منشورة في هذا العلم حالياً.
+      </div>`;
+    return;
+  }
+
+  articles.forEach((a, i) => {
     box.innerHTML += `
-      <div class="card" onclick="openArticle(${i})">
-        ${a.title}
+      <div class="card" onclick="openArticle(${i})" style="margin-bottom: 12px; display: block; width: 100%; text-align: right;">
+        <h4 style="margin: 0; color: #c7a86b; font-size: 1.1rem;">${a.title}</h4>
       </div>
     `;
   });
 }
 
-/* ARTICLE */
+/* 📄 ARTICLE VIEW (عرض المقال التفصيلي) */
 function openArticle(i){
-  const article = Storage.getArticles(currentCategory)[i];
+  const articles = Storage.getArticles(currentCategory);
+  const article = articles[i];
+
+  if (!article) return;
 
   switchView("articleView");
 
@@ -59,28 +85,38 @@ function openArticle(i){
   document.getElementById("articleContent").innerText = article.text;
 }
 
-/* NAV */
+/* 🧭 NAVIGATION (محرك التنقل السلس) */
 function goHome(){
   switchView("homeView");
   renderHome();
 }
 
 function goCategory(){
-  openCategory(currentCategory);
+  if (currentCategory) {
+    openCategory(currentCategory);
+  } else {
+    goHome();
+  }
 }
 
-/* VIEW ENGINE */
+/* ⚙️ VIEW ENGINE */
 function switchView(id){
   document.querySelectorAll(".view")
-    .forEach(v=>v.classList.remove("active"));
+    .forEach(v => v.classList.remove("active"));
 
-  document.getElementById(id).classList.add("active");
+  const targetView = document.getElementById(id);
+  if (targetView) {
+    targetView.classList.add("active");
+  }
 }
 
-/* THEME (بسيط) */
+/* 🌓 THEME CONTROL (التحكم في المظهر لضمان الاستقرار الداكن) */
 function toggleTheme(){
   document.body.classList.toggle("light");
 }
 
-/* START */
-renderHome();
+/* 🚀 START SYSTEM */
+// التأكد من تحميل العناصر بالكامل قبل بدء الرندرة لمنع تداخل الألوان البيضاء الافتراضية للمتصفح
+document.addEventListener("DOMContentLoaded", () => {
+  renderHome();
+});
