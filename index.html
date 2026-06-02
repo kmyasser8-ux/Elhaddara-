@@ -13,36 +13,32 @@
 <nav class="nav">
   <div class="logo">الحضارة</div>
   <div class="actions">
-    <button onclick="toggleTheme()">🌓</button>
-    <a href="dashboard.html">لوحة التحكم</a>
+    <button onclick="toggleTheme()" aria-label="تغيير المظهر">🌓</button>
+    <a href="dashboard.html" class="btn-dashboard">لوحة التحكم</a>
   </div>
 </nav>
 
 <main>
 
-  <!-- HOME -->
   <section id="homeView" class="view active">
     <h1>الأقسام الفكرية</h1>
     <div id="categories" class="grid"></div>
   </section>
 
-  <!-- CATEGORY -->
   <section id="categoryView" class="view">
-    <button onclick="goHome()">← رجوع</button>
+    <button onclick="goHome()" class="btn-back">← رجوع</button>
     <h2 id="categoryTitle"></h2>
     <div id="articles"></div>
   </section>
 
-  <!-- ARTICLE -->
   <section id="articleView" class="view">
-    <button onclick="goCategory()">← رجوع</button>
+    <button onclick="goCategory()" class="btn-back">← رجوع</button>
     <h2 id="articleTitle"></h2>
     <div id="articleContent"></div>
   </section>
 
 </main>
 
-<link rel="stylesheet" href="style.css">
 <script src="data.js"></script>
 <script src="storage.js"></script>
 <script src="app.js"></script>
